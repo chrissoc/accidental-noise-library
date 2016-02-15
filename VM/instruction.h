@@ -186,6 +186,7 @@ namespace anl
 			return *this;
 		}
 
+		unsigned int GetIndex() { return index_; }
 
 		private:
 		CInstructionIndex()
