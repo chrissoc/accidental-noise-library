@@ -137,13 +137,13 @@ namespace anl
 		CInstructionIndex simpleBillowLayer(unsigned int basistype, CInstructionIndex interptypeindex, double layerscale, double layerfreq, unsigned int seed, bool rot=true,
             double angle=0.5, double ax=0, double ay=0, double az=1);
 
-        CInstructionIndex simplefBm(unsigned int basistype, unsigned int interptype, unsigned int numoctaves, double frequency, unsigned int seed, bool rot=true);
-		CInstructionIndex simpleRidgedMultifractal(unsigned int basistype, unsigned int interptype, unsigned int numoctaves, double frequency, unsigned int seed, bool rot=true);
-		CInstructionIndex simpleBillow(unsigned int basistype, unsigned int interptype, unsigned int numoctaves, double frequency, unsigned int seed, bool rot=true);
+        CInstructionIndex simplefBm(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot=true);
+		CInstructionIndex simpleRidgedMultifractal(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot=true);
+		CInstructionIndex simpleBillow(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot=true);
 
         InstructionListType *getKernel(){return &kernel_;}
-        CInstructionIndex nextIndex(){return CInstructionIndex(kernel_.size());}
-        CInstructionIndex lastIndex(){return CInstructionIndex(kernel_.size()-1);}
+        CInstructionIndex nextIndex(){return CInstructionIndex((unsigned int)kernel_.size());}
+        CInstructionIndex lastIndex(){return CInstructionIndex((unsigned int)kernel_.size()-1);}
 
         void setVar(const std::string name,double val);
         CInstructionIndex getVar(const std::string name);

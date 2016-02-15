@@ -144,7 +144,7 @@ namespace anl
         InstructionListType *k=prepare();
         if(!k) return out;
 
-        evaluateInstruction(*k, evaluated_, coordcache_, cache_, k->size()-1, coord);
+        evaluateInstruction(*k, evaluated_, coordcache_, cache_, (unsigned int)k->size()-1, coord);
 
         return cache_[k->size()-1];
     }
@@ -955,7 +955,7 @@ namespace anl
 
 			case OP_HexTile:
 			{
-				TileCoord tile=calcHexPointTile(coord.x_, coord.y_);
+				TileCoord tile=calcHexPointTile((float)coord.x_, (float)coord.y_);
 				unsigned int seed=(unsigned int)evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[0],coord);
 				unsigned int hash=hash_coords_2(tile.x, tile.y, seed);
 				cache[index].set((double)hash/255.0);
@@ -965,7 +965,7 @@ namespace anl
 
 			case OP_HexBump:
 			{
-				TileCoord tile=calcHexPointTile(coord.x_, coord.y_);
+				TileCoord tile=calcHexPointTile((float)coord.x_, (float)coord.y_);
 				CoordPair center=calcHexTileCenter(tile.x, tile.y);
 				double dx=coord.x_-center.x;
 				double dy=coord.y_-center.y;
@@ -1083,8 +1083,8 @@ namespace anl
 	CoordPair CNoiseExecutor::calcHexTileCenter(int tx, int ty)
 	{
 		CoordPair origin;
-		float ymod=fmod(ty, 2.0f);
-		if(ymod==1.0f) ymod=0.8660254;
+		float ymod=(float)fmod(ty, 2.0f);
+		if(ymod==1.0f) ymod=0.8660254f;
 		else ymod=0.0f;
 		origin.x=(float)tx*1.732051+ymod;
 		origin.y=(float)ty*1.5;

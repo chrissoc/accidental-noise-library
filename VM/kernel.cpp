@@ -680,7 +680,7 @@ CInstructionIndex CKernel::simpleBillowLayer(unsigned int basistype, CInstructio
     return lastIndex();
 }
 
-CInstructionIndex CKernel::simpleRidgedMultifractal(unsigned int basistype, unsigned int interptype, unsigned int numoctaves, double frequency, unsigned int seed, bool rot)
+CInstructionIndex CKernel::simpleRidgedMultifractal(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot)
 {
     if(numoctaves<1) return 0;
 
@@ -700,7 +700,7 @@ CInstructionIndex CKernel::simpleRidgedMultifractal(unsigned int basistype, unsi
 	return lastIndex();
 }
 
-CInstructionIndex CKernel::simplefBm(unsigned int basistype, unsigned int interptype, unsigned int numoctaves, double frequency, unsigned int seed, bool rot)
+CInstructionIndex CKernel::simplefBm(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot)
 {
     if(numoctaves<1) return 0;
 
@@ -720,7 +720,7 @@ CInstructionIndex CKernel::simplefBm(unsigned int basistype, unsigned int interp
 	return lastIndex();
 }
 
-CInstructionIndex CKernel::simpleBillow(unsigned int basistype, unsigned int interptype, unsigned int numoctaves, double frequency, unsigned int seed, bool rot)
+CInstructionIndex CKernel::simpleBillow(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot)
 {
     if(numoctaves<1) return 0;
 
