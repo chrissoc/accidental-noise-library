@@ -1,6 +1,7 @@
 #include "NoiseParser.h"
 
 #include <math.h>
+#include <sstream>
 
 namespace anl
 {
@@ -45,14 +46,16 @@ namespace anl
 		SetUnGetLocation();
 
 		if (IsEof())
+		{
+			token.token = Token::TOKEN_EOF;
 			return token;
+		}
 
 		while (true)
 		{
 			if (IsEof())
 			{
-				SetError("Unexpected EOF in tokenizer");
-				token.token = Token::ERROR;
+				token.token = Token::TOKEN_EOF;
 				return token;
 			}
 
@@ -99,7 +102,7 @@ namespace anl
 						if (IntegralDigitCount || FractionalDigitCount)
 						{
 							SetError("Unexpected letter found within a number");
-							token.token = Token::ERROR;
+							token.token = Token::TOKEN_ERROR;
 							return token;
 						}
 
@@ -111,7 +114,7 @@ namespace anl
 						if (token.keyword.length())
 						{
 							SetError("Unexpected digit found withing keyword");
-							token.token = Token::ERROR;
+							token.token = Token::TOKEN_ERROR;
 							return token;
 						}
 
@@ -137,20 +140,20 @@ namespace anl
 						if (token.keyword.length())
 						{
 							SetError("Unexpected '.' found withing keyword");
-							token.token = Token::ERROR;
+							token.token = Token::TOKEN_ERROR;
 							return token;
 						}
 
 						if (IntegralDigitCount == 0)
 						{
 							SetError("numbers must start with a digit, not a '.'");
-							token.token = Token::ERROR;
+							token.token = Token::TOKEN_ERROR;
 							return token;
 						}
 						else if (FractionalDigitCount != 0)
 						{
 							SetError("Too many '.' in number");
-							token.token = Token::ERROR;
+							token.token = Token::TOKEN_ERROR;
 							return token;
 						}
 						else
@@ -181,7 +184,7 @@ namespace anl
 						msg += " at index: ";
 						msg += DataIndex;
 						SetError(msg);
-						token.token = Token::ERROR;
+						token.token = Token::TOKEN_ERROR;
 						return token;
 					}
 					c = Data[DataIndex];
@@ -200,17 +203,13 @@ namespace anl
 
 	void NoiseParser::SetError(ParseString msg, const Token& cause)
 	{
-		ParseString ErrorMsg;
+		std::stringstream ss;
 		if (tokens.IsError())
 		{
-			ErrorMsg += "Tokenizer error: ";
-			ErrorMsg += tokens.GetLastError();
+			ss << "Tokenizer error: " << tokens.GetLastError() << ". ";
 		}
-		ErrorMsg += "Parse Error ln:";
-		ErrorMsg += cause.tokenLocation;
-		ErrorMsg += " - ";
-		ErrorMsg += msg;
-		ErrorMsgs.push_back(msg);
+		ss << "Parse Error ln:" << cause.tokenLocation << " - " << msg;
+		ErrorMsgs.push_back(ss.str());
 		Error = true;
 	}
 
@@ -263,7 +262,7 @@ namespace anl
 		return f;
 	}
 
-	bool NoiseParser::axisScalar(double& scale)
+	bool NoiseParser::axisScalar(CInstructionIndex& instruction)
 	{
 		Token t = tokens.GetToken();
 		if (t.token != Token::L_BRACKET)
@@ -272,14 +271,11 @@ namespace anl
 			return false;
 		}
 
-		t = tokens.GetToken();
-		if (t.token != Token::NUMBER)
+		if (expression(instruction) == false)
 		{
-			SetError("Missing number from axisScalar", t);
+			SetError("Missing expression from axis scalar - Empty []");
 			return false;
 		}
-
-		scale = t.number;
 
 		t = tokens.GetToken();
 		if (t.token != Token::R_BRACKET)
@@ -291,7 +287,7 @@ namespace anl
 		return true;
 	}
 
-	bool NoiseParser::domainScalar(double& scale)
+	bool NoiseParser::domainScalar(CInstructionIndex& instruction)
 	{
 		Token t = tokens.GetToken();
 		if (t.token != Token::L_PAREN)
@@ -300,14 +296,11 @@ namespace anl
 			return false;
 		}
 
-		t = tokens.GetToken();
-		if (t.token != Token::NUMBER)
+		if (expression(instruction) == false)
 		{
-			SetError("Missing number from domain scalar", t);
+			SetError("Missing expression for domain scalar - empty ()");
 			return false;
 		}
-
-		scale = t.number;
 
 		t = tokens.GetToken();
 		if (t.token != Token::R_PAREN)
@@ -427,7 +420,7 @@ namespace anl
 				SetError("SimplexBasis accepts 1 arguemnt");
 				return false;
 			}
-			instruction = Kernel.simplexBasis(Kernel.seed(static_cast<unsigned int>(args[1])));
+			instruction = Kernel.simplexBasis(Kernel.seed(static_cast<unsigned int>(args[0])));
 			return true;
 		default:
 			SetError("Unkown function type", funcToken);
@@ -440,10 +433,10 @@ namespace anl
 		if (functionCall(instruction) == false)
 			return false;
 
-		double scalar;
+		CInstructionIndex scalar(NOP);
 		if (domainScalar(scalar))
 		{
-			instruction = Kernel.scaleDomain(instruction, Kernel.constant(scalar));
+			instruction = Kernel.scaleDomain(instruction, scalar);
 			return true;
 		}
 
@@ -454,23 +447,23 @@ namespace anl
 			switch (axisCount)
 			{
 			case 1:
-				instruction = Kernel.scaleX(instruction, Kernel.constant(scalar));
+				instruction = Kernel.scaleX(instruction, scalar);
 				break;
 			case 2:
-				instruction = Kernel.scaleY(instruction, Kernel.constant(scalar));
+				instruction = Kernel.scaleY(instruction, scalar);
 				break;
 			case 3:
-				instruction = Kernel.scaleZ(instruction, Kernel.constant(scalar));
+				instruction = Kernel.scaleZ(instruction, scalar);
 				break;
 			case 4:
 				// anl uses WUV instead of UVW
-				instruction = Kernel.scaleW(instruction, Kernel.constant(scalar));
+				instruction = Kernel.scaleW(instruction, scalar);
 				break;
 			case 5:
-				instruction = Kernel.scaleU(instruction, Kernel.constant(scalar));
+				instruction = Kernel.scaleU(instruction,scalar);
 				break;
 			case 6:
-				instruction = Kernel.scaleV(instruction, Kernel.constant(scalar));
+				instruction = Kernel.scaleV(instruction,scalar);
 				break;
 			default:
 				SetError("Too many axis scalars");
@@ -626,6 +619,28 @@ namespace anl
 
 	bool NoiseParser::Parse()
 	{
-		return expression(ParseResult);
+		// return true if there was an expression found and no error
+		bool result = expression(ParseResult);
+
+		Token t;
+		if (IsEof(t) == false)
+		{
+			SetError("expression ended prematurly", t);
+		}
+
+		result = result && Error == false;
+		return result;
+	}
+
+	// return true if at end of file, position will conatain the location of the token used to make the determination
+	bool NoiseParser::IsEof(Token& token)
+	{
+		token = tokens.GetToken();
+		if (token.token != Token::TOKEN_EOF)
+		{
+			tokens.UnGet();
+			return false;
+		}
+		return true;
 	}
 }

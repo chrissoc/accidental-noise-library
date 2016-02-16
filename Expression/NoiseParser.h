@@ -39,7 +39,8 @@ namespace anl
 		struct Token {
 			enum TokenType {
 				NONE,
-				ERROR,
+				TOKEN_EOF,
+				TOKEN_ERROR,
 				KEYWORD,
 				NUMBER,
 				L_PAREN,
@@ -99,12 +100,13 @@ namespace anl
 		bool Error;
 
 	private:
+		bool IsEof(Token& token);
 		BlendType KeywordToBlend(const ParseString& keyword);
 		Function KeywordToFunc(const ParseString& keyword);
 		void SetError(ParseString msg, const Token& cause);
 		void SetError(ParseString msg);
-		bool axisScalar(double& scale);
-		bool domainScalar(double& scale);
+		bool axisScalar(CInstructionIndex& instruction);
+		bool domainScalar(CInstructionIndex& instruction);
 		bool argument(double& result);
 		bool argumentList(double args[], int argc, int& argsFound);
 		bool functionCall(CInstructionIndex& instruction);
@@ -112,7 +114,6 @@ namespace anl
 		bool object(CInstructionIndex& instruction);
 		bool mult(CInstructionIndex& instruction);
 		bool add(CInstructionIndex& instruction);
-		bool operation(CInstructionIndex& instruction);
 		bool grouping(CInstructionIndex& instruction);
 		bool negative(CInstructionIndex& instruction);
 		bool expression(CInstructionIndex& instruction);
@@ -127,6 +128,7 @@ namespace anl
 		ParseString FormErrorMsgs();
 		CNoiseExecutor& GetVM() { return VM; }
 		CInstructionIndex GetParseResult() { return ParseResult; }
+		CKernel& GetKernel() { return Kernel; }
 	};
 
 }
