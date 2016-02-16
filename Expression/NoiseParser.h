@@ -9,10 +9,16 @@
 #include "../VM/instruction.h"
 
 /*
+whiteSpace ::= ' ' | '\n' | '\r' | '\t'
+printableChar ::= whiteSpace | [!-~]
+commentLine ::= '/' '/' printableChar*  '\n'
+commentBlock ::= '/' '*' printableChar* '*' '/'
+
 letter ::= [a-zA-Z]
 keyword ::= letter+
 digit ::= [0-9]
 number ::= digit+ ('.' digit+)?
+
 axisScalar ::= '[' expression ']'
 domainScalar ::= '<' expression '>'
 argumentList ::= expression (',' argumentList)*
@@ -54,6 +60,7 @@ namespace anl
 				SEMI_COLON,
 				ASSIGNMENT,
 				MULT,
+				DIV,
 				ADD,
 				SUB,
 			};

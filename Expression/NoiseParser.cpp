@@ -108,6 +108,47 @@ namespace anl
 			case '=':
 				token.token = Token::ASSIGNMENT;
 				return token;
+			case '/':
+				// peek ahead to see if this is a block comment
+				if (IsEof() == false && Data[DataIndex] == '*')
+				{
+					DataIndex++;
+					// block comment, gobble untill end
+					bool foundAsterisk = false;
+					bool done = false;
+					while (IsEof() == false && !done)
+					{
+						if (Data[DataIndex] == '*')
+						{
+							DataIndex++;
+							if (IsEof() == false && Data[DataIndex] == '/')
+							{
+								done = true;
+								DataIndex++;
+							}
+						}
+						else
+						{
+							DataIndex++;
+						}
+					}
+				}
+				else if (IsEof() == false && Data[DataIndex] == '/')
+				{
+					DataIndex++;
+					// line comment, gobble untill end
+					while (IsEof() == false && Data[DataIndex] != '\n')
+						DataIndex++;
+					// gobble the newline as well
+					if (IsEof() == false)
+						DataIndex++;
+				}
+				else
+				{
+					token.token = Token::DIV;
+					return token;
+				}
+				break;
 			default:
 				while (true)
 				{
