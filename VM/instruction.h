@@ -186,6 +186,16 @@ namespace anl
 			return *this;
 		}
 
+		bool operator!=(const CInstructionIndex &c)
+		{
+			return c.index_ != index_;
+		}
+
+		bool operator==(const CInstructionIndex &c)
+		{
+			return c.index_ == index_;
+		}
+
 		unsigned int GetIndex() { return index_; }
 
 		private:

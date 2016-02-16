@@ -100,6 +100,9 @@ namespace anl
 			case ',':
 				token.token = Token::COMMA;
 				return token;
+			case ';':
+				token.token = Token::SEMI_COLON;
+				return token;
 			default:
 				while (true)
 				{
@@ -207,6 +210,14 @@ namespace anl
 
 	/*********  NoiseParser **********************/
 
+	NoiseParser::~NoiseParser()
+	{
+		for (auto p : Variables)
+		{
+			delete p.second;
+		}
+	}
+
 	void NoiseParser::SetError(ParseString msg, const Token& cause)
 	{
 		std::stringstream ss;
@@ -268,6 +279,48 @@ namespace anl
 		return f;
 	}
 
+	bool NoiseParser::KeywordToVariable(CInstructionIndex& instruction, const ParseString& keyword)
+	{
+		// check constants first
+		CInstructionIndex newInstruction(instruction);
+		if (keyword == "pi")
+			newInstruction = Kernel.pi();
+		else if (keyword == "e")
+			newInstruction = Kernel.e();
+
+		if (newInstruction != instruction)
+		{
+			instruction = newInstruction;
+			return true;// found the constant
+		}
+
+		auto var = Variables.find(keyword);
+		if (var != Variables.end())
+		{
+			instruction = *var->second;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	void NoiseParser::AddVariable(const ParseString& keyword, CInstructionIndex& value)
+	{
+		auto var = Variables.find(keyword);
+		if (var != Variables.end())
+		{
+			ParseString msg = "variable initilized multiple times: ";
+			msg += keyword;
+			SetError(msg);
+			return;
+		}
+
+		// CInstructionIndex's private constructor prevents us from storing the class within std::map directly
+		Variables[keyword] = new CInstructionIndex(value);
+	}
+
 	bool NoiseParser::axisScalar(CInstructionIndex& instruction)
 	{
 		Token t = tokens.GetToken();
@@ -318,35 +371,7 @@ namespace anl
 		return true;
 	}
 
-	bool NoiseParser::argument(double& result)
-	{
-		Token t = tokens.GetToken();
-		if (t.token == Token::NUMBER)
-		{
-			result = t.number;
-			return true;
-		}
-		else if (t.token == Token::KEYWORD)
-		{
-			BlendType bt = KeywordToBlend(t.keyword);
-
-			if (bt == BLEND_INVALID)
-			{
-				SetError("Invalid blend type specified as argument", t);
-				return false;
-			}
-
-			result = (double)bt;
-			return true;
-		}
-		else
-		{
-			tokens.UnGet();
-			return false;
-		}
-	}
-
-	bool NoiseParser::argumentList(double args[], int argc, int& argsFound)
+	bool NoiseParser::argumentList(CInstructionIndex args[], int argc, int& argsFound)
 	{
 		if (argc == 0)
 		{
@@ -354,10 +379,8 @@ namespace anl
 			return false;
 		}
 
-		double value;
-		if (argument(value))
+		if (expression(args[0]))
 		{
-			args[0] = value;
 			argsFound += 1;
 
 			Token t = tokens.GetToken();
@@ -386,6 +409,7 @@ namespace anl
 		Token funcToken = t;
 		if (func == FUNC_INVALID)
 		{
+			// not a known function, it had better be a constant or a variable
 			SetError("Unexpected 'function' name", t);
 			return false;
 		}
@@ -398,7 +422,7 @@ namespace anl
 		}
 
 		const int argc = 10;
-		double args[argc];
+		CInstructionIndex args[argc] = { NOP, NOP, NOP, NOP, NOP, NOP, NOP, NOP, NOP, NOP };
 		int argsFound = 0;
 		argumentList(args, argc, argsFound);
 
@@ -418,7 +442,7 @@ namespace anl
 				SetError("GradientBasis accepts 2 arguemnts");
 				return false;
 			}
-			instruction = Kernel.gradientBasis(Kernel.constant(args[0]), Kernel.seed(static_cast<unsigned int>(args[1])));
+			instruction = Kernel.gradientBasis(args[0], args[1]);
 			return true;
 		case FUNC_SIMPLEX_BASIS:
 			if (argsFound != 1)
@@ -426,59 +450,13 @@ namespace anl
 				SetError("SimplexBasis accepts 1 arguemnt");
 				return false;
 			}
-			instruction = Kernel.simplexBasis(Kernel.seed(static_cast<unsigned int>(args[0])));
+			instruction = Kernel.simplexBasis(args[0]);
 			return true;
 		default:
 			SetError("Unkown function type", funcToken);
 			return false;
 		}
 	}
-
-	//bool NoiseParser::scaledFunctionCall(CInstructionIndex& instruction)
-	//{
-	//	if (functionCall(instruction) == false)
-	//		return false;
-
-	//	CInstructionIndex scalar(NOP);
-	//	if (domainScalar(scalar))
-	//	{
-	//		instruction = Kernel.scaleDomain(instruction, scalar);
-	//		return true;
-	//	}
-
-	//	int axisCount = 0;
-	//	while (axisScalar(scalar))
-	//	{
-	//		axisCount++;
-	//		switch (axisCount)
-	//		{
-	//		case 1:
-	//			instruction = Kernel.scaleX(instruction, scalar);
-	//			break;
-	//		case 2:
-	//			instruction = Kernel.scaleY(instruction, scalar);
-	//			break;
-	//		case 3:
-	//			instruction = Kernel.scaleZ(instruction, scalar);
-	//			break;
-	//		case 4:
-	//			// anl uses WUV instead of UVW
-	//			instruction = Kernel.scaleW(instruction, scalar);
-	//			break;
-	//		case 5:
-	//			instruction = Kernel.scaleU(instruction,scalar);
-	//			break;
-	//		case 6:
-	//			instruction = Kernel.scaleV(instruction,scalar);
-	//			break;
-	//		default:
-	//			SetError("Too many axis scalars");
-	//			return false;
-	//		}
-	//	}
-
-	//	return true;
-	//}
 
 	bool NoiseParser::object(CInstructionIndex& instruction)
 	{
@@ -494,6 +472,13 @@ namespace anl
 		{
 			instruction = Kernel.constant(t.number);
 			return true;
+		}
+		else if (t.token == Token::KEYWORD)
+		{
+			if (KeywordToVariable(instruction, t.keyword))
+				return true;
+			else
+				return false;
 		}
 		else
 		{
@@ -695,10 +680,33 @@ namespace anl
 			return false;
 	}
 
+	bool NoiseParser::statement(CInstructionIndex& instruction)
+	{
+		if (expression(instruction) == false)
+			return false;
+
+		Token t = tokens.GetToken();
+		if (t.token != Token::SEMI_COLON)
+		{
+			SetError("Satement does not end in a semicolon", t);
+			return false;
+		}
+		return true;
+	}
+
+	bool NoiseParser::program(CInstructionIndex& instruction)
+	{
+		if (statement(instruction) == false)
+			return false;
+
+		program(instruction);
+		return true;
+	}
+
 	bool NoiseParser::Parse()
 	{
 		// return true if there was an expression found and no error
-		bool result = expression(ParseResult);
+		bool result = program(ParseResult);
 
 		Token t;
 		if (IsEof(t) == false)

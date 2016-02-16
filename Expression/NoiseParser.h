@@ -15,10 +15,9 @@ digit ::= [0-9]
 number ::= digit+ ('.' digit+)?
 axisScalar ::= '[' expression ']'
 domainScalar ::= '<' expression '>'
-argument ::= expression | keyword
-argumentList ::= argument (',' argumentList)*
-functionCall ::= keyword '(' argumentList* ')'
-object ::= functionCall | grouping | negative | number
+argumentList ::= expression (',' argumentList)*
+functionCall ::= keyword ( '(' argumentList* ')' )?
+object ::= functionCall | grouping | negative | number | keyword
 scalar ::= (axisScalar | domainScalar)? object
 mult ::= scalar ('*' mult)?
 add ::= mult (('+' | '-') add)?
@@ -26,6 +25,8 @@ add ::= mult (('+' | '-') add)?
 grouping ::= '(' expression ')'
 negative ::= '-' expression
 expression ::= grouping | negative | add
+statement ::= expression ';'
+program ::= statement program?
 */
 
 namespace anl 
@@ -49,6 +50,7 @@ namespace anl
 				L_BRACKET,
 				R_BRACKET,
 				COMMA,
+				SEMI_COLON,
 				MULT,
 				ADD,
 				SUB,
@@ -98,18 +100,21 @@ namespace anl
 		CInstructionIndex NOP;
 		CInstructionIndex ParseResult;
 		std::vector<ParseString> ErrorMsgs;
+		std::map<ParseString, CInstructionIndex*> Variables;
 		bool Error;
 
 	private:
 		bool IsEof(Token& token);
 		BlendType KeywordToBlend(const ParseString& keyword);
 		Function KeywordToFunc(const ParseString& keyword);
+		// variables include constants
+		bool KeywordToVariable(CInstructionIndex& instruction, const ParseString& keyword);
+		void AddVariable(const ParseString& keyword, CInstructionIndex& value);
 		void SetError(ParseString msg, const Token& cause);
 		void SetError(ParseString msg);
 		bool axisScalar(CInstructionIndex& instruction);
 		bool domainScalar(CInstructionIndex& instruction);
-		bool argument(double& result);
-		bool argumentList(double args[], int argc, int& argsFound);
+		bool argumentList(CInstructionIndex args[], int argc, int& argsFound);
 		bool functionCall(CInstructionIndex& instruction);
 		//bool scaledFunctionCall(CInstructionIndex& instruction);
 		bool object(CInstructionIndex& instruction);
@@ -119,11 +124,13 @@ namespace anl
 		bool grouping(CInstructionIndex& instruction);
 		bool negative(CInstructionIndex& instruction);
 		bool expression(CInstructionIndex& instruction);
+		bool statement(CInstructionIndex& instruction);
+		bool program(CInstructionIndex& instruction);
 
 	public:
 		NoiseParser(ParseString expression)
 			: tokens(expression), VM(Kernel), Error(false), NOP(Kernel.constant(0)), ParseResult(NOP) {}
-		virtual ~NoiseParser() {}
+		virtual ~NoiseParser();
 
 		// returns true for success
 		bool Parse();
