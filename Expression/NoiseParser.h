@@ -14,14 +14,13 @@ keyword ::= letter+
 digit ::= [0-9]
 number ::= digit+ ('.' digit+)?
 axisScalar ::= '[' expression ']'
-domainScalar ::= '(' expression ')'
+domainScalar ::= '<' expression '>'
 argument ::= expression | keyword
 argumentList ::= argument (',' argumentList)*
 functionCall ::= keyword '(' argumentList* ')'
-scaledFunctionCall ::= functionCall (axisScalar+ | domainScalar)?
-object ::= scaledFunctionCall | grouping | negative | number
-
-mult ::= object ('*' mult)?
+object ::= functionCall | grouping | negative | number
+scalar ::= (axisScalar | domainScalar)? object
+mult ::= scalar ('*' mult)?
 add ::= mult (('+' | '-') add)?
 
 grouping ::= '(' expression ')'
@@ -45,6 +44,8 @@ namespace anl
 				NUMBER,
 				L_PAREN,
 				R_PAREN,
+				L_CHEVRON,
+				R_CHEVRON,
 				L_BRACKET,
 				R_BRACKET,
 				COMMA,
@@ -110,8 +111,9 @@ namespace anl
 		bool argument(double& result);
 		bool argumentList(double args[], int argc, int& argsFound);
 		bool functionCall(CInstructionIndex& instruction);
-		bool scaledFunctionCall(CInstructionIndex& instruction);
+		//bool scaledFunctionCall(CInstructionIndex& instruction);
 		bool object(CInstructionIndex& instruction);
+		bool scalar(CInstructionIndex& instruction);
 		bool mult(CInstructionIndex& instruction);
 		bool add(CInstructionIndex& instruction);
 		bool grouping(CInstructionIndex& instruction);

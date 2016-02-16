@@ -85,6 +85,12 @@ namespace anl
 			case ')':
 				token.token = Token::R_PAREN;
 				return token;
+			case '<':
+				token.token = Token::L_CHEVRON;
+				return token;
+			case '>':
+				token.token = Token::R_CHEVRON;
+				return token;
 			case '[':
 				token.token = Token::L_BRACKET;
 				return token;
@@ -290,7 +296,7 @@ namespace anl
 	bool NoiseParser::domainScalar(CInstructionIndex& instruction)
 	{
 		Token t = tokens.GetToken();
-		if (t.token != Token::L_PAREN)
+		if (t.token != Token::L_CHEVRON)
 		{
 			tokens.UnGet();
 			return false;
@@ -298,14 +304,14 @@ namespace anl
 
 		if (expression(instruction) == false)
 		{
-			SetError("Missing expression for domain scalar - empty ()");
+			SetError("Missing expression for domain scalar - empty <>");
 			return false;
 		}
 
 		t = tokens.GetToken();
-		if (t.token != Token::R_PAREN)
+		if (t.token != Token::R_CHEVRON)
 		{
-			SetError("Missing closing ')' in domain scalar", t);
+			SetError("Missing closing '>' in domain scalar", t);
 			return false;
 		}
 
@@ -428,55 +434,55 @@ namespace anl
 		}
 	}
 
-	bool NoiseParser::scaledFunctionCall(CInstructionIndex& instruction)
-	{
-		if (functionCall(instruction) == false)
-			return false;
+	//bool NoiseParser::scaledFunctionCall(CInstructionIndex& instruction)
+	//{
+	//	if (functionCall(instruction) == false)
+	//		return false;
 
-		CInstructionIndex scalar(NOP);
-		if (domainScalar(scalar))
-		{
-			instruction = Kernel.scaleDomain(instruction, scalar);
-			return true;
-		}
+	//	CInstructionIndex scalar(NOP);
+	//	if (domainScalar(scalar))
+	//	{
+	//		instruction = Kernel.scaleDomain(instruction, scalar);
+	//		return true;
+	//	}
 
-		int axisCount = 0;
-		while (axisScalar(scalar))
-		{
-			axisCount++;
-			switch (axisCount)
-			{
-			case 1:
-				instruction = Kernel.scaleX(instruction, scalar);
-				break;
-			case 2:
-				instruction = Kernel.scaleY(instruction, scalar);
-				break;
-			case 3:
-				instruction = Kernel.scaleZ(instruction, scalar);
-				break;
-			case 4:
-				// anl uses WUV instead of UVW
-				instruction = Kernel.scaleW(instruction, scalar);
-				break;
-			case 5:
-				instruction = Kernel.scaleU(instruction,scalar);
-				break;
-			case 6:
-				instruction = Kernel.scaleV(instruction,scalar);
-				break;
-			default:
-				SetError("Too many axis scalars");
-				return false;
-			}
-		}
+	//	int axisCount = 0;
+	//	while (axisScalar(scalar))
+	//	{
+	//		axisCount++;
+	//		switch (axisCount)
+	//		{
+	//		case 1:
+	//			instruction = Kernel.scaleX(instruction, scalar);
+	//			break;
+	//		case 2:
+	//			instruction = Kernel.scaleY(instruction, scalar);
+	//			break;
+	//		case 3:
+	//			instruction = Kernel.scaleZ(instruction, scalar);
+	//			break;
+	//		case 4:
+	//			// anl uses WUV instead of UVW
+	//			instruction = Kernel.scaleW(instruction, scalar);
+	//			break;
+	//		case 5:
+	//			instruction = Kernel.scaleU(instruction,scalar);
+	//			break;
+	//		case 6:
+	//			instruction = Kernel.scaleV(instruction,scalar);
+	//			break;
+	//		default:
+	//			SetError("Too many axis scalars");
+	//			return false;
+	//		}
+	//	}
 
-		return true;
-	}
+	//	return true;
+	//}
 
 	bool NoiseParser::object(CInstructionIndex& instruction)
 	{
-		if (scaledFunctionCall(instruction))
+		if (functionCall(instruction))
 			return true;
 		else if (grouping(instruction))
 			return true;
@@ -496,9 +502,81 @@ namespace anl
 		}
 	}
 
+	bool NoiseParser::scalar(CInstructionIndex& instruction)
+	{
+		CInstructionIndex scalar[6+1] = { NOP, NOP, NOP, NOP, NOP, NOP, NOP };
+
+		bool foundDomainScale = false;
+		int axisCount = 0;
+		while (axisScalar(scalar[axisCount]))
+		{
+			axisCount++;
+			if (axisCount == 7)
+				SetError("Too many axis scalars");
+		}
+			
+		if (axisCount == 0)
+		{
+			if (domainScalar(scalar[0]))
+				foundDomainScale = true;
+		}
+
+		if (object(instruction))
+		{
+
+		}
+		else if (axisCount != 0 || foundDomainScale)
+		{
+			// error
+			SetError("No object following unary operator scale, nothing to scale");
+			return false;
+		}
+		else
+		{
+			// no error, just nothing found here
+			return false;
+		}
+
+		for (int i = 0; i < axisCount; ++i)
+		{
+			switch (i)
+			{
+			case 0:
+				instruction = Kernel.scaleX(instruction, scalar[i]);
+				break;
+			case 1:
+				instruction = Kernel.scaleY(instruction, scalar[i]);
+				break;
+			case 2:
+				instruction = Kernel.scaleZ(instruction, scalar[i]);
+				break;
+			case 3:
+				// anl uses WUV instead of UVW
+				instruction = Kernel.scaleW(instruction, scalar[i]);
+				break;
+			case 4:
+				instruction = Kernel.scaleU(instruction, scalar[i]);
+				break;
+			case 5:
+				instruction = Kernel.scaleV(instruction, scalar[i]);
+				break;
+			default:
+				SetError("Too many axis scalars");
+				return false;
+			}
+		}
+
+		if (foundDomainScale)
+		{
+			instruction = Kernel.scaleDomain(instruction, scalar[0]);
+		}
+
+		return true;
+	}
+
 	bool NoiseParser::mult(CInstructionIndex& instruction)
 	{
-		if (object(instruction) == false)
+		if (scalar(instruction) == false)
 			return false;
 
 		Token t = tokens.GetToken();
