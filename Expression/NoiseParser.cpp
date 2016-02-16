@@ -614,7 +614,7 @@ namespace anl
 			return false;
 
 		Token t = tokens.GetToken();
-		if (t.token != Token::MULT)
+		if (t.token != Token::MULT && t.token != Token::DIV)
 		{
 			tokens.UnGet();
 			// not an error, we are just returning the object
@@ -624,7 +624,10 @@ namespace anl
 		CInstructionIndex operandRight(instruction);
 		if (mult(operandRight))
 		{
-			instruction = Kernel.multiply(instruction, operandRight);
+			if(t.token == Token::MULT)
+				instruction = Kernel.multiply(instruction, operandRight);
+			else
+				instruction = Kernel.divide(instruction, operandRight);
 			return true;
 		}
 		else
