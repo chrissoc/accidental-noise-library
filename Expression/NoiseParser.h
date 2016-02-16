@@ -26,7 +26,8 @@ grouping ::= '(' expression ')'
 negative ::= '-' expression
 expression ::= grouping | negative | add
 statement ::= expression ';'
-program ::= statement program?
+assignment ::= (keyword '=')? statement
+program ::= assignment program?
 */
 
 namespace anl 
@@ -51,6 +52,7 @@ namespace anl
 				R_BRACKET,
 				COMMA,
 				SEMI_COLON,
+				ASSIGNMENT,
 				MULT,
 				ADD,
 				SUB,
@@ -78,6 +80,7 @@ namespace anl
 			ParseString Data;
 			int DataIndex;
 			int RewindIndex;// for UnGet()
+			int RewindIndex2;// for second UnGet()
 			ParseString LastError;
 
 		private:
@@ -85,7 +88,7 @@ namespace anl
 			bool IsEof();
 
 		public:
-			Tokenizer(ParseString input) : Data(input), DataIndex(0), RewindIndex(-1) {}
+			Tokenizer(ParseString input) : Data(input), DataIndex(0), RewindIndex(-1), RewindIndex2(-1) {}
 			ParseString GetLastError() { return LastError; }
 			bool IsError() { return LastError.length() != 0 ? true : false; }
 			void UnGet();
@@ -125,6 +128,7 @@ namespace anl
 		bool negative(CInstructionIndex& instruction);
 		bool expression(CInstructionIndex& instruction);
 		bool statement(CInstructionIndex& instruction);
+		bool assignment(CInstructionIndex& instruction);
 		bool program(CInstructionIndex& instruction);
 
 	public:

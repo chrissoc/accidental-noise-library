@@ -21,11 +21,13 @@ namespace anl
 	{
 		if (RewindIndex >= 0)
 			DataIndex = RewindIndex;
-		RewindIndex = -1;
+		RewindIndex = RewindIndex2;
+		RewindIndex2 = -1;
 	}
 
 	void NoiseParser::Tokenizer::SetUnGetLocation()
 	{
+		RewindIndex2 = RewindIndex;
 		RewindIndex = DataIndex;
 	}
 
@@ -102,6 +104,9 @@ namespace anl
 				return token;
 			case ';':
 				token.token = Token::SEMI_COLON;
+				return token;
+			case '=':
+				token.token = Token::ASSIGNMENT;
 				return token;
 			default:
 				while (true)
@@ -410,14 +415,17 @@ namespace anl
 		if (func == FUNC_INVALID)
 		{
 			// not a known function, it had better be a constant or a variable
-			SetError("Unexpected 'function' name", t);
+			//SetError("Unexpected 'function' name", t);
+			tokens.UnGet();
 			return false;
 		}
 
 		t = tokens.GetToken();
 		if (t.token != Token::L_PAREN)
 		{
-			SetError("Missing '(' after keyword for 'function call'", t);
+			//SetError("Missing '(' after keyword for 'function call'", t);
+			tokens.UnGet();// put back the '('
+			tokens.UnGet();// put back the keyword
 			return false;
 		}
 
@@ -694,9 +702,61 @@ namespace anl
 		return true;
 	}
 
+	bool NoiseParser::assignment(CInstructionIndex& instruction)
+	{
+		ParseString variableName;
+		CInstructionIndex variableValue(NOP);
+		bool isAssignment = false;
+
+		Token t = tokens.GetToken();
+		if (t.token == Token::KEYWORD)
+		{
+			if (KeywordToBlend(t.keyword) == BLEND_INVALID && KeywordToFunc(t.keyword) == FUNC_INVALID && KeywordToVariable(variableValue, t.keyword) == false)
+			{
+				variableName = t.keyword;
+				t = tokens.GetToken();
+				if (t.token == Token::ASSIGNMENT)
+				{
+					isAssignment = true;
+				}
+				else
+				{
+					ParseString msg = "Unrecognized keyword: ";
+					msg += variableName;
+					SetError(msg);
+					return false;
+				}
+			}
+			else
+			{
+				tokens.UnGet();
+			}
+		}
+		else
+		{
+			tokens.UnGet();
+		}
+
+		if (statement(instruction) == false)
+		{
+			if (isAssignment)
+			{
+				SetError("Missing statement following assignment operator");
+				return false;
+			}
+			return false;
+		}
+		else
+		{
+			if(isAssignment)
+				AddVariable(variableName, instruction);
+			return true;
+		}
+	}
+
 	bool NoiseParser::program(CInstructionIndex& instruction)
 	{
-		if (statement(instruction) == false)
+		if (assignment(instruction) == false)
 			return false;
 
 		program(instruction);
