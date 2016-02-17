@@ -2,6 +2,7 @@
 #include "kernel.h"
 #include "utility.h"
 #include "hashing.h"
+#include "BooleanBits.h"
 #include <iostream>
 
 CoordPair closest_point(double vx, double vy, double x, double  y)
@@ -126,13 +127,13 @@ namespace anl
 	{
 	    InstructionListType *k=kernel_.getKernel();
         if(!k || k->size()==0) return 0;
-        if(k->size() != evaluated_.size()) evaluated_.resize(k->size());
+        if(k->size() != evaluated_.size()) evaluated_.resize((int32_t)k->size());
         if(k->size() != coordcache_.size()) coordcache_.resize(k->size());
         if(k->size() != cache_.size()) cache_.resize(k->size());
 
         // clear evaluated flags
-        for(auto i=evaluated_.begin(); i!=evaluated_.end(); ++i) *i=false;
-
+        //for(auto i=evaluated_.begin(); i!=evaluated_.end(); ++i) *i=false;
+		evaluated_.ClearAllBits();
         return k;
 	}
 

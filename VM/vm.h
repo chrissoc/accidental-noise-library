@@ -9,6 +9,8 @@
 #include "../templates/tarray1.h"
 #include "../vectortypes.h"
 
+#include "BooleanBits.h"
+
 struct TileCoord
 {
 	unsigned int x,y;
@@ -92,7 +94,7 @@ namespace anl
     };
 
     typedef std::vector<SInstruction> InstructionListType;
-    typedef std::vector<bool> EvaluatedType;
+    typedef CBooleanBits EvaluatedType;
 	typedef std::vector<CCoordinate> CoordCacheType;
     typedef std::vector<SVMOutput> CacheType;
 
