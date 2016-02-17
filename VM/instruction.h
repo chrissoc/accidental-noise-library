@@ -4,7 +4,8 @@
 #include "../vectortypes.h"
 #include <vector>
 
-const int MaxSourceCount=10;
+const int MaxSourceCount=20;
+const int SInstructionDefaultIndex = 1000000;
 
 namespace anl
 {
@@ -100,7 +101,7 @@ namespace anl
 
         SInstruction()
         {
-            for(unsigned int c=0; c<MaxSourceCount; ++c) sources_[c]=1000000;
+            for(unsigned int c=0; c<MaxSourceCount; ++c) sources_[c]=SInstructionDefaultIndex;
             outfloat_=0;
 			outrgba_=SRGBA(0,0,0,1);
             opcode_=0;

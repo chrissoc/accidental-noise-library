@@ -12,7 +12,7 @@ namespace anl
 
 	bool NoiseParser::Tokenizer::IsEof()
 	{
-		if (DataIndex >= Data.length())
+		if (DataIndex >= (int)Data.length())
 			return true;
 		return false;
 	}
@@ -810,7 +810,7 @@ namespace anl
 	bool NoiseParser::Parse()
 	{
 		// return true if there was an expression found and no error
-		bool result = program(ParseResult);
+		bool success = program(ParseResult);
 
 		Token t;
 		if (IsEof(t) == false)
@@ -818,8 +818,14 @@ namespace anl
 			SetError("expression ended prematurly", t);
 		}
 
-		result = result && Error == false;
-		return result;
+		success = success && Error == false;
+
+		if (success)
+		{
+			Kernel.optimize(TotalFolds, TotalInstructions);
+		}
+
+		return success;
 	}
 
 	// return true if at end of file, position will conatain the location of the token used to make the determination

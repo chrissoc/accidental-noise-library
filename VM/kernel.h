@@ -147,6 +147,12 @@ namespace anl
 
         void setVar(const std::string name,double val);
         CInstructionIndex getVar(const std::string name);
+
+		// performs constantFolding optimization, returns number of operations reduced
+		int constFold(CInstructionIndex startingIndex);
+		int constFoldAll();
+		void optimize(int& totalFolds, int& totalInstructions);
+
     private:
         InstructionListType kernel_;
 

@@ -111,6 +111,7 @@ namespace anl
 		CInstructionIndex ParseResult;
 		std::vector<ParseString> ErrorMsgs;
 		std::map<ParseString, CInstructionIndex*> Variables;
+		int TotalFolds, TotalInstructions;
 		bool Error;
 
 	private:
@@ -140,7 +141,7 @@ namespace anl
 
 	public:
 		NoiseParser(ParseString expression)
-			: tokens(expression), VM(Kernel), Error(false), NOP(Kernel.constant(0)), ParseResult(NOP) {}
+			: tokens(expression), VM(Kernel), Error(false), NOP(Kernel.constant(0)), ParseResult(NOP), TotalFolds(0), TotalInstructions(0) {}
 		virtual ~NoiseParser();
 
 		// returns true for success
@@ -149,6 +150,8 @@ namespace anl
 		CNoiseExecutor& GetVM() { return VM; }
 		CInstructionIndex GetParseResult() { return ParseResult; }
 		CKernel& GetKernel() { return Kernel; }
+		int GetTotalFolds() { return TotalFolds; }
+		int GetTotalInstructions() { return TotalInstructions; }
 	};
 
 }

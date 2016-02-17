@@ -972,4 +972,166 @@ CInstructionIndex CKernel::getVar(const std::string name)
         return (*i).second;
     }
 }
+
+int CKernel::constFold(CInstructionIndex startingIndex)
+{
+	int foldCount = 0;
+	SInstruction& i = kernel_[startingIndex.index_];
+
+	if (i.opcode_ == OP_Constant)
+		return 0;
+
+	unsigned int opcode = i.opcode_;
+	bool isValidCanidate = false;
+	
+	SInstruction* Li = nullptr;
+	SInstruction* Ri = nullptr;
+
+	if (opcode == OP_Add 
+		|| opcode == OP_Subtract
+		|| opcode == OP_Multiply
+		|| opcode == OP_Divide
+		|| opcode == OP_Min
+		|| opcode == OP_Max
+		|| opcode == OP_Pow)
+	{
+		foldCount = constFold(i.sources_[0]);
+		Li = &kernel_[i.sources_[0]];
+		if (Li->opcode_ == OP_Constant)
+		{
+			foldCount += constFold(i.sources_[1]);
+			Ri = &kernel_[i.sources_[1]];
+			if (Ri->opcode_ == OP_Constant)
+			{
+				isValidCanidate = true;
+			}
+		}
+	}
+	else if (opcode == OP_Sin
+		|| opcode == OP_Cos
+		|| opcode == OP_Tan
+		|| opcode == OP_ASin
+		|| opcode == OP_ACos
+		|| opcode == OP_ATan
+		|| opcode == OP_Abs)
+	{
+		foldCount = constFold(i.sources_[0]);
+		Li = &kernel_[i.sources_[0]];
+		if (Li->opcode_ == OP_Constant)
+		{
+			isValidCanidate = true;
+		}
+	}
+
+	if (isValidCanidate)
+	{
+		switch (opcode)
+		{
+		case OP_Add:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = Li->outfloat_ + Ri->outfloat_;
+			i.outrgba_ = Li->outrgba_ + Ri->outrgba_;
+			foldCount += 1;
+			break;
+		case OP_Subtract:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = Li->outfloat_ - Ri->outfloat_;
+			i.outrgba_ = Li->outrgba_ - Ri->outrgba_;
+			foldCount += 1;
+			break;
+		case OP_Multiply:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = Li->outfloat_ * Ri->outfloat_;
+			i.outrgba_ = Li->outrgba_ * Ri->outrgba_;
+			foldCount += 1;
+			break;
+		case OP_Divide:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = Li->outfloat_ / Ri->outfloat_;
+			i.outrgba_ = Li->outrgba_ / Ri->outrgba_;
+			foldCount += 1;
+			break;
+		case OP_Min:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = std::min(Li->outfloat_, Ri->outfloat_);
+			foldCount += 1;
+			break;
+		case OP_Max:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = std::max(Li->outfloat_, Ri->outfloat_);
+			foldCount += 1;
+			break;
+		case OP_Pow:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = std::pow(Li->outfloat_, Ri->outfloat_);
+			foldCount += 1;
+			break;
+
+		case OP_Sin:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = std::sin(Li->outfloat_);
+			foldCount += 1;
+			break;
+		case OP_Cos:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = std::cos(Li->outfloat_);
+			foldCount += 1;
+			break;
+		case OP_Tan:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = std::tan(Li->outfloat_);
+			foldCount += 1;
+			break;
+		case OP_ASin:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = std::asin(Li->outfloat_);
+			foldCount += 1;
+			break;
+		case OP_ACos:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = std::acos(Li->outfloat_);
+			foldCount += 1;
+			break;
+		case OP_ATan:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = std::atan(Li->outfloat_);
+			foldCount += 1;
+			break;
+		case OP_Abs:
+			i.opcode_ = OP_Constant;
+			i.outfloat_ = std::abs(Li->outfloat_);
+			foldCount += 1;
+			break;
+		default:
+			break;
+		}
+	}
+
+	if (isValidCanidate && i.opcode_ == OP_Constant)
+	{
+		// This is now a constant so clear the references to other instructions.
+		// This is helpful in the event we try to count references later
+		for (int j = 0; j < MaxSourceCount; ++j)
+			i.sources_[j] = SInstructionDefaultIndex;
+	}
+
+	return foldCount;
+}
+
+int CKernel::constFoldAll() 
+{
+	int totalFolds = 0;
+	const int size = (int)kernel_.size();
+	for (int i = 0; i < size; ++i)
+		totalFolds += constFold(i);
+	return totalFolds;
+}
+
+void CKernel::optimize(int& totalFolds, int& totalInstructions)
+{
+	totalFolds = 0;
+	totalFolds = constFoldAll();
+	totalInstructions = (int)kernel_.size();
+}
+
 };
