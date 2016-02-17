@@ -318,10 +318,92 @@ namespace anl
 	NoiseParser::Function NoiseParser::KeywordToFunc(const ParseString& keyword)
 	{
 		Function f = FUNC_INVALID;
-		if (keyword == "SimplexBasis")
+		if (keyword == "valueBasis")
+			f = FUNC_VALUE_BASIS;
+		else if (keyword == "gradientBasis")
+			f = FUNC_GRADIENT_BASIS; 
+		else if (keyword == "simplexBasis")
 			f = FUNC_SIMPLEX_BASIS;
-		else if (keyword == "GradientBasis")
-			f = FUNC_GRADIENT_BASIS;
+		else if (keyword == "cellularBasis")
+			f = FUNC_CELLULAR_BASIS;
+		else if (keyword == "max")
+			f = FUNC_MAX;
+		else if (keyword == "min")
+			f = FUNC_MIN;
+		else if (keyword == "abs")
+			f = FUNC_ABS;
+		else if (keyword == "pow")
+			f = FUNC_POW;
+		else if (keyword == "bias")
+			f = FUNC_BIAS;
+		else if (keyword == "gain")
+			f = FUNC_GAIN;
+		else if (keyword == "cos")
+			f = FUNC_COS;
+		else if (keyword == "sin")
+			f = FUNC_SIN;
+		else if (keyword == "tan")
+			f = FUNC_TAN;
+		else if (keyword == "acos")
+			f = FUNC_ACOS;
+		else if (keyword == "asin")
+			f = FUNC_ASIN;
+		else if (keyword == "atan")
+			f = FUNC_ATAN;
+		else if (keyword == "tiers")
+			f = FUNC_TIERS;
+		else if (keyword == "smoothTiers")
+			f = FUNC_SMOOTH_TIERS;
+		else if (keyword == "blend")
+			f = FUNC_BLEND;
+		else if (keyword == "select")
+			f = FUNC_SELECT;
+		else if (keyword == "simpleRidgedMultifractal")
+			f = FUNC_SIMPLE_RIDGED_MULTIFRACTAL;
+		else if (keyword == "simplefBm")
+			f = FUNC_SIMPLE_FBM;
+		else if (keyword == "simpleBillow")
+			f = FUNC_SIMPLE_BILLOW;
+		else if (keyword == "x")
+			f = FUNC_X;
+		else if (keyword == "y")
+			f = FUNC_Y;
+		else if (keyword == "z")
+			f = FUNC_Z;
+		else if (keyword == "w")
+			f = FUNC_W;
+		else if (keyword == "u")
+			f = FUNC_U;
+		else if (keyword == "v")
+			f = FUNC_V;
+		else if (keyword == "dx")
+			f = FUNC_DX;
+		else if (keyword == "dy")
+			f = FUNC_DY;
+		else if (keyword == "dz")
+			f = FUNC_DZ;
+		else if (keyword == "dw")
+			f = FUNC_DW;
+		else if (keyword == "du")
+			f = FUNC_DU;
+		else if (keyword == "dv")
+			f = FUNC_DV;
+		else if (keyword == "sigmoid")
+			f = FUNC_SIGMOID;
+		else if (keyword == "scaleOffset")
+			f = FUNC_SCALE_OFFSET;
+		else if (keyword == "radial")
+			f = FUNC_RADIAL;
+		else if (keyword == "clamp")
+			f = FUNC_CLAMP;
+		else if (keyword == "rgba")
+			f = FUNC_RGBA;
+		else if (keyword == "color")
+			f = FUNC_COLOR;
+		else if (keyword == "hexTile")
+			f = FUNC_HEX_TILE;
+		else if (keyword == "hexBump")
+			f = FUNC_HEX_BUMP;
 		return f;
 	}
 
@@ -485,26 +567,354 @@ namespace anl
 		// we now have the name of the function and all the arguments
 		switch (func)
 		{
+		case FUNC_VALUE_BASIS:
+			if (argsFound != 2)
+			{
+				SetError("valueBasis accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.valueBasis(args[0], args[1]);
+			break;
 		case FUNC_GRADIENT_BASIS:
 			if (argsFound != 2)
 			{
-				SetError("GradientBasis accepts 2 arguemnts");
+				SetError("GradientBasis accepts 2 arguemnts", funcToken);
 				return false;
 			}
 			instruction = Kernel.gradientBasis(args[0], args[1]);
-			return true;
+			break;
 		case FUNC_SIMPLEX_BASIS:
 			if (argsFound != 1)
 			{
-				SetError("SimplexBasis accepts 1 arguemnt");
+				SetError("SimplexBasis accepts 1 arguemnt", funcToken);
 				return false;
 			}
 			instruction = Kernel.simplexBasis(args[0]);
-			return true;
+			break;
+		case FUNC_CELLULAR_BASIS:
+			if (argsFound != 10)
+			{
+				SetError("cellularBasis accepts 10 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.cellularBasis(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
+			break;
+		case FUNC_MAX:
+			if (argsFound != 2)
+			{
+				SetError("max accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.maximum(args[0], args[1]);
+			break;
+		case FUNC_MIN:
+			if (argsFound != 2)
+			{
+				SetError("min accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.minimum(args[0], args[1]);
+			break;
+		case FUNC_ABS:
+			if (argsFound != 1)
+			{
+				SetError("abs accepts 1 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.abs(args[0]);
+			break;
+		case FUNC_POW:
+			if (argsFound != 2)
+			{
+				SetError("pow accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.pow(args[0], args[1]);
+			break;
+		case FUNC_BIAS:
+			if (argsFound != 2)
+			{
+				SetError("bias accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.bias(args[0], args[1]);
+			break;
+		case FUNC_GAIN:
+			if (argsFound != 2)
+			{
+				SetError("gain accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.gain(args[0], args[1]);
+			break;
+		case FUNC_COS:
+			if (argsFound != 1)
+			{
+				SetError("cos accepts 1 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.cos(args[0]);
+			break;
+		case FUNC_SIN:
+			if (argsFound != 1)
+			{
+				SetError("sin accepts 1 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.sin(args[0]);
+			break;
+		case FUNC_TAN:
+			if (argsFound != 1)
+			{
+				SetError("tan accepts 1 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.tan(args[0]);
+			break;
+		case FUNC_ACOS:
+			if (argsFound != 1)
+			{
+				SetError("acos accepts 1 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.acos(args[0]);
+			break;
+		case FUNC_ASIN:
+			if (argsFound != 1)
+			{
+				SetError("asin accepts 1 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.asin(args[0]);
+			break;
+		case FUNC_ATAN:
+			if (argsFound != 1)
+			{
+				SetError("atan accepts 1 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.atan(args[0]);
+			break;
+		case FUNC_TIERS:
+			if (argsFound != 2)
+			{
+				SetError("tiers accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.tiers(args[0], args[1]);
+			break;
+		case FUNC_SMOOTH_TIERS:
+			if (argsFound != 2)
+			{
+				SetError("smoothTiers accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.smoothTiers(args[0], args[1]);
+			break;
+		case FUNC_BLEND:
+			if (argsFound != 3)
+			{
+				SetError("blend accepts 3 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.blend(args[0], args[1], args[2]);
+			break;
+		case FUNC_SELECT:
+			if (argsFound != 5)
+			{
+				SetError("select accepts 5 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.select(args[0], args[1], args[2], args[3], args[4]);
+			break;
+		case FUNC_SIMPLE_RIDGED_MULTIFRACTAL:
+			if (argsFound != 6)
+			{
+				SetError("simpleRidgedMultifractal accepts 6 arguemnts", funcToken);
+				return false;
+			}
+			SetError("simpleRidgedMultifractal not supported");
+			//instruction = Kernel.simpleRidgedMultifractal(args[0], args[1], args[2], args[3], args[4], args[5]);
+			break;
+		case FUNC_SIMPLE_FBM:
+			if (argsFound != 6)
+			{
+				SetError("simplefBm accepts 6 arguemnts", funcToken);
+				return false;
+			}
+			SetError("simplefBm not supported");
+			//instruction = Kernel.simplefBm(args[0], args[1], args[2], args[3], args[4], args[5]);
+			break;
+		case FUNC_SIMPLE_BILLOW:
+			if (argsFound != 6)
+			{
+				SetError("simpleBillow accepts 6 arguemnts", funcToken);
+				return false;
+			}
+			SetError("simpleBillow not supported");
+			//instruction = Kernel.simpleBillow(args[0], args[1], args[2], args[3], args[4], args[5]);
+			break;
+		case FUNC_X:
+			if (argsFound != 0)
+			{
+				SetError("x accepts 0 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.x();
+			break;
+		case FUNC_Y:
+			if (argsFound != 0)
+			{
+				SetError("y accepts 0 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.y();
+			break;
+		case FUNC_Z:
+			if (argsFound != 0)
+			{
+				SetError("z accepts 0 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.z();
+			break;
+		case FUNC_W:
+			if (argsFound != 0)
+			{
+				SetError("w accepts 0 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.w();
+			break;
+		case FUNC_U:
+			if (argsFound != 0)
+			{
+				SetError("u accepts 0 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.u();
+			break;
+		case FUNC_V:
+			if (argsFound != 0)
+			{
+				SetError("v accepts 0 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.v();
+			break;
+		case FUNC_DX:
+			if (argsFound != 2)
+			{
+				SetError("dx accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.dx(args[0], args[1]);
+			break;
+		case FUNC_DY:
+			if (argsFound != 2)
+			{
+				SetError("dy accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.dy(args[0], args[1]);
+			break;
+		case FUNC_DZ:
+			if (argsFound != 2)
+			{
+				SetError("dz accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.dz(args[0], args[1]);
+			break;
+		case FUNC_DW:
+			if (argsFound != 2)
+			{
+				SetError("dw accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.dw(args[0], args[1]);
+			break;
+		case FUNC_DU:
+			if (argsFound != 2)
+			{
+				SetError("du accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.du(args[0], args[1]);
+			break;
+		case FUNC_DV:
+			if (argsFound != 2)
+			{
+				SetError("dv accepts 2 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.dv(args[0], args[1]);
+			break;
+		case FUNC_SIGMOID:
+			if (argsFound != 1 && argsFound != 3)
+			{
+				SetError("dv accepts 1 or 3 arguemnts", funcToken);
+				return false;
+			}
+			if(argsFound == 1)
+				instruction = Kernel.sigmoid(args[0]);
+			else
+				instruction = Kernel.sigmoid(args[0], args[1], args[2]);
+			break;
+		case FUNC_SCALE_OFFSET:
+			if (argsFound != 3)
+			{
+				SetError("scaleOffset accepts 3 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.scaleOffset(args[0], args[1], args[2]);
+			break;
+		case FUNC_RADIAL:
+			if (argsFound != 0)
+			{
+				SetError("radial accepts 0 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.radial();
+			break;
+		case FUNC_CLAMP:
+			if (argsFound != 3)
+			{
+				SetError("clamp accepts 3 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.clamp(args[0], args[1], args[2]);
+			break;
+		case FUNC_RGBA:
+		case FUNC_COLOR:
+			if (argsFound != 4)
+			{
+				SetError("rgba/color accepts 4 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.combineRGBA(args[0], args[1], args[2], args[3]);
+			break;
+		case FUNC_HEX_TILE:
+			if (argsFound != 1)
+			{
+				SetError("hexTile accepts 1 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.hexTile(args[0]);
+			break;
+		case FUNC_HEX_BUMP:
+			if (argsFound != 0)
+			{
+				SetError("hexBump accepts 0 arguemnts", funcToken);
+				return false;
+			}
+			instruction = Kernel.hexBump();
+			break;
 		default:
 			SetError("Unkown function type", funcToken);
 			return false;
 		}
+		return true;
 	}
 
 	bool NoiseParser::object(CInstructionIndex& instruction)

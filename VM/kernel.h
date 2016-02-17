@@ -129,6 +129,7 @@ namespace anl
 		CInstructionIndex combineRGBA(CInstructionIndex r, CInstructionIndex g, CInstructionIndex b, CInstructionIndex a);
 
         CInstructionIndex scaleOffset(CInstructionIndex src, double scale, double offset);
+		CInstructionIndex scaleOffset(CInstructionIndex src, CInstructionIndex scale, CInstructionIndex offset);
 
         CInstructionIndex simpleFractalLayer(unsigned int basistype, CInstructionIndex interptypeindex, double layerscale, double layerfreq, unsigned int seed, bool rot=true,
             double angle=0.5, double ax=0, double ay=0, double az=1);

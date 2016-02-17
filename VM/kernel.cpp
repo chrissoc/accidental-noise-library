@@ -876,6 +876,13 @@ CInstructionIndex CKernel::scaleOffset(CInstructionIndex src, double scale, doub
     return lastIndex();
 }
 
+CInstructionIndex CKernel::scaleOffset(CInstructionIndex src, CInstructionIndex scale, CInstructionIndex offset)
+{
+	CInstructionIndex m = multiply(src, scale);
+	add(m, offset);
+	return lastIndex();
+}
+
 CInstructionIndex CKernel::radial()
 {
     anl::SInstruction i;
