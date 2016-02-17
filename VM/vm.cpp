@@ -132,7 +132,6 @@ namespace anl
         if(k->size() != cache_.size()) cache_.resize(k->size());
 
         // clear evaluated flags
-        //for(auto i=evaluated_.begin(); i!=evaluated_.end(); ++i) *i=false;
 		evaluated_.ClearAllBits();
         return k;
 	}
