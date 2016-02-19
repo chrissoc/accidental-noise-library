@@ -83,9 +83,6 @@
     <ClCompile Include="..\..\Expression\NoiseParser.cpp">
       <Filter>Source Files\ANL\Expression</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\VM\BooleanBits.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\VM\coordinate.cpp">
       <Filter>Source Files\ANL\VM</Filter>
     </ClCompile>

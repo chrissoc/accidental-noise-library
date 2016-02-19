@@ -58,7 +58,7 @@ namespace SimplexAutoExpression
         {
             if (clear)
             {
-                txtParseErrorMsg.Visibility = Visibility.Visible;
+                txtParseErrorMsg.Visibility = Visibility.Collapsed;
                 txtParseErrorMsg.Text = "";
             }
             else
@@ -90,6 +90,11 @@ namespace SimplexAutoExpression
             {
                 SetExpressionFileParseError(false, parseError);
             }
+            else
+            {
+                SetExpressionFileParseError(true, string.Empty);
+            }
+
             lblParseTime.Content = ImageRenderService.ElapsedParseTimeInMs().ToString();
             lblInstructionCount.Content = ImageRenderService.GetInstructionCount().ToString();
             lblConstFoldCount.Content = ImageRenderService.GetFoldCount().ToString();
@@ -102,7 +107,31 @@ namespace SimplexAutoExpression
                 //System.Windows.Media.Imaging.BitmapSource bitmap = new BitmapSource();
                 //System.Windows.Media.Imaging.BitmapImage bitmap = new BitmapImage();
                 lblRenderTime.Content = ImageRenderService.ElapsedRenderTimeInMs().ToString();
-                imgImage.Source = BitmapSource.Create(width, height, 72, 72, PixelFormats.Gray32Float, BitmapPalettes.Gray256, buffer, width * sizeof(float));
+
+                ushort[] colorBuffer = new ushort[buffer.Length * 3];
+                bool checkLimits = chkShowLimits.IsChecked.Value;
+                for(int i = 0, j = 0; i < buffer.Length; ++i, j += 3)
+                {
+                    if (checkLimits && buffer[i] > 1.0)
+                    {
+                        colorBuffer[j + 0] = ushort.MaxValue / 2;
+                        colorBuffer[j + 1] = 0;
+                        colorBuffer[j + 2] = 0;
+                    }
+                    else if (checkLimits && buffer[i] < 0.0)
+                    {
+                        colorBuffer[j + 0] = 0;
+                        colorBuffer[j + 1] = ushort.MaxValue / 2;
+                        colorBuffer[j + 2] = 0;
+                    }
+                    else
+                    {
+                        colorBuffer[j + 0] = (ushort)(buffer[i] * ushort.MaxValue);
+                        colorBuffer[j + 1] = (ushort)(buffer[i] * ushort.MaxValue);
+                        colorBuffer[j + 2] = (ushort)(buffer[i] * ushort.MaxValue);
+                    }
+                }
+                imgImage.Source = BitmapSource.Create(width, height, 72, 72, PixelFormats.Rgb48, BitmapPalettes.Gray256, colorBuffer, width * sizeof(ushort) * 3);
                 if (WaitingForThumbnail)
                 {
                     string parseError;
@@ -117,6 +146,10 @@ namespace SimplexAutoExpression
                     if (ImageRenderService.StartRender(CurrentPendingExpression, out parseError, w, h) == false)
                     {
                         SetExpressionFileParseError(false, parseError);
+                    }
+                    else
+                    {
+                        SetExpressionFileParseError(true, string.Empty);
                     }
                 }
             }));
@@ -260,6 +293,11 @@ namespace SimplexAutoExpression
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ImageRenderService.AbortImageRender();
+        }
+
+        private void chkShowLimits_Checked(object sender, RoutedEventArgs e)
+        {
+            TimedReadAllTextAndRender(DirectoryToWatch + System.IO.Path.DirectorySeparatorChar + FileNameToWatch);
         }
     }
 }

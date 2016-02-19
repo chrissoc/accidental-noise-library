@@ -135,11 +135,14 @@ namespace anl
             double angle=0.5, double ax=0, double ay=0, double az=1);
 		CInstructionIndex simpleRidgedLayer(unsigned int basistype, CInstructionIndex interptypeindex, double layerscale, double layerfreq, unsigned int seed, bool rot=true,
             double angle=0.5, double ax=0, double ay=0, double az=1);
+		CInstructionIndex simpleRidgedLayer(unsigned int basistype, CInstructionIndex interpindex, CInstructionIndex layerscale, CInstructionIndex layerfreq, unsigned int seed, bool rot,
+			double angle, double ax, double ay, double az);
 		CInstructionIndex simpleBillowLayer(unsigned int basistype, CInstructionIndex interptypeindex, double layerscale, double layerfreq, unsigned int seed, bool rot=true,
             double angle=0.5, double ax=0, double ay=0, double az=1);
 
         CInstructionIndex simplefBm(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot=true);
 		CInstructionIndex simpleRidgedMultifractal(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot=true);
+		CInstructionIndex simpleRidgedMultifractal(CInstructionIndex basistype, CInstructionIndex interptype, CInstructionIndex numoctaves, CInstructionIndex frequency, CInstructionIndex seed, CInstructionIndex/*bool*/ rot, int& nonConstArg);
 		CInstructionIndex simpleBillow(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot=true);
 
         InstructionListType *getKernel(){return &kernel_;}
@@ -153,6 +156,10 @@ namespace anl
 		int constFold(CInstructionIndex startingIndex);
 		int constFoldAll();
 		void optimize(int& totalFolds, int& totalInstructions);
+
+	private:
+		// success indicates if the index was a constant and that the returned value is valid.
+		double extractConst(CInstructionIndex index, bool& success);
 
     private:
         InstructionListType kernel_;

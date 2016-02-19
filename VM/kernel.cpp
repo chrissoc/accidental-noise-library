@@ -641,6 +641,41 @@ CInstructionIndex CKernel::simpleRidgedLayer(unsigned int basistype, CInstructio
     return lastIndex();
 }
 
+CInstructionIndex CKernel::simpleRidgedLayer(unsigned int basistype, CInstructionIndex interpindex, CInstructionIndex layerscale, CInstructionIndex layerfreq, unsigned int seed, bool rot,
+	double angle, double ax, double ay, double az)
+{
+	CInstructionIndex base = nextIndex();
+	switch (basistype)
+	{
+	case anl::OP_ValueBasis:
+		valueBasis(interpindex, seed);
+		break;
+	case anl::OP_GradientBasis:
+		gradientBasis(interpindex, seed);
+		break;
+	case anl::OP_SimplexBasis:
+		simplexBasis(seed);
+		break;
+	default:
+		gradientBasis(interpindex, seed);
+		break;
+	}
+	base = abs(base);
+	base = subtract(one(), base);
+	base = multiply(base, layerscale);
+	CInstructionIndex sd = scaleDomain(base, layerfreq);
+	if (rot)
+	{
+		double len = std::sqrt(ax*ax + ay*ay + az*az);
+		constant(angle);
+		constant(ax / len);
+		constant(ay / len);
+		constant(az / len);
+		rotateDomain(sd, sd + 1, sd + 2, sd + 3, sd + 4);
+	}
+	return lastIndex();
+}
+
 CInstructionIndex CKernel::simpleBillowLayer(unsigned int basistype, CInstructionIndex interpindex, double layerscale, double layerfreq, unsigned int seed, bool rot,
 	double angle, double ax, double ay, double az)
 {
@@ -696,6 +731,68 @@ CInstructionIndex CKernel::simpleRidgedMultifractal(unsigned int basistype, unsi
 		CInstructionIndex nextlayer=simpleRidgedLayer(basistype, interpindex, 1.0/std::pow(2.0, (double)(c)), std::pow(2.0, (double)(c))*frequency, seed+10+c*1000,rot,
                                rnd.get01()*3.14159265, rnd.get01(), rnd.get01(), rnd.get01());
 		lastlayer=add(lastlayer,nextlayer);
+	}
+	return lastIndex();
+}
+
+CInstructionIndex CKernel::simpleRidgedMultifractal(CInstructionIndex basistype, CInstructionIndex interptype, CInstructionIndex numoctaves, CInstructionIndex frequency, CInstructionIndex seed, CInstructionIndex/*bool*/ rot, int& nonConstArg)
+{
+	// first go through trying to make our aruments constant
+	// then extract their value
+	nonConstArg = -1;
+	constFold(basistype);
+	constFold(numoctaves);
+	constFold(seed);
+	constFold(rot);
+
+	bool success;
+	double basistypeConst = extractConst(basistype, success);
+	if (!success)
+	{
+		nonConstArg = 0;
+		return 0;
+	}
+
+	int numoctavesConst = extractConst(numoctaves, success);
+	if (!success)
+	{
+		nonConstArg = 2;
+		return 0;
+	}
+
+	unsigned int seedConst = extractConst(seed, success);
+	if (!success)
+	{
+		nonConstArg = 4;
+		return 0;
+	}
+
+	bool rotConst = extractConst(rot, success) != 0.0;
+	if (!success)
+	{
+		nonConstArg = 5;
+		return 0;
+	}
+
+	if (numoctavesConst<1) return 0;
+
+	KISS rnd;
+	rnd.setSeed(seedConst);
+	simpleRidgedLayer(basistypeConst, interptype, one(), multiply(frequency, one()), seedConst + 10, rotConst,
+		rnd.get01()*3.14159265, rnd.get01(), rnd.get01(), rnd.get01());
+	CInstructionIndex lastlayer = lastIndex();
+
+	CInstructionIndex twoConst = constant(2.0);
+	
+	for (int c = 0; c<numoctavesConst - 1; ++c)
+	{
+		//divide(one(), this->pow(twoConst, constant(c)));
+		CInstructionIndex layerscale =  constant(1.0 / std::pow(2.0, (double)(c)));
+		CInstructionIndex layerfreq = multiply(constant(std::pow(2.0, (double)(c))), frequency);
+
+		CInstructionIndex nextlayer = simpleRidgedLayer(basistypeConst, interptype, layerscale, layerfreq, seedConst + 10 + c * 1000, rotConst,
+			rnd.get01()*3.14159265, rnd.get01(), rnd.get01(), rnd.get01());
+		lastlayer = add(lastlayer, nextlayer);
 	}
 	return lastIndex();
 }
@@ -1139,6 +1236,21 @@ void CKernel::optimize(int& totalFolds, int& totalInstructions)
 	totalFolds = 0;
 	totalFolds = constFoldAll();
 	totalInstructions = (int)kernel_.size();
+}
+
+double CKernel::extractConst(CInstructionIndex index, bool& success)
+{
+	const SInstruction& ins = kernel_[index.index_];
+	if (ins.opcode_ == OP_Constant || ins.opcode_ == OP_Seed)
+	{
+		success = true;
+		return ins.outfloat_;
+	}
+	else
+	{
+		success = false;
+		return 0.0;
+	}
 }
 
 };

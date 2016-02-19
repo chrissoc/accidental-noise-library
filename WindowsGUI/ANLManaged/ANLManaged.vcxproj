@@ -150,7 +150,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Expression\NoiseParser.cpp" />
-    <ClCompile Include="..\..\VM\BooleanBits.cpp" />
     <ClCompile Include="..\..\VM\coordinate.cpp" />
     <ClCompile Include="..\..\VM\hashing.cpp" />
     <ClCompile Include="..\..\VM\kernel.cpp" />

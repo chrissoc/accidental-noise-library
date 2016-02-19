@@ -37,6 +37,7 @@
                             <Label>Const Folds:</Label>
                             <Label Name="lblConstFoldCount" />
                         </WrapPanel>
+                        <CheckBox Name="chkShowLimits" Checked="chkShowLimits_Checked" Unchecked="chkShowLimits_Checked">Show limits</CheckBox>
                     </StackPanel>
                 </WrapPanel>
                 <TextBox Name="txtParseErrorMsg" IsReadOnly="True" Margin="5" BorderBrush="Red" Visibility="Collapsed"/>

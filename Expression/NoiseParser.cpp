@@ -567,6 +567,8 @@ namespace anl
 			return false;
 		}
 
+		int nonConstArgIndex;
+
 		// we now have the name of the function and all the arguments
 		switch (func)
 		{
@@ -731,13 +733,18 @@ namespace anl
 			instruction = Kernel.select(args[0], args[1], args[2], args[3], args[4]);
 			break;
 		case FUNC_SIMPLE_RIDGED_MULTIFRACTAL:
-			if (argsFound != 6)
+			if (argsFound != 6 && argsFound != 5)
 			{
-				SetError("simpleRidgedMultifractal accepts 6 arguemnts", funcToken);
+				SetError("simpleRidgedMultifractal accepts 5 or 6 arguemnts", funcToken);
 				return false;
 			}
-			SetError("simpleRidgedMultifractal not supported");
-			//instruction = Kernel.simpleRidgedMultifractal(args[0], args[1], args[2], args[3], args[4], args[5]);
+			else
+			{
+				CInstructionIndex boolRot = Kernel.one(); // default to true;
+				if (argsFound == 6)
+					boolRot = args[5];
+				instruction = Kernel.simpleRidgedMultifractal(args[0], args[1], args[2], args[3], args[4], boolRot, nonConstArgIndex);
+			}
 			break;
 		case FUNC_SIMPLE_FBM:
 			if (argsFound != 6)
