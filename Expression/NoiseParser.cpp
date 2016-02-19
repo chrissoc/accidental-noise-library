@@ -411,10 +411,13 @@ namespace anl
 	{
 		// check constants first
 		CInstructionIndex newInstruction(instruction);
+		BlendType bt = KeywordToBlend(keyword);
 		if (keyword == "pi")
 			newInstruction = Kernel.pi();
 		else if (keyword == "e")
 			newInstruction = Kernel.e();
+		else if (bt != BLEND_INVALID)
+			newInstruction = Kernel.constant(bt);
 
 		if (newInstruction != instruction)
 		{

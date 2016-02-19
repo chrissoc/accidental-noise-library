@@ -75,6 +75,11 @@ public:
 	{
 	}
 
+private:
+	//CBooleanBits(CBooleanBits& other) { throw "CBooleanBits Copy ctor not allowed"; }
+	CBooleanBits(const CBooleanBits& other) { throw "CBooleanBits Copy ctor not allowed"; }
+public:
+
 	virtual ~CBooleanBits()
 	{
 		delete[] BitArray;
@@ -86,7 +91,7 @@ public:
 	{
 		if (BitElementCount() < newSize)
 		{
-			const int32_t newElementCount = newSize / (sizeof(Type) * 8);
+			const int32_t newElementCount = newSize / (sizeof(Type) * 8) + 1;
 			Type* newArray = new Type[newElementCount];
 			Copy(newArray, newElementCount, BitArray, ArrayCapacity);
 			delete[] BitArray;
@@ -109,13 +114,24 @@ public:
 		}
 	}
 
+private:
+#if _DEBUG
+	void BoundsCheck(int32_t index) const { if(index < 0 || index >= ArrayCapacity) throw "Bounds check failed for BooleanBits";  }
+#define ANL_BOOLEANBITS_DEBUG_BOUNDS_CHECK(index) BoundsCheck(index)
+#else
+#define ANL_BOOLEANBITS_DEBUG_BOUNDS_CHECK(index)
+#endif
+	public:
+
 	BoolRef operator[](int32_t index)
 	{
+		ANL_BOOLEANBITS_DEBUG_BOUNDS_CHECK(index / (sizeof(Type) * 8));
 		return BoolRef(BitArray[index / (sizeof(Type) * 8)], index % (sizeof(Type) * 8));
 	}
 
 	const bool operator[](int32_t index) const
 	{
+		ANL_BOOLEANBITS_DEBUG_BOUNDS_CHECK(index / (sizeof(Type) * 8));
 		return (BitArray[index / (sizeof(Type) * 8)] & (1ll << index % (sizeof(Type) * 8))) != 0;
 	}
 };
