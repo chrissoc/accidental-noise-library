@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\ANL">
+      <UniqueIdentifier>{5c319324-516d-4237-aa3b-72167ca2fdba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ANL\VM">
+      <UniqueIdentifier>{90f2f3cb-ac3e-4384-934d-ce992e309fa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ANL\Expression">
+      <UniqueIdentifier>{8b7b6e8e-ac80-4575-91fe-d222d8615f34}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Simplex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InterfaceCDLL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Expression\NoiseParser.cpp">
+      <Filter>Source Files\ANL\Expression</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\BooleanBits.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\coordinate.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\hashing.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\kernel.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\noise_gen.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\noise_lut.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\vm.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Simplex.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InterfaceCDLL.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimplexTypes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Expression\NoiseParser.h">
+      <Filter>Source Files\ANL\Expression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VM\BooleanBits.h">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VM\coordinate.h">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VM\hashing.h">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VM\instruction.h">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VM\kernel.h">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VM\noise_gen.h">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VM\noise_lut.h">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VM\random_gen.h">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VM\types.h">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VM\utility.h">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VM\vm.h">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

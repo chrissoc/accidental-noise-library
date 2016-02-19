@@ -1,0 +1,43 @@
+
+SuperSimplex =
+(     0.5 * simplexBasis(12345) 
+	+ 0.25 * <2>simplexBasis(12345) 
+	+ 0.125 * <pow(2,2)>simplexBasis(12345)
+	+ (0.125 / pow(2,1)) * <pow(2,3)>simplexBasis(12345)
+	+ (0.125 / pow(2,2)) * <pow(2,4)>simplexBasis(12345)
+	+ (0.125 / pow(2,3)) * <pow(2,5)>simplexBasis(12345)
+	+ (0.125 / pow(2,4)) * <pow(2,6)>simplexBasis(12345)
+	+ (0.125 / pow(2,5)) * <pow(2,7)>simplexBasis(12345)
+	+ (0.125 / pow(2,6)) * <pow(2,8)>simplexBasis(12345)
+	+ (0.125 / pow(2,7)) * <pow(2,9)>simplexBasis(12345)
+	+ (0.125 / pow(2,8)) * <pow(2,10)>simplexBasis(12345)
+	+ (0.125 / pow(2,9)) * <pow(2,11)>simplexBasis(12345)
+	+ (0.125 / pow(2,10)) * <pow(2,12)>simplexBasis(12345)
+	+ (0.125 / pow(2,11)) * <pow(2,13)>simplexBasis(12345)
+	+ (0.125 / pow(2,12)) * <pow(2,14)>simplexBasis(12345)
+	+ (0.125 / pow(2,13)) * <pow(2,15)>simplexBasis(12345)
+	+ (0.125 / pow(2,14)) * <pow(2,16)>simplexBasis(12345)
+	+ (0.125 / pow(2,15)) * <pow(2,17)>simplexBasis(12345)
+	+ (0.125 / pow(2,16)) * <pow(2,18)>simplexBasis(12345)
+	+ (0.125 / pow(2,17)) * <pow(2,19)>simplexBasis(12345)
+	+ (0.125 / pow(2,18)) * <pow(2,20)>simplexBasis(12345)
+	+ (0.125 / pow(2,19)) * <pow(2,21)>simplexBasis(12345)
+	+ (0.125 / pow(2,20)) * <pow(2,22)>simplexBasis(12345)
+	+ (0.125 / pow(2,21)) * <pow(2,23)>simplexBasis(12345)
+	+ (0.125 / pow(2,22)) * <pow(2,24)>simplexBasis(12345)
+	+ (0.125 / pow(2,23)) * <pow(2,25)>simplexBasis(12345)
+	+ (0.125 / pow(2,24)) * <pow(2,26)>simplexBasis(12345)
+	+ (0.125 / pow(2,25)) * <pow(2,27)>simplexBasis(12345)
+	+ (0.125 / pow(2,26)) * <pow(2,28)>simplexBasis(12345)
+	+ (0.125 / pow(2,27)) * <pow(2,29)>simplexBasis(12345)
+	+ (0.125 / pow(2,28)) * <pow(2,30)>simplexBasis(12345)
+	+ (0.125 / pow(2,29)) * <pow(2,31)>simplexBasis(12345)
+	+ (0.125 / pow(2,30)) * <pow(2,32)>simplexBasis(12345)
+	+ (0.125 / pow(2,31)) * <pow(2,33)>simplexBasis(12345)
+	+ (0.125 / pow(2,32)) * <pow(2,34)>simplexBasis(12345)
+	+ (0.125 / pow(2,33)) * <pow(2,35)>simplexBasis(12345)
+);
+
+funny = gradientBasis(BLEND_NONE, 12345); 
+
+<10>(0.5 * SuperSimplex +  0.5 * funny);

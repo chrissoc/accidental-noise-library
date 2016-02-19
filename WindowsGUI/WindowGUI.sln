@@ -1,0 +1,71 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplexGUI", "SimplexGUI\SimplexGUI.csproj", "{7D10D826-E099-4F4C-A59C-C9672027DD60}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EC4420BC-B2CF-46B4-B3B3-080C2268F2EE} = {EC4420BC-B2CF-46B4-B3B3-080C2268F2EE}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simplex", "Simplex\Simplex.vcxproj", "{EC4420BC-B2CF-46B4-B3B3-080C2268F2EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplexAutoExpression", "SimplexAutoExpression\SimplexAutoExpression.csproj", "{4C943045-57D0-40A5-AA84-B7437ABD6F35}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ANLManaged", "ANLManaged\ANLManaged.vcxproj", "{58AA1298-39E7-4905-AE49-C1F20E88FC84}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AutoExpression", "AutoExpression", "{97098851-B2FB-47AF-BC4D-808311D883F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OldDev", "OldDev", "{90788328-458C-477D-BFD4-44730E2A77FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D10D826-E099-4F4C-A59C-C9672027DD60}.Debug|x64.ActiveCfg = Debug|x64
+		{7D10D826-E099-4F4C-A59C-C9672027DD60}.Debug|x64.Build.0 = Debug|x64
+		{7D10D826-E099-4F4C-A59C-C9672027DD60}.Debug|x86.ActiveCfg = Debug|x86
+		{7D10D826-E099-4F4C-A59C-C9672027DD60}.Debug|x86.Build.0 = Debug|x86
+		{7D10D826-E099-4F4C-A59C-C9672027DD60}.Release|x64.ActiveCfg = Release|x64
+		{7D10D826-E099-4F4C-A59C-C9672027DD60}.Release|x64.Build.0 = Release|x64
+		{7D10D826-E099-4F4C-A59C-C9672027DD60}.Release|x86.ActiveCfg = Release|x86
+		{7D10D826-E099-4F4C-A59C-C9672027DD60}.Release|x86.Build.0 = Release|x86
+		{EC4420BC-B2CF-46B4-B3B3-080C2268F2EE}.Debug|x64.ActiveCfg = Debug|x64
+		{EC4420BC-B2CF-46B4-B3B3-080C2268F2EE}.Debug|x64.Build.0 = Debug|x64
+		{EC4420BC-B2CF-46B4-B3B3-080C2268F2EE}.Debug|x86.ActiveCfg = Debug|Win32
+		{EC4420BC-B2CF-46B4-B3B3-080C2268F2EE}.Debug|x86.Build.0 = Debug|Win32
+		{EC4420BC-B2CF-46B4-B3B3-080C2268F2EE}.Release|x64.ActiveCfg = Release|x64
+		{EC4420BC-B2CF-46B4-B3B3-080C2268F2EE}.Release|x64.Build.0 = Release|x64
+		{EC4420BC-B2CF-46B4-B3B3-080C2268F2EE}.Release|x86.ActiveCfg = Release|Win32
+		{EC4420BC-B2CF-46B4-B3B3-080C2268F2EE}.Release|x86.Build.0 = Release|Win32
+		{4C943045-57D0-40A5-AA84-B7437ABD6F35}.Debug|x64.ActiveCfg = Debug|x64
+		{4C943045-57D0-40A5-AA84-B7437ABD6F35}.Debug|x64.Build.0 = Debug|x64
+		{4C943045-57D0-40A5-AA84-B7437ABD6F35}.Debug|x86.ActiveCfg = Debug|x86
+		{4C943045-57D0-40A5-AA84-B7437ABD6F35}.Debug|x86.Build.0 = Debug|x86
+		{4C943045-57D0-40A5-AA84-B7437ABD6F35}.Release|x64.ActiveCfg = Release|x64
+		{4C943045-57D0-40A5-AA84-B7437ABD6F35}.Release|x64.Build.0 = Release|x64
+		{4C943045-57D0-40A5-AA84-B7437ABD6F35}.Release|x86.ActiveCfg = Release|x86
+		{4C943045-57D0-40A5-AA84-B7437ABD6F35}.Release|x86.Build.0 = Release|x86
+		{58AA1298-39E7-4905-AE49-C1F20E88FC84}.Debug|x64.ActiveCfg = Debug|x64
+		{58AA1298-39E7-4905-AE49-C1F20E88FC84}.Debug|x64.Build.0 = Debug|x64
+		{58AA1298-39E7-4905-AE49-C1F20E88FC84}.Debug|x86.ActiveCfg = Debug|Win32
+		{58AA1298-39E7-4905-AE49-C1F20E88FC84}.Debug|x86.Build.0 = Debug|Win32
+		{58AA1298-39E7-4905-AE49-C1F20E88FC84}.Release|x64.ActiveCfg = Release|x64
+		{58AA1298-39E7-4905-AE49-C1F20E88FC84}.Release|x64.Build.0 = Release|x64
+		{58AA1298-39E7-4905-AE49-C1F20E88FC84}.Release|x86.ActiveCfg = Release|Win32
+		{58AA1298-39E7-4905-AE49-C1F20E88FC84}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7D10D826-E099-4F4C-A59C-C9672027DD60} = {90788328-458C-477D-BFD4-44730E2A77FD}
+		{EC4420BC-B2CF-46B4-B3B3-080C2268F2EE} = {90788328-458C-477D-BFD4-44730E2A77FD}
+		{4C943045-57D0-40A5-AA84-B7437ABD6F35} = {97098851-B2FB-47AF-BC4D-808311D883F5}
+		{58AA1298-39E7-4905-AE49-C1F20E88FC84} = {97098851-B2FB-47AF-BC4D-808311D883F5}
+	EndGlobalSection
+EndGlobal
