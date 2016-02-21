@@ -11,6 +11,7 @@ Bindings/toluaexe.exe
 
 Debug
 Release
+.vs
 
 *.suo
 *.VC.opendb

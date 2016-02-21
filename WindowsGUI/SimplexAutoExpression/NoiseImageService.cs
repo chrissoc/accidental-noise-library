@@ -69,8 +69,6 @@ namespace SimplexAutoExpression
                         loopSate.Stop();
                         return taskVmCopy;
                     }
-
-                    //ANLManaged.CNoiseExecutorManaged vm = Parser.GetVMCopy();
                     var root = Parser.GetInstructionIndexRoot();
                     for (int x = 0; x < width; x += 1)
                     {
@@ -79,7 +77,6 @@ namespace SimplexAutoExpression
                         double d = taskVmCopy.evaluateScalar(x * XScale, y * YScale, root);
                         d += 1.0;
                         d /= 2.0;
-                        //buffer[y * width + x] = (byte)(d * byte.MaxValue);
                         buffer[y * width + x] = (float)d;
                     }
                     return taskVmCopy;

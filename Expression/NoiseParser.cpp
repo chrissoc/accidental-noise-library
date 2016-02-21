@@ -406,7 +406,7 @@ namespace anl
 			f = FUNC_HEX_BUMP;
 		return f;
 	}
-
+	
 	bool NoiseParser::KeywordToVariable(CInstructionIndex& instruction, const ParseString& keyword)
 	{
 		// check constants first
@@ -416,6 +416,12 @@ namespace anl
 			newInstruction = Kernel.pi();
 		else if (keyword == "e")
 			newInstruction = Kernel.e();
+		else if (keyword == "OP_ValueBasis")
+			newInstruction = Kernel.constant(OP_ValueBasis);
+		else if(keyword == "OP_GradientBasis")
+			newInstruction = Kernel.constant(OP_GradientBasis);
+		else if (keyword == "OP_SimplexBasis")
+			newInstruction = Kernel.constant(OP_SimplexBasis);
 		else if (bt != BLEND_INVALID)
 			newInstruction = Kernel.constant(bt);
 
@@ -424,6 +430,7 @@ namespace anl
 			instruction = newInstruction;
 			return true;// found the constant
 		}
+		
 
 		auto var = Variables.find(keyword);
 		if (var != Variables.end())
@@ -863,7 +870,7 @@ namespace anl
 		case FUNC_SIGMOID:
 			if (argsFound != 1 && argsFound != 3)
 			{
-				SetError("dv accepts 1 or 3 arguemnts", funcToken);
+				SetError("sigmoid accepts 1 or 3 arguemnts", funcToken);
 				return false;
 			}
 			if(argsFound == 1)

@@ -168,7 +168,6 @@ namespace anl
 		bool domainScalar(CInstructionIndex& instruction);
 		bool argumentList(CInstructionIndex args[], int argc, int& argsFound);
 		bool functionCall(CInstructionIndex& instruction);
-		//bool scaledFunctionCall(CInstructionIndex& instruction);
 		bool object(CInstructionIndex& instruction);
 		bool scalar(CInstructionIndex& instruction);
 		bool mult(CInstructionIndex& instruction);

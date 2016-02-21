@@ -1,0 +1,45 @@
+/*
+
+As a reference the following lists all functions and keywords built into ANL
+
+CONSTANTS-------------
+	BLENDs / Interpolation operations
+	BLEND_NONE
+	BLEND_LINEAR
+	BLEND_HERMITE
+	BLEND_QUINTIC
+
+FUNCTIONS---------------
+
+	valueBasis
+	gradientBasis
+	simplexBasis
+	cellularBasis
+
+	bias gain
+	max	min	abs	pow
+	cos	sin	tan	acos asin atan
+	tiers
+	smoothTiers
+	blend
+	select
+	simpleRidgedMultifractal
+	simplefBm
+	simpleBillow
+	x	y	z	w	u	v	dx dy dz dw du dv
+	sigmoid
+	scaleOffset
+	radial
+	clamp
+	rgba
+	color
+	hexTile
+	hexBump
+
+BASIS OPs-------------------
+	OP_ValueBasis
+	OP_GradientBasis
+	OP_SimplexBasis
+*/
+
+<10>gradientBasis(BLEND_NONE, 12345);
