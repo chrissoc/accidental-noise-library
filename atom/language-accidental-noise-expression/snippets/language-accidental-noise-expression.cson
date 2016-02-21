@@ -1,0 +1,159 @@
+# If you want some example snippets, check out:
+# https://github.com/atom/language-gfm/blob/master/snippets/gfm.cson
+
+# in place of real code completion we use alot of snippets to fill the gaps
+# after all we only have builtin functions and constants, only variables may
+# be defined in code.
+
+'.source.accidental-noise-expression':
+  'Method documentation':
+    'prefix': 'doc'
+    'body': '// ${1:method} - ${2:description}'
+# SIMPLES
+  'simpleRidgedMultifractal':
+    'prefix': 'simpleRidgedMultifractal'
+    'body': 'simpleRidgedMultifractal(${1:OP_SimplexBasis}, ${2:BLEND_QUINTIC}, ${3:numoctaves}, ${4:frequency}, ${5:seed}, ${6:boolrot})'
+  'simpleBillow':
+    'prefix': 'simpleBillow'
+    'body': 'simpleBillow(${1:OP_SimplexBasis}, ${2:BLEND_QUINTIC}, ${3:numoctaves}, ${4:frequency}, ${5:seed}, ${6:boolrot})'
+  'simplefBm':
+    'prefix': 'simplefBm'
+    'body': 'simplefBm(${1:OP_SimplexBasis}, ${2:BLEND_QUINTIC}, ${3:numoctaves}, ${4:frequency}, ${5:seed}, ${6:boolrot})'
+
+#Shortened SIMPLES
+  'RidgedMultifractal':
+    'prefix': 'Ridged'
+    'body': 'simpleRidgedMultifractal(${1:OP_SimplexBasis}, ${2:BLEND_QUINTIC}, ${3:numoctaves}, ${4:frequency}, ${5:seed}, ${6:boolrot})'
+  'Billow':
+    'prefix': 'Billow'
+    'body': 'simpleBillow(${1:OP_SimplexBasis}, ${2:BLEND_QUINTIC}, ${3:numoctaves}, ${4:frequency}, ${5:seed}, ${6:boolrot})'
+  'fBm':
+    'prefix': 'fBm'
+    'body': 'simplefBm(${1:OP_SimplexBasis}, ${2:BLEND_QUINTIC}, ${3:numoctaves}, ${4:frequency}, ${5:seed}, ${6:boolrot})'
+
+# BASISs
+  'valueBasis':
+    'prefix': 'valueBasis'
+    'body': 'simplefBm(${1:BLEND_QUINTIC}, ${2:seed})'
+  'gradientBasis':
+    'prefix': 'gradientBasis'
+    'body': 'simplefBm(${1:BLEND_QUINTIC}, ${2:seed})'
+  'simplexBasis':
+    'prefix': 'simplexBasis'
+    'body': 'simplexBasis(${1:seed})'
+  'cellularBasis':
+    'prefix': 'cellularBasis'
+    'body': 'cellularBasis(${1:f1}, ${2:f2}, ${3:f3}, ${4:f4}, ${5:d1}, ${6:d2}, ${7:d3}, ${8:d4}, ${9:dist}, ${10:seed})'
+
+# BASISs reversed
+  'BasisValue':
+    'prefix': 'BasisValue'
+    'body': 'simplefBm(${1:BLEND_QUINTIC}, ${2:seed})'
+  'BasisGradient':
+    'prefix': 'BasisGradient'
+    'body': 'simplefBm(${1:BLEND_QUINTIC}, ${2:seed})'
+  'BasisSimplex':
+    'prefix': 'BasisSimplex'
+    'body': 'simplexBasis(${1:seed})'
+  'BasisCellular':
+    'prefix': 'BasisCellular'
+    'body': 'cellularBasis(${1:f1}, ${2:f2}, ${3:f3}, ${4:f4}, ${5:d1}, ${6:d2}, ${7:d3}, ${8:d4}, ${9:dist}, ${10:seed})'
+
+# OPs
+  'OP_ValueBasis':
+    'prefix': 'OP_ValueBasis'
+    'body': 'OP_ValueBasis'
+  'OP_SimplexBasis':
+    'prefix': 'OP_SimplexBasis'
+    'body': 'OP_SimplexBasis'
+  'OP_GradientBasis':
+    'prefix': 'OP_GradientBasis'
+    'body': 'OP_GradientBasis'
+#BLEND TYPES
+  'BLEND_NONE':
+    'prefix': 'OP_ValueBasis'
+    'body': 'OP_ValueBasis'
+  'BLEND_LINEAR':
+    'prefix': 'OP_SimplexBasis'
+    'body': 'OP_SimplexBasis'
+  'BLEND_HERMITE':
+    'prefix': 'OP_GradientBasis'
+    'body': 'OP_GradientBasis'
+  'BLEND_QUINTIC':
+    'prefix': 'OP_GradientBasis'
+    'body': 'OP_GradientBasis'
+
+#Simple functions
+  'max':
+    'prefix': 'max'
+    'body': 'max(${1:number}, ${2:number})'
+  'min':
+    'prefix': 'min'
+    'body': 'min(${1:number}, ${2:number})'
+  'abs':
+    'prefix': 'abs'
+    'body': 'abs(${1:number})'
+  'bias':
+    'prefix': 'bias'
+    'body': 'bias(${1:a}, ${2:b})'
+  'gain':
+    'prefix': 'gain'
+    'body': 'gain(${1:a}, ${2:b})'
+  'cos':
+    'prefix': 'cos'
+    'body': 'cos(${1:number})'
+  'sin':
+    'prefix': 'sin'
+    'body': 'sin(${1:number})'
+  'tan':
+    'prefix': 'tan'
+    'body': 'tan(${1:number})'
+  'acos':
+    'prefix': 'acos'
+    'body': 'acos(${1:number})'
+  'asin':
+    'prefix': 'asin'
+    'body': 'asin(${1:number})'
+  'atan':
+    'prefix': 'atan'
+    'body': 'atan(${1:number})'
+  'tiers':
+    'prefix': 'tiers'
+    'body': 'tiers(${1:a}, ${2:b})'
+  'smoothTiers':
+    'prefix': 'smoothTiers'
+    'body': 'smoothTiers(${1:a}, ${2:b})'
+    #Tiers Reverse
+  'TiersSmooth':
+    'prefix': 'TiersSmooth'
+    'body': 'smoothTiers(${1:a}, ${2:b})'
+  'blend':
+    'prefix': 'blend'
+    'body': 'blend(${1:low}, ${2:heigh}, ${3:control})'
+  'select':
+    'prefix': 'select'
+    'body': 'select(${1:low}, ${2:heigh}, (${3:control}, ${4:threshold}, (${5:falloff})'
+  'sigmoid':
+    'prefix': 'sigmoid'
+    'body': 'sigmoid(${1:source}, ${2:opt_center}, ${3:opt_ramp})'
+  'scaleOffset':
+    'prefix': 'scaleOffset'
+    'body': 'scaleOffset(${1:source}, ${2:scale}, ${3:offset})'
+  'radial':
+    'prefix': 'radial'
+    'body': 'radial()'
+  'clamp':
+    'prefix': 'clamp'
+    'body': 'clamp(${1:source}, ${2:low}, ${3:heigh})'
+  'color':
+    'prefix': 'color'
+    'body': 'color(${1:red}, ${2:green}, (${3:blue}, ${4:alpha})'
+  'rgba':
+    'prefix': 'rgba'
+    'body': 'rgba(${1:red}, ${2:green}, (${3:blue}, ${4:alpha})'
+  'hexTile':
+    'prefix': 'hexTile'
+    'body': 'hexTile(${1:seed})'
+  'hexBump':
+    'prefix': 'hexBump'
+    'body': 'hexBump()'

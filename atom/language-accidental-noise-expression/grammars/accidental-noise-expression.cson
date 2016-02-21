@@ -1,0 +1,48 @@
+# If this is your first time writing a language grammar, check out:
+#   - http://manual.macromates.com/en/language_grammars
+
+'scopeName': 'source.accidental-noise-expression'
+'name': 'accidental-noise-library'
+'fileTypes': [
+  'anl'
+  'ane'
+]
+'patterns': [
+  {
+    'match': '//.*$'
+    'name': 'comment'
+  }
+  {
+    'begin': '/\\*'
+    'end': '\\*/'
+    'name': 'comment'
+    'contentName': 'comment'
+  }
+  {
+    'match': '(\\d+\\.\\d+)|(\\d+)'
+    'name': 'constant.numeric'
+  }
+  {
+    'match': '(\\+|-|/|\\*|=)'
+    'name': 'keyword.opeartor'
+  }
+  {
+    'captures':
+      '1':
+        'name': 'entity.name.function'
+    'match': '(\\w+)\\s*\\('
+    'name': 'meta.function-call'
+  }
+  {
+    'match': '(BLEND_NONE|BLEND_LINEAR|BLEND_HERMITE|BLEND_QUINTIC|pi|e|OP_ValueBasis|OP_GradientBasis|OP_SimplexBasis)'
+    'name': 'constant.other.symbol'
+  }
+  {
+    'match': '[a-z|A-Z]+'
+    'name': 'variable'
+  }
+  {
+    'match': '<|>|\\[|\\]'
+    'name': 'keyword.control'
+  }
+]

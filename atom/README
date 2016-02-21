@@ -1,0 +1,7 @@
+The language-accidental-noise-expression is a package for the atom text editor.
+It is currently un-published thus why it is sitting here instead of its own
+repository.
+
+To install by hand (since its not published):
+  1. copy the folder language-accidental-noise-expression to ~/.atom/packages/
+  2. All done.
