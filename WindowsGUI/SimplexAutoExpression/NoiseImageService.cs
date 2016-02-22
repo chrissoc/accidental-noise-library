@@ -75,8 +75,9 @@ namespace SimplexAutoExpression
                         if (loopSate.ShouldExitCurrentIteration || AbortRequest)
                             return taskVmCopy;
                         double d = taskVmCopy.evaluateScalar(x * XScale, y * YScale, root);
-                        d += 1.0;
                         d /= 2.0;
+                        d += 0.5;
+                        
                         buffer[y * width + x] = (float)d;
                     }
                     return taskVmCopy;

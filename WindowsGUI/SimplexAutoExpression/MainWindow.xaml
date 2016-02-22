@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimplexAutoExpression"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" MinHeight="100" MinWidth="100"
+        Title="MainWindow" Height="350" Width="631.304" MinHeight="100" MinWidth="100"
         Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing"
         SizeChanged="Window_SizeChanged">
     <Grid>
@@ -38,6 +38,14 @@
                             <Label Name="lblConstFoldCount" />
                         </WrapPanel>
                         <CheckBox Name="chkShowLimits" Checked="chkShowLimits_Checked" Unchecked="chkShowLimits_Checked">Show limits</CheckBox>
+                    </StackPanel>
+                    <StackPanel>
+                        <WrapPanel>
+                            <Label ToolTip="Minimum and maximum values in rendered scene, red for above 1.0, orange for below 0.0, purple for below -1.0" Background="White" Foreground="Black">Min Max</Label>
+                            <Label Name="lblSceneMin" />
+                            <Label>-</Label>
+                            <Label Name="lblSceneMax" />
+                        </WrapPanel>
                     </StackPanel>
                 </WrapPanel>
                 <TextBox Name="txtParseErrorMsg" IsReadOnly="True" Margin="5" BorderBrush="Red" Visibility="Collapsed"/>

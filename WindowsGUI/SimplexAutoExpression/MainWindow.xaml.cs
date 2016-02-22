@@ -102,8 +102,12 @@ namespace SimplexAutoExpression
 
         private void RenderDoneCallback(float[] buffer, int width, int height)
         {
+            if (width * height <= 0)
+                return;
             this.Dispatcher.InvokeAsync(new Action(() =>
             {
+                float min = buffer[0];
+                float max = buffer[0];
                 //System.Windows.Media.Imaging.BitmapSource bitmap = new BitmapSource();
                 //System.Windows.Media.Imaging.BitmapImage bitmap = new BitmapImage();
                 lblRenderTime.Content = ImageRenderService.ElapsedRenderTimeInMs().ToString();
@@ -112,6 +116,10 @@ namespace SimplexAutoExpression
                 bool checkLimits = chkShowLimits.IsChecked.Value;
                 for(int i = 0, j = 0; i < buffer.Length; ++i, j += 3)
                 {
+                    if (buffer[i] < min)
+                        min = buffer[i];
+                    if (buffer[i] > max)
+                        max = buffer[i];
                     if (checkLimits && buffer[i] > 1.0)
                     {
                         colorBuffer[j + 0] = ushort.MaxValue / 2;
@@ -131,6 +139,32 @@ namespace SimplexAutoExpression
                         colorBuffer[j + 2] = (ushort)(buffer[i] * ushort.MaxValue);
                     }
                 }
+
+                // buffer was already adjusted by the NoiseImageService to be between 0.0 and 1.0,
+                // but we want to report our min/max between -1.0 and  1.0.
+                min = (min - 0.5f) * 2.0f;
+                max = (max - 0.5f) * 2.0f;
+
+                lblSceneMin.Content = min.ToString();
+                if(min > 1.0f)
+                    lblSceneMin.Foreground = Brushes.Red;
+                else if(min >= 0.0f)
+                    lblSceneMin.Foreground = Brushes.Black;
+                else if(min >= -1.0f)
+                    lblSceneMin.Foreground = Brushes.Orange;
+                else
+                    lblSceneMin.Foreground = Brushes.Purple;
+
+                lblSceneMax.Content = max.ToString();
+                if (max > 1.0f)
+                    lblSceneMax.Foreground = Brushes.Red;
+                else if (max >= 0.0f)
+                    lblSceneMax.Foreground = Brushes.Black;
+                else if (max >= -1.0f)
+                    lblSceneMax.Foreground = Brushes.Orange;
+                else
+                    lblSceneMax.Foreground = Brushes.Purple;
+
                 imgImage.Source = BitmapSource.Create(width, height, 72, 72, PixelFormats.Rgb48, BitmapPalettes.Gray256, colorBuffer, width * sizeof(ushort) * 3);
                 if (WaitingForThumbnail)
                 {

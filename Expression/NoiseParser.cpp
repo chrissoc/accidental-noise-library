@@ -787,8 +787,14 @@ namespace anl
 				SetError("simpleBillow accepts 6 arguemnts", funcToken);
 				return false;
 			}
-			SetError("simpleBillow not supported");
-			//instruction = Kernel.simpleBillow(args[0], args[1], args[2], args[3], args[4], args[5]);
+			instruction = Kernel.simpleBillow(args[0], args[1], args[2], args[3], args[4], args[5], nonConstArgIndex);
+			if (nonConstArgIndex >= 0)
+			{
+				ParseString msg = "simpleBillow requires argument index ";
+				msg += std::to_string(nonConstArgIndex);
+				msg += " to be constant";
+				SetError(msg);
+			}
 			break;
 		case FUNC_X:
 			if (argsFound != 0)
