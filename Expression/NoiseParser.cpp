@@ -751,16 +751,35 @@ namespace anl
 				if (argsFound == 6)
 					boolRot = args[5];
 				instruction = Kernel.simpleRidgedMultifractal(args[0], args[1], args[2], args[3], args[4], boolRot, nonConstArgIndex);
+				if (nonConstArgIndex >= 0)
+				{
+					ParseString msg = "simpleRidgedMultifractal requires argument index ";
+					msg += std::to_string(nonConstArgIndex);
+					msg += " to be constant";
+					SetError(msg);
+				}
 			}
 			break;
 		case FUNC_SIMPLE_FBM:
-			if (argsFound != 6)
+			if (argsFound != 6 && argsFound != 5)
 			{
-				SetError("simplefBm accepts 6 arguemnts", funcToken);
+				SetError("simplefBm accepts 5 or 6 arguemnts", funcToken);
 				return false;
 			}
-			SetError("simplefBm not supported");
-			//instruction = Kernel.simplefBm(args[0], args[1], args[2], args[3], args[4], args[5]);
+			else
+			{
+				CInstructionIndex boolRot = Kernel.one(); // default to true;
+				if (argsFound == 6)
+					boolRot = args[5];
+				instruction = Kernel.simplefBm(args[0], args[1], args[2], args[3], args[4], args[5], nonConstArgIndex);
+				if (nonConstArgIndex >= 0)
+				{
+					ParseString msg = "simplefBm requires argument index ";
+					msg += std::to_string(nonConstArgIndex);
+					msg += " to be constant";
+					SetError(msg);
+				}
+			}
 			break;
 		case FUNC_SIMPLE_BILLOW:
 			if (argsFound != 6)
@@ -1059,7 +1078,7 @@ namespace anl
 		}
 		else
 		{
-			SetError("missing value to the right of the multiply operator", t);
+			SetError("Missing value to the right of the multiply operator", t);
 			return false;
 		}
 	}
@@ -1088,7 +1107,7 @@ namespace anl
 		}
 		else
 		{
-			SetError("missing value to the right of the +/- operator", t);
+			SetError("Missing value to the right of the +/- operator", t);
 			return false;
 		}
 	}
@@ -1167,7 +1186,7 @@ namespace anl
 		Token t = tokens.GetToken();
 		if (t.token != Token::SEMI_COLON)
 		{
-			SetError("Satement does not end in a semicolon", t);
+			SetError("Statement does not end in a semicolon", t);
 			return false;
 		}
 		return true;
