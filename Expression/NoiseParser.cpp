@@ -87,12 +87,6 @@ namespace anl
 			case ')':
 				token.token = Token::R_PAREN;
 				return token;
-			case '<':
-				token.token = Token::L_CHEVRON;
-				return token;
-			case '>':
-				token.token = Token::R_CHEVRON;
-				return token;
 			case '[':
 				token.token = Token::L_BRACKET;
 				return token;
@@ -107,6 +101,81 @@ namespace anl
 				return token;
 			case '=':
 				token.token = Token::ASSIGNMENT;
+				return token;
+			case '<':
+			{
+				token.token = Token::TOKEN_ERROR;
+				if (IsEof())
+				{
+					SetError("Unexpected eof found within a domain operator '<>'");
+					return token;
+				}
+
+				c = Data[DataIndex];
+				DataIndex++;
+				Token::TokenType tt;
+				if (c == 's')
+					tt = Token::DOMAIN_SCALE;
+				else if (c == 't')
+					tt = Token::DOMAIN_TRANSLATE;
+				else if (c == 'r')
+					tt = Token::DOMAIN_ROTATE;
+				else
+				{
+					ParseString msg = "Unexpected character found within a domain operator '<>' char:'";
+					msg += c;
+					msg += "'";
+					SetError(msg);
+					return token;
+				}
+
+				if (IsEof())
+				{
+					SetError("Unexpected eof found within a domain operator '<>'");
+					return token;
+				}
+
+				c = Data[DataIndex];
+				DataIndex++;
+				if (c == 'x' || c == 'y' || c == 'z' || c == 'w' || c == 'u' || c == 'v')
+				{
+					// this domain operation only applys in one of the 6 domains.
+					if (c == 'x')
+						tt = (Token::TokenType)(tt + 1);
+					else if (c == 'y')
+						tt = (Token::TokenType)(tt + 2);
+					else if (c == 'z')
+						tt = (Token::TokenType)(tt + 3);
+					else if (c == 'w')
+						tt = (Token::TokenType)(tt + 4);
+					else if (c == 'u')
+						tt = (Token::TokenType)(tt + 5);
+					else if (c == 'v')
+						tt = (Token::TokenType)(tt + 6);
+					// advance
+					c = Data[DataIndex];
+					DataIndex++;
+				}
+
+				if (IsEof())
+				{
+					SetError("Unexpected eof found within a domain operator '<>'");
+					return token;
+				}
+
+				if (c != ':')
+				{
+					ParseString msg = "Unexpected character found within a domain operator '<>' char:'";
+					msg += c;
+					msg += "'";
+					SetError(msg);
+					return token;
+				}
+				token.token = tt;
+				return token;
+			}
+			case '>':
+				token.token = Token::R_CHEVRON;
 				return token;
 			case '/':
 				// peek ahead to see if this is a block comment
@@ -459,53 +528,28 @@ namespace anl
 		Variables[keyword] = new CInstructionIndex(value);
 	}
 
-	bool NoiseParser::axisScalar(CInstructionIndex& instruction)
+	bool NoiseParser::domainOperator(CInstructionIndex args[], int argc, int& argsFound, Token::TokenType& OperationToken)
 	{
 		Token t = tokens.GetToken();
-		if (t.token != Token::L_BRACKET)
+		OperationToken = t.token;
+		if (t.token < Token::DOMAIN_OP_BEGIN || t.token >= Token::DOMAIN_OP_END)
 		{
 			tokens.UnGet();
 			return false;
 		}
 
-		if (expression(instruction) == false)
+		if (argumentList(args, argc, argsFound) == false)
 		{
-			SetError("Missing expression from axis scalar - Empty []");
+			SetError("domainOperator '< expression >' requires an expression", t);
 			return false;
 		}
-
-		t = tokens.GetToken();
-		if (t.token != Token::R_BRACKET)
-		{
-			SetError("Missing closing bracket in axis scalar", t);
-			return false;
-		}
-
-		return true;
-	}
-
-	bool NoiseParser::domainScalar(CInstructionIndex& instruction)
-	{
-		Token t = tokens.GetToken();
-		if (t.token != Token::L_CHEVRON)
-		{
-			tokens.UnGet();
-			return false;
-		}
-
-		if (expression(instruction) == false)
-		{
-			SetError("Missing expression for domain scalar - empty <>");
-			return false;
-		}
-
+		
 		t = tokens.GetToken();
 		if (t.token != Token::R_CHEVRON)
 		{
-			SetError("Missing closing '>' in domain scalar", t);
+			SetError("Unable to find closing chevron '>'", t);
 			return false;
 		}
-
 		return true;
 	}
 
@@ -757,6 +801,7 @@ namespace anl
 					msg += std::to_string(nonConstArgIndex);
 					msg += " to be constant";
 					SetError(msg);
+					return false;
 				}
 			}
 			break;
@@ -778,22 +823,30 @@ namespace anl
 					msg += std::to_string(nonConstArgIndex);
 					msg += " to be constant";
 					SetError(msg);
+					return false;
 				}
 			}
 			break;
 		case FUNC_SIMPLE_BILLOW:
-			if (argsFound != 6)
+			if (argsFound != 6 && argsFound != 5)
 			{
-				SetError("simpleBillow accepts 6 arguemnts", funcToken);
+				SetError("simpleBillow accepts 5 or 6 arguemnts", funcToken);
 				return false;
 			}
-			instruction = Kernel.simpleBillow(args[0], args[1], args[2], args[3], args[4], args[5], nonConstArgIndex);
-			if (nonConstArgIndex >= 0)
+			else
 			{
-				ParseString msg = "simpleBillow requires argument index ";
-				msg += std::to_string(nonConstArgIndex);
-				msg += " to be constant";
-				SetError(msg);
+				CInstructionIndex boolRot = Kernel.one(); // default to true;
+				if (argsFound == 6)
+					boolRot = args[5];
+				instruction = Kernel.simpleBillow(args[0], args[1], args[2], args[3], args[4], boolRot, nonConstArgIndex);
+				if (nonConstArgIndex >= 0)
+				{
+					ParseString msg = "simpleBillow requires argument index ";
+					msg += std::to_string(nonConstArgIndex);
+					msg += " to be constant";
+					SetError(msg);
+					return false;
+				}
 			}
 			break;
 		case FUNC_X:
@@ -961,7 +1014,9 @@ namespace anl
 
 	bool NoiseParser::object(CInstructionIndex& instruction)
 	{
-		if (functionCall(instruction))
+		if (domainPrecedence(instruction))
+			return true;
+		else if (functionCall(instruction))
 			return true;
 		else if (grouping(instruction))
 			return true;
@@ -988,81 +1043,101 @@ namespace anl
 		}
 	}
 
-	bool NoiseParser::scalar(CInstructionIndex& instruction)
+	bool NoiseParser::domainPrecedence(CInstructionIndex& instruction)
 	{
-		CInstructionIndex scalar[6+1] = { NOP, NOP, NOP, NOP, NOP, NOP, NOP };
+		// optional
+		Token::TokenType tt;
+		const int argc = 5;
+		CInstructionIndex args[argc] = { NOP, NOP, NOP, NOP, NOP };
+		int argsFound = 0;
+		bool hasDomainOperator = domainOperator(args, argc, argsFound, tt);
 
-		bool foundDomainScale = false;
-		int axisCount = 0;
-		while (axisScalar(scalar[axisCount]))
+		bool foundExpr = object(instruction);
+		if (hasDomainOperator && foundExpr == false)
 		{
-			axisCount++;
-			if (axisCount == 7)
-				SetError("Too many axis scalars");
+			SetError("Domain operator '<xx: argumentList  > object' requires an object ");
 		}
-			
-		if (axisCount == 0)
+		else if (foundExpr == false)
 		{
-			if (domainScalar(scalar[0]))
-				foundDomainScale = true;
-		}
-
-		if (object(instruction))
-		{
-
-		}
-		else if (axisCount != 0 || foundDomainScale)
-		{
-			// error
-			SetError("No object following unary operator scale, nothing to scale");
-			return false;
-		}
-		else
-		{
-			// no error, just nothing found here
 			return false;
 		}
 
-		for (int i = 0; i < axisCount; ++i)
+		if (hasDomainOperator && argsFound == 1)
 		{
-			switch (i)
+			switch (tt)
 			{
-			case 0:
-				instruction = Kernel.scaleX(instruction, scalar[i]);
+			case Token::DOMAIN_SCALE:
+				instruction = Kernel.scaleDomain(instruction, args[0]);
 				break;
-			case 1:
-				instruction = Kernel.scaleY(instruction, scalar[i]);
+			case Token::DOMAIN_SCALE_X:
+				instruction = Kernel.scaleX(instruction, args[0]);
 				break;
-			case 2:
-				instruction = Kernel.scaleZ(instruction, scalar[i]);
+			case Token::DOMAIN_SCALE_Y:
+				instruction = Kernel.scaleY(instruction, args[0]);
 				break;
-			case 3:
-				// anl uses WUV instead of UVW
-				instruction = Kernel.scaleW(instruction, scalar[i]);
+			case Token::DOMAIN_SCALE_Z:
+				instruction = Kernel.scaleZ(instruction, args[0]);
 				break;
-			case 4:
-				instruction = Kernel.scaleU(instruction, scalar[i]);
+			case Token::DOMAIN_SCALE_W:
+				instruction = Kernel.scaleW(instruction, args[0]);
 				break;
-			case 5:
-				instruction = Kernel.scaleV(instruction, scalar[i]);
+			case Token::DOMAIN_SCALE_U:
+				instruction = Kernel.scaleU(instruction, args[0]);
+				break;
+			case Token::DOMAIN_SCALE_V:
+				instruction = Kernel.scaleV(instruction, args[0]);
+				break;
+			case Token::DOMAIN_TRANSLATE:
+				instruction = Kernel.translateDomain(instruction, args[0]);
+				break;
+			case Token::DOMAIN_TRANSLATE_X:
+				instruction = Kernel.translateX(instruction, args[0]);
+				break;
+			case Token::DOMAIN_TRANSLATE_Y:
+				instruction = Kernel.translateY(instruction, args[0]);
+				break;
+			case Token::DOMAIN_TRANSLATE_Z:
+				instruction = Kernel.translateZ(instruction, args[0]);
+				break;
+			case Token::DOMAIN_TRANSLATE_W:
+				instruction = Kernel.translateW(instruction, args[0]);
+				break;
+			case Token::DOMAIN_TRANSLATE_U:
+				instruction = Kernel.translateU(instruction, args[0]);
+				break;
+			case Token::DOMAIN_TRANSLATE_V:
+				instruction = Kernel.translateV(instruction, args[0]);
 				break;
 			default:
-				SetError("Too many axis scalars");
+				SetError("Unrecognized token in domainPrecedence");
 				return false;
+				break;
 			}
 		}
-
-		if (foundDomainScale)
+		else if (hasDomainOperator)
 		{
-			instruction = Kernel.scaleDomain(instruction, scalar[0]);
+			if (argsFound != 4)
+			{
+				SetError("rotate domain operation requires 4 arguments");
+				return false;
+			}
+			switch (tt)
+			{
+			case Token::DOMAIN_ROTATE:
+				instruction = Kernel.rotateDomain(instruction, args[0], args[1], args[2], args[3]);
+				break;
+			default:
+				SetError("Unrecognized token in domainPrecedence (multi arg section)");
+				return false;
+				break;
+			}
 		}
-
 		return true;
 	}
 
 	bool NoiseParser::mult(CInstructionIndex& instruction)
 	{
-		if (scalar(instruction) == false)
+		if (domainPrecedence(instruction) == false)
 			return false;
 
 		Token t = tokens.GetToken();

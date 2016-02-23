@@ -1007,7 +1007,6 @@ CInstructionIndex CKernel::simpleBillow(CInstructionIndex basistype, CInstructio
 	simpleBillowLayer(basistypeConst, interptype, one(), frequency, seedConst + 10, rotConst,
 		rnd.get01()*3.14159265, rnd.get01(), rnd.get01(), rnd.get01());
 	CInstructionIndex lastlayer = lastIndex();
-	CInstructionIndex numTwo = constant(2.0);
 
 	for (int c = 0; c<numoctavesConst - 1; ++c)
 	{

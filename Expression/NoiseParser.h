@@ -18,14 +18,17 @@ letter ::= [a-zA-Z]
 keyword ::= letter+
 digit ::= [0-9]
 number ::= digit+ ('.' digit+)?
+domainOp ::= 's' | 't' | 'r'
+component ::= 'x' | 'y' | 'z' | 'w' | 'u' | 'v'
+domainModifierLeft ::= '<' domainOp component? ':'
+domainModifierRight ::= '>'
 
-axisScalar ::= '[' expression ']'
-domainScalar ::= '<' expression '>'
+domainOperator ::= domainModifierLeft argumentList domainModifierRight domainOperator?
 argumentList ::= expression (',' argumentList)*
 functionCall ::= keyword ( '(' argumentList* ')' )?
 object ::= functionCall | grouping | negative | number | keyword
-scalar ::= (axisScalar | domainScalar)? object
-mult ::= scalar ('*' mult)?
+domainPrecedence ::= domainOperator? object
+mult ::= domainPrecedence ('*' mult)?
 add ::= mult (('+' | '-') add)?
 
 grouping ::= '(' expression ')'
@@ -52,7 +55,7 @@ namespace anl
 				NUMBER,
 				L_PAREN,
 				R_PAREN,
-				L_CHEVRON,
+				//L_CHEVRON,// replaced with DOMAIN_* operations
 				R_CHEVRON,
 				L_BRACKET,
 				R_BRACKET,
@@ -63,6 +66,23 @@ namespace anl
 				DIV,
 				ADD,
 				SUB,
+				DOMAIN_OP_BEGIN,
+				DOMAIN_SCALE = DOMAIN_OP_BEGIN,
+				DOMAIN_SCALE_X,
+				DOMAIN_SCALE_Y,
+				DOMAIN_SCALE_Z,
+				DOMAIN_SCALE_W,
+				DOMAIN_SCALE_U,
+				DOMAIN_SCALE_V,
+				DOMAIN_TRANSLATE,
+				DOMAIN_TRANSLATE_X,
+				DOMAIN_TRANSLATE_Y,
+				DOMAIN_TRANSLATE_Z,
+				DOMAIN_TRANSLATE_W,
+				DOMAIN_TRANSLATE_U,
+				DOMAIN_TRANSLATE_V,
+				DOMAIN_ROTATE,
+				DOMAIN_OP_END,
 			};
 			TokenType token;
 			double number;
@@ -164,12 +184,11 @@ namespace anl
 		void AddVariable(const ParseString& keyword, CInstructionIndex& value);
 		void SetError(ParseString msg, const Token& cause);
 		void SetError(ParseString msg);
-		bool axisScalar(CInstructionIndex& instruction);
-		bool domainScalar(CInstructionIndex& instruction);
+		bool domainOperator(CInstructionIndex args[], int argc, int& argsFound, Token::TokenType& OperationToken);
 		bool argumentList(CInstructionIndex args[], int argc, int& argsFound);
 		bool functionCall(CInstructionIndex& instruction);
 		bool object(CInstructionIndex& instruction);
-		bool scalar(CInstructionIndex& instruction);
+		bool domainPrecedence(CInstructionIndex& instruction);
 		bool mult(CInstructionIndex& instruction);
 		bool add(CInstructionIndex& instruction);
 		bool grouping(CInstructionIndex& instruction);

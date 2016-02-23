@@ -192,9 +192,10 @@ namespace SimplexAutoExpression
         private bool WatchExpressionFile(string file)
         {
             string dir = System.IO.Path.GetDirectoryName(file);
-            FileNameToWatch = System.IO.Path.GetFileName(file);
+            string newFileNameToWatch = System.IO.Path.GetFileName(file);
             if (dir != DirectoryToWatch || FileWatcher == null)
             {
+                FileNameToWatch = newFileNameToWatch;
                 DirectoryToWatch = dir;
                 FileWatcher = new FileSystemWatcher(DirectoryToWatch);
                 FileWatcher.Changed += FileWatcherChanged;
@@ -204,6 +205,12 @@ namespace SimplexAutoExpression
                 //FileWatcher.Renamed += FileWatcherChanged;
                 FileWatcher.Error += FilwWatcher_Error;
 
+                // start the first render ourself
+                TimedReadAllTextAndRender(DirectoryToWatch + System.IO.Path.DirectorySeparatorChar + FileNameToWatch);
+            }
+            else if(FileNameToWatch != newFileNameToWatch)
+            {
+                FileNameToWatch = newFileNameToWatch;
                 // start the first render ourself
                 TimedReadAllTextAndRender(DirectoryToWatch + System.IO.Path.DirectorySeparatorChar + FileNameToWatch);
             }
