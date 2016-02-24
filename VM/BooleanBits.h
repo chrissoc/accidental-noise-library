@@ -77,7 +77,7 @@ public:
 
 private:
 	//CBooleanBits(CBooleanBits& other) { throw "CBooleanBits Copy ctor not allowed"; }
-	CBooleanBits(const CBooleanBits& other) { throw "CBooleanBits Copy ctor not allowed"; }
+	//CBooleanBits(const CBooleanBits& ) { throw "CBooleanBits Copy ctor not allowed"; }
 public:
 
 	virtual ~CBooleanBits()

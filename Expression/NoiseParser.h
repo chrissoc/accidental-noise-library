@@ -3,6 +3,7 @@
 
 #include<string>
 #include<vector>
+#include<stack>
 
 #include "../VM/vm.h"
 #include "../VM/kernel.h"
@@ -172,31 +173,33 @@ namespace anl
 		CInstructionIndex ParseResult;
 		std::vector<ParseString> ErrorMsgs;
 		std::map<ParseString, CInstructionIndex*> Variables;
+		std::vector<CInstructionIndex> Stack;
 		int TotalFolds, TotalInstructions;
 		bool Error;
 
 	private:
 		bool IsEof(Token& token);
+		CInstructionIndex TopNPop();// returns the top of the stack and pops it at the same time.
 		BlendType KeywordToBlend(const ParseString& keyword);
 		Function KeywordToFunc(const ParseString& keyword);
 		// variables include constants
-		bool KeywordToVariable(CInstructionIndex& instruction, const ParseString& keyword);
-		void AddVariable(const ParseString& keyword, CInstructionIndex& value);
+		bool KeywordToVariable(const ParseString& keyword);
+		void AddVariable(const ParseString& keyword, const CInstructionIndex& value);
 		void SetError(ParseString msg, const Token& cause);
 		void SetError(ParseString msg);
-		bool domainOperator(CInstructionIndex args[], int argc, int& argsFound, Token::TokenType& OperationToken);
-		bool argumentList(CInstructionIndex args[], int argc, int& argsFound);
-		bool functionCall(CInstructionIndex& instruction);
-		bool object(CInstructionIndex& instruction);
-		bool domainPrecedence(CInstructionIndex& instruction);
-		bool mult(CInstructionIndex& instruction);
-		bool add(CInstructionIndex& instruction);
-		bool grouping(CInstructionIndex& instruction);
-		bool negative(CInstructionIndex& instruction);
-		bool expression(CInstructionIndex& instruction);
-		bool statement(CInstructionIndex& instruction);
-		bool assignment(CInstructionIndex& instruction);
-		bool program(CInstructionIndex& instruction);
+		bool domainOperator(int& argsFound, Token::TokenType& OperationToken);
+		bool argumentList(int& argsFound);
+		bool functionCall();
+		bool object();
+		bool domainPrecedence();
+		bool mult();
+		bool add();
+		bool grouping();
+		bool negative();
+		bool expression();
+		bool statement();
+		bool assignment();
+		bool program();
 
 	public:
 		NoiseParser(ParseString expression)

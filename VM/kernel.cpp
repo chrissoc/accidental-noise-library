@@ -943,6 +943,8 @@ CInstructionIndex CKernel::simplefBm(CInstructionIndex basistype, CInstructionIn
 	return lastIndex();
 }
 
+
+
 CInstructionIndex CKernel::simpleBillow(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot)
 {
     if(numoctaves<1) return 0;

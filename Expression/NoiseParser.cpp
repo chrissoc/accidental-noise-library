@@ -40,7 +40,6 @@ namespace anl
 		token.tokenLocation = DataIndex;
 		token.number = 0.0;
 
-		bool makingIntegral = false;
 		bool makingFractional = false;
 		int IntegralDigitCount = 0;
 		int FractionalDigitCount = 0;
@@ -183,7 +182,6 @@ namespace anl
 				{
 					DataIndex++;
 					// block comment, gobble untill end
-					bool foundAsterisk = false;
 					bool done = false;
 					while (IsEof() == false && !done)
 					{
@@ -306,7 +304,7 @@ namespace anl
 						ParseString msg = "Unexpected character: ";
 						msg += c;
 						msg += " at index: ";
-						msg += DataIndex;
+						msg += std::to_string(DataIndex);
 						SetError(msg);
 						token.token = Token::TOKEN_ERROR;
 						return token;
@@ -331,6 +329,13 @@ namespace anl
 		{
 			delete p.second;
 		}
+	}
+
+	CInstructionIndex NoiseParser::TopNPop()
+	{
+		CInstructionIndex& top = Stack.back();
+		Stack.pop_back();
+		return top;
 	}
 
 	void NoiseParser::SetError(ParseString msg, const Token& cause)
@@ -476,10 +481,10 @@ namespace anl
 		return f;
 	}
 	
-	bool NoiseParser::KeywordToVariable(CInstructionIndex& instruction, const ParseString& keyword)
+	bool NoiseParser::KeywordToVariable(const ParseString& keyword)
 	{
 		// check constants first
-		CInstructionIndex newInstruction(instruction);
+		CInstructionIndex newInstruction(NOP);
 		BlendType bt = KeywordToBlend(keyword);
 		if (keyword == "pi")
 			newInstruction = Kernel.pi();
@@ -494,9 +499,9 @@ namespace anl
 		else if (bt != BLEND_INVALID)
 			newInstruction = Kernel.constant(bt);
 
-		if (newInstruction != instruction)
+		if (newInstruction != NOP)
 		{
-			instruction = newInstruction;
+			Stack.push_back(newInstruction);
 			return true;// found the constant
 		}
 		
@@ -504,7 +509,7 @@ namespace anl
 		auto var = Variables.find(keyword);
 		if (var != Variables.end())
 		{
-			instruction = *var->second;
+			Stack.push_back(*var->second);
 			return true;
 		}
 		else
@@ -513,7 +518,7 @@ namespace anl
 		}
 	}
 
-	void NoiseParser::AddVariable(const ParseString& keyword, CInstructionIndex& value)
+	void NoiseParser::AddVariable(const ParseString& keyword, const CInstructionIndex& value)
 	{
 		auto var = Variables.find(keyword);
 		if (var != Variables.end())
@@ -528,7 +533,7 @@ namespace anl
 		Variables[keyword] = new CInstructionIndex(value);
 	}
 
-	bool NoiseParser::domainOperator(CInstructionIndex args[], int argc, int& argsFound, Token::TokenType& OperationToken)
+	bool NoiseParser::domainOperator(int& argsFound, Token::TokenType& OperationToken)
 	{
 		Token t = tokens.GetToken();
 		OperationToken = t.token;
@@ -538,7 +543,7 @@ namespace anl
 			return false;
 		}
 
-		if (argumentList(args, argc, argsFound) == false)
+		if (argumentList(argsFound) == false)
 		{
 			SetError("domainOperator '< expression >' requires an expression", t);
 			return false;
@@ -553,21 +558,15 @@ namespace anl
 		return true;
 	}
 
-	bool NoiseParser::argumentList(CInstructionIndex args[], int argc, int& argsFound)
+	bool NoiseParser::argumentList(int& argsFound)
 	{
-		if (argc == 0)
-		{
-			SetError("More arguments specified than supported");
-			return false;
-		}
-
-		if (expression(args[0]))
+		if (expression())
 		{
 			argsFound += 1;
 
 			Token t = tokens.GetToken();
 			if (t.token == Token::COMMA)
-				argumentList(args + 1, argc - 1, argsFound);
+				argumentList(argsFound);
 			else
 				tokens.UnGet();
 			return true;// return true, found atleast one.
@@ -578,7 +577,7 @@ namespace anl
 		}
 	}
 
-	bool NoiseParser::functionCall(CInstructionIndex& instruction)
+	bool NoiseParser::functionCall()
 	{
 		Token t = tokens.GetToken();
 		if (t.token != Token::KEYWORD)
@@ -606,10 +605,8 @@ namespace anl
 			return false;
 		}
 
-		const int argc = 10;
-		CInstructionIndex args[argc] = { NOP, NOP, NOP, NOP, NOP, NOP, NOP, NOP, NOP, NOP };
 		int argsFound = 0;
-		argumentList(args, argc, argsFound);
+		argumentList(argsFound);
 
 		t = tokens.GetToken();
 		if (t.token != Token::R_PAREN)
@@ -619,6 +616,9 @@ namespace anl
 		}
 
 		int nonConstArgIndex;
+
+		auto args = Stack.end() - argsFound;
+		CInstructionIndex instruction = NOP;
 
 		// we now have the name of the function and all the arguments
 		switch (func)
@@ -1009,32 +1009,36 @@ namespace anl
 			SetError("Unkown function type", funcToken);
 			return false;
 		}
+
+		Stack.erase(Stack.end() - argsFound, Stack.end());
+		Stack.push_back(instruction);
 		return true;
 	}
 
-	bool NoiseParser::object(CInstructionIndex& instruction)
+	bool NoiseParser::object()
 	{
-		if (domainPrecedence(instruction))
+		if (functionCall())
 			return true;
-		else if (functionCall(instruction))
+		else if (grouping())
 			return true;
-		else if (grouping(instruction))
-			return true;
-		else if (negative(instruction))
+		else if (negative())
 			return true;
 
 		Token t = tokens.GetToken();
 		if (t.token == Token::NUMBER)
 		{
-			instruction = Kernel.constant(t.number);
+			Stack.push_back(Kernel.constant(t.number));
 			return true;
 		}
 		else if (t.token == Token::KEYWORD)
 		{
-			if (KeywordToVariable(instruction, t.keyword))
+			if (KeywordToVariable(t.keyword))
 				return true;
 			else
+			{
+				SetError("Variable undefined: " + t.keyword, t);
 				return false;
+			}
 		}
 		else
 		{
@@ -1043,24 +1047,32 @@ namespace anl
 		}
 	}
 
-	bool NoiseParser::domainPrecedence(CInstructionIndex& instruction)
+	bool NoiseParser::domainPrecedence()
 	{
-		// optional
 		Token::TokenType tt;
-		const int argc = 5;
-		CInstructionIndex args[argc] = { NOP, NOP, NOP, NOP, NOP };
 		int argsFound = 0;
-		bool hasDomainOperator = domainOperator(args, argc, argsFound, tt);
+		// optional
+		bool hasDomainOperator = domainOperator(argsFound, tt);
 
-		bool foundExpr = object(instruction);
+		bool foundExpr = false;
+		if (hasDomainOperator && domainPrecedence())
+			foundExpr = true;
+		else if (object())
+			foundExpr = true;
+
 		if (hasDomainOperator && foundExpr == false)
 		{
 			SetError("Domain operator '<xx: argumentList  > object' requires an object ");
+			return false;
 		}
 		else if (foundExpr == false)
 		{
 			return false;
 		}
+
+		CInstructionIndex instruction = Stack.back();
+		Stack.pop_back();
+		auto args = Stack.end() - argsFound;
 
 		if (hasDomainOperator && argsFound == 1)
 		{
@@ -1132,12 +1144,14 @@ namespace anl
 				break;
 			}
 		}
+		Stack.erase(Stack.end() - argsFound, Stack.end());
+		Stack.push_back(instruction);
 		return true;
 	}
 
-	bool NoiseParser::mult(CInstructionIndex& instruction)
+	bool NoiseParser::mult()
 	{
-		if (domainPrecedence(instruction) == false)
+		if (domainPrecedence() == false)
 			return false;
 
 		Token t = tokens.GetToken();
@@ -1148,13 +1162,16 @@ namespace anl
 			return true;
 		}
 
-		CInstructionIndex operandRight(instruction);
-		if (mult(operandRight))
+		if (mult())
 		{
-			if(t.token == Token::MULT)
-				instruction = Kernel.multiply(instruction, operandRight);
+			auto right = Stack.back();
+			Stack.pop_back();
+			auto left = Stack.back();
+			Stack.pop_back();
+			if (t.token == Token::MULT)
+				Stack.push_back(Kernel.multiply(left, right));
 			else
-				instruction = Kernel.divide(instruction, operandRight);
+				Stack.push_back(Kernel.divide(left, right));
 			return true;
 		}
 		else
@@ -1164,9 +1181,9 @@ namespace anl
 		}
 	}
 
-	bool NoiseParser::add(CInstructionIndex& instruction)
+	bool NoiseParser::add()
 	{
-		if (mult(instruction) == false)
+		if (mult() == false)
 			return false;
 
 		Token t = tokens.GetToken();
@@ -1177,13 +1194,16 @@ namespace anl
 			return true;
 		}
 
-		CInstructionIndex operandRight(instruction);
-		if (add(operandRight))
+		if (add())
 		{
+			auto right = Stack.back();
+			Stack.pop_back();
+			auto left = Stack.back();
+			Stack.pop_back();
 			if (t.token == Token::ADD)
-				instruction = Kernel.add(instruction, operandRight);
+				Stack.push_back(Kernel.add(left, right));
 			else
-				instruction = Kernel.subtract(instruction, operandRight);
+				Stack.push_back(Kernel.subtract(left, right));
 			return true;
 		}
 		else
@@ -1193,7 +1213,7 @@ namespace anl
 		}
 	}
 
-	bool NoiseParser::grouping(CInstructionIndex& instruction)
+	bool NoiseParser::grouping()
 	{
 		Token t = tokens.GetToken();
 		if (t.token != Token::L_PAREN)
@@ -1202,7 +1222,7 @@ namespace anl
 			return false;
 		}
 
-		if (expression(instruction) == false)
+		if (expression() == false)
 		{
 			SetError("Missing expression within grouping, empty ()", t);
 			return false;
@@ -1217,7 +1237,7 @@ namespace anl
 		return true;
 	}
 
-	bool NoiseParser::negative(CInstructionIndex& instruction)
+	bool NoiseParser::negative()
 	{
 		Token t = tokens.GetToken();
 		if (t.token != Token::SUB)
@@ -1226,42 +1246,45 @@ namespace anl
 			return false;
 		}
 
-		if (expression(instruction) == false)
+		if (expression() == false)
 		{
 			SetError("Attempting to negate nothing", t);
 			return false;
 		}
 
-		SInstruction& i = (*Kernel.getKernel())[instruction.GetIndex()];
+		const SInstruction& i = (*Kernel.getKernel())[Stack.back().GetIndex()];
 		if (i.opcode_ == OP_Constant)
 		{
-			// negate the constant directly
-			i.outfloat_ = -i.outfloat_;
+			// negate the constant, but don't change it directly just incase something else is referencing it.
+			Stack.pop_back();
+			Stack.push_back(Kernel.constant(-i.outfloat_));
 			return true;
 		}
 		else
 		{
 			// since there is no constant to directly negate, we must multiply by -1.0
-			instruction = Kernel.multiply(instruction, Kernel.constant(-0.1));
+			CInstructionIndex instruction = Stack.back();
+			Stack.pop_back();
+			Stack.push_back(Kernel.multiply(instruction, Kernel.constant(-0.1)));
 			return true;
 		}
 	}
 
-	bool NoiseParser::expression(CInstructionIndex& instruction)
+	bool NoiseParser::expression()
 	{
-		if (grouping(instruction))
+		if (grouping())
 			return true;
-		else if (negative(instruction))
+		else if (negative())
 			return true;
-		else if (add(instruction))
+		else if (add())
 			return true;
 		else
 			return false;
 	}
 
-	bool NoiseParser::statement(CInstructionIndex& instruction)
+	bool NoiseParser::statement()
 	{
-		if (expression(instruction) == false)
+		if (expression() == false)
 			return false;
 
 		Token t = tokens.GetToken();
@@ -1273,7 +1296,7 @@ namespace anl
 		return true;
 	}
 
-	bool NoiseParser::assignment(CInstructionIndex& instruction)
+	bool NoiseParser::assignment()
 	{
 		ParseString variableName;
 		CInstructionIndex variableValue(NOP);
@@ -1282,7 +1305,11 @@ namespace anl
 		Token t = tokens.GetToken();
 		if (t.token == Token::KEYWORD)
 		{
-			if (KeywordToBlend(t.keyword) == BLEND_INVALID && KeywordToFunc(t.keyword) == FUNC_INVALID && KeywordToVariable(variableValue, t.keyword) == false)
+			bool isKeyword = KeywordToVariable(t.keyword);
+			// we wanted to see if it existed, not actually get it, so discard it from the stack.
+			if(isKeyword)
+				Stack.pop_back();
+			if (KeywordToBlend(t.keyword) == BLEND_INVALID && KeywordToFunc(t.keyword) == FUNC_INVALID && isKeyword == false)
 			{
 				variableName = t.keyword;
 				t = tokens.GetToken();
@@ -1308,7 +1335,7 @@ namespace anl
 			tokens.UnGet();
 		}
 
-		if (statement(instruction) == false)
+		if (statement() == false)
 		{
 			if (isAssignment)
 			{
@@ -1320,24 +1347,35 @@ namespace anl
 		else
 		{
 			if(isAssignment)
-				AddVariable(variableName, instruction);
+				AddVariable(variableName, Stack.back());
+			// don't pop stack here since we use the top of the stack to communicate the last statment
+			// seen as the statment to run. Yes this will grow the stack by one for each assignment.
+			//Stack.pop_back();
 			return true;
 		}
 	}
 
-	bool NoiseParser::program(CInstructionIndex& instruction)
+	bool NoiseParser::program()
 	{
-		if (assignment(instruction) == false)
+		if (assignment() == false)
 			return false;
 
-		program(instruction);
+		program();
 		return true;
 	}
 
 	bool NoiseParser::Parse()
 	{
 		// return true if there was an expression found and no error
-		bool success = program(ParseResult);
+		Stack.clear();
+		bool success = program();
+		//bool success = true;
+		//ParseResult = Kernel.simpleBillow(OP_SimplexBasis, BLEND_QUINTIC, 5, 1.0, 654989732, true);
+
+		if (Stack.size())
+			ParseResult = Stack.back();
+		else
+			ParseResult = NOP;
 
 		Token t;
 		if (IsEof(t) == false)

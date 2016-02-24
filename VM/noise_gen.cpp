@@ -638,26 +638,26 @@ double anl::gradval_noise6D(double x, double y, double z, double w, double u, do
 
 double anl::white_noise2D(double x, double y, unsigned int seed, interp_func interp)
 {
-	unsigned char hash=compute_hash_double_2(x,y,seed);
+	unsigned char hash=(unsigned char)compute_hash_double_2(x,y,seed);
 	return whitenoise_lut[hash];
 }
 
 double anl::white_noise3D(double x, double y, double z, unsigned int seed, interp_func interp)
 {
-    unsigned char hash=compute_hash_double_3(x,y,z,seed);
+    unsigned char hash= (unsigned char)compute_hash_double_3(x,y,z,seed);
 	//std::cout << (unsigned int)hash << std::endl;
     return whitenoise_lut[hash];
 }
 
 double anl::white_noise4D(double x, double y, double z, double w, unsigned int seed, interp_func interp)
 {
-	unsigned char hash=compute_hash_double_4(x,y,z,w,seed);
+	unsigned char hash= (unsigned char)compute_hash_double_4(x,y,z,w,seed);
 	return whitenoise_lut[hash];
 }
 
 double anl::white_noise6D(double x, double y, double z, double w, double u, double v, unsigned int seed, interp_func interp)
 {
-	unsigned char hash=compute_hash_double_6(x,y,z,w,u,v,seed);
+	unsigned char hash= (unsigned char)compute_hash_double_6(x,y,z,w,u,v,seed);
 	return whitenoise_lut[hash];
 }
 

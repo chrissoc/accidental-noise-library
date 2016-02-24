@@ -112,14 +112,16 @@ int32 MapExpressionToArea(int32 offsetX, int32 offsetY, int32 width, int32 heigh
 	anl::CNoiseExecutor& vm = parser.GetVM();
 	anl::CInstructionIndex ii = parser.GetParseResult();
 	double pct;
+	double scaleX = 1.0 / width;
+	double scaleY = 1.0 / height;
 	for (int32 y = 0; y < height; ++y)
 	{
 		for (int32 x = 0; x < width; ++x)
 		{
 			//pct = (double)i / (double)(width * height);
-			pct = vm.evaluateScalar(offsetX + x, offsetY + y, ii);
-			pct += 1.0;
-			pct /= 2;
+			pct = vm.evaluateScalar(offsetX + x * scaleX, offsetY + y * scaleY, ii);
+			pct /= 2.0;
+			pct += 0.5;
 			DataDest[y * width + x] = (uint32)(pct * UINT32_MAX);
 		}
 	}

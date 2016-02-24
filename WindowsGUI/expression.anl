@@ -38,12 +38,13 @@ SuperSimplex =
 	+ (0.125 / pow(2,33)) * <s:pow(2,35)>simplexBasis(12345)
 );
 
+
 funny = gradientBasis(BLEND_NONE, 12345);
 
 <s:10>(0.5 * SuperSimplex +  0.5 * funny);
 
-test = 0.35 * <s:10>simpleBillow(OP_SimplexBasis, BLEND_QUINTIC, 5, 1, 123456789, 1);
-<s:10><r:90,90,90,90>gradientBasis(BLEND_QUINTIC, 123456789);
+simpleBillow(OP_SimplexBasis, BLEND_QUINTIC, 5, 1, 123456789, 1);
+//<s:10>gradientBasis(BLEND_NONE, 123456789);
 // the following 2 lines are equivialant
 //1.25 + 0.75 * test;
 

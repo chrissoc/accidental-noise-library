@@ -56,6 +56,10 @@ namespace anl
             return (unsigned int)(val);
         }
 
+		// This function, get01(), is not compatible with C++/clr (.net managed).
+		// with function inlining the function works as expected,
+		// without inlining  (__declspec(noinline)) the function produces incorrect results.
+		// This works completely fine in a completly native build.
         double get01()
         {
             return ((double)get() / (double)(UINT_MAX));
