@@ -1,3 +1,56 @@
+/*
+
+Quick Reference:
+
+true, TRUE, True, are aliases for 1.0
+false, FALSE, False, are aliase for 0.0
+
+Multiplication and addition can be used to affect the output of a value,
+where as expressions inside angled brackets '< expression >' affect the
+coordinates used to generate the noise.
+
+Angled brackets have a starting flag on the left indicating the type of
+operation and what it affects. Operation is listed as the first character
+and can be s - scale, r - rotate, t - translate. The second character is
+what it affects, if left empty then it affects all axies, otherwise it must
+be the axis to apply the operation to (x,y,z,w,u,v).
+
+4th, 5th and 6th dimensions are w, u and v respectivly, not u, v and w as
+might be expected.
+
+Math functions such as the following are supported:
+	max min abs pow
+	cos sin tan acos asin atan
+
+Simple noise functions including the following are supported:
+	simpleRidgedMultifractal
+	simplefBm
+	simpleBillow
+Basis functions inclusing the following are supported:
+	valueBasis gradientBasis  simplexBasis cellularBasis
+Along with severl other helpful functions:
+	bias gain tiers smoothTiers blend select
+	sigmoid scaleOffset radial clamp
+
+The following functions return in corresponding input coordinate:
+	x y z w u v
+
+The following functions accept two arguments (source, spacing) and return
+the slope (change in height divided by spacing) where the change in height is
+between the height at the current cooridnate and the height at a new coordinate
+at current coordinate + spacing along the cooresponding axis. For example,
+dx provides the change in height along the x axis with a
+'granualrity' of spacing
+	dx dy dz dw du dv
+
+rgba and color allow constructing color inputs.
+	rgba color
+
+Making hexes.
+ hexTile hexBump
+
+*/
+
 
 SuperSimplex =
 (     0.5 * simplexBasis(12345)
@@ -40,8 +93,9 @@ SuperSimplex =
 
 
 funny = gradientBasis(BLEND_NONE, 12345);
-//<s:10><r:90,0,0,1>funny;
-<s:10>(0.5 * SuperSimplex +  0.5 * funny);
+<s:10><r:90,0,0,true>funny;
+<s:10>(dx(simpleBillow(OP_SimplexBasis, BLEND_QUINTIC, 5, 1, 654989732, 1), 0.5));
+//<s:10>(0.5 * SuperSimplex +  0.5 * funny);
 
 //simpleBillow(OP_SimplexBasis, BLEND_QUINTIC, 5, 1, 654989732, 1);
 //<s:10>gradientBasis(BLEND_NONE, 123456789);

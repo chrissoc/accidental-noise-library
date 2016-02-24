@@ -496,6 +496,10 @@ namespace anl
 			newInstruction = Kernel.constant(OP_GradientBasis);
 		else if (keyword == "OP_SimplexBasis")
 			newInstruction = Kernel.constant(OP_SimplexBasis);
+		else if (keyword == "true" || keyword == "TRUE" || keyword == "True")
+			newInstruction = Kernel.one();
+		else if (keyword == "false" || keyword == "FALSE" || keyword == "False")
+			newInstruction = Kernel.zero();
 		else if (bt != BLEND_INVALID)
 			newInstruction = Kernel.constant(bt);
 
