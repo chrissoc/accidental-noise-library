@@ -24,12 +24,12 @@ component ::= 'x' | 'y' | 'z' | 'w' | 'u' | 'v'
 domainModifierLeft ::= '<' domainOp component? ':'
 domainModifierRight ::= '>'
 
-domainOperator ::= domainModifierLeft argumentList domainModifierRight domainOperator?
+domainOperator ::= domainModifierLeft argumentList domainModifierRight
 argumentList ::= expression (',' argumentList)*
 functionCall ::= keyword ( '(' argumentList* ')' )?
 object ::= functionCall | grouping | negative | number | keyword
-domainPrecedence ::= domainOperator? object
-mult ::= domainPrecedence ('*' mult)?
+domainPrecedence ::= domainOperator? (domainPrecedence | object)
+mult ::= domainPrecedence (('*' | '/') mult)?
 add ::= mult (('+' | '-') add)?
 
 grouping ::= '(' expression ')'
