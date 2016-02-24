@@ -24,17 +24,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Simplex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="InterfaceCDLL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Expression\NoiseParser.cpp">
       <Filter>Source Files\ANL\Expression</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\BooleanBits.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
     </ClCompile>
     <ClCompile Include="..\..\VM\coordinate.cpp">
       <Filter>Source Files\ANL\VM</Filter>
@@ -54,15 +48,12 @@
     <ClCompile Include="..\..\VM\vm.cpp">
       <Filter>Source Files\ANL\VM</Filter>
     </ClCompile>
+    <ClCompile Include="NoiseParserInterfaceCDLL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Simplex.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="InterfaceCDLL.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SimplexTypes.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Expression\NoiseParser.h">
@@ -100,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="..\..\VM\vm.h">
       <Filter>Source Files\ANL\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="NoiseParserInterfaceCDLL.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

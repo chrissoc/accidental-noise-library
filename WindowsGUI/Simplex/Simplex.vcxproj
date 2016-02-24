@@ -157,12 +157,10 @@
     <ClInclude Include="..\..\VM\utility.h" />
     <ClInclude Include="..\..\VM\vm.h" />
     <ClInclude Include="InterfaceCDLL.h" />
-    <ClInclude Include="Simplex.h" />
-    <ClInclude Include="SimplexTypes.h" />
+    <ClInclude Include="NoiseParserInterfaceCDLL.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Expression\NoiseParser.cpp" />
-    <ClCompile Include="..\..\VM\BooleanBits.cpp" />
     <ClCompile Include="..\..\VM\coordinate.cpp" />
     <ClCompile Include="..\..\VM\hashing.cpp" />
     <ClCompile Include="..\..\VM\kernel.cpp" />
@@ -170,7 +168,7 @@
     <ClCompile Include="..\..\VM\noise_lut.cpp" />
     <ClCompile Include="..\..\VM\vm.cpp" />
     <ClCompile Include="InterfaceCDLL.cpp" />
-    <ClCompile Include="Simplex.cpp" />
+    <ClCompile Include="NoiseParserInterfaceCDLL.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

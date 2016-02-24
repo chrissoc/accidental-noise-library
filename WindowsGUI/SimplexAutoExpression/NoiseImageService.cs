@@ -26,7 +26,7 @@ namespace SimplexAutoExpression
         int FoldCount = 0;
 
 
-        ANLManaged.ParserManaged Parser;
+        ANL.Parser Parser;
 
         public delegate void RenderComplete(float[] buffer, int width, int height);
         public RenderComplete RenderDoneCallback;
@@ -57,7 +57,7 @@ namespace SimplexAutoExpression
 
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
-            Parallel.For<ANLManaged.CNoiseExecutorManaged>(0, height,
+            Parallel.For<ANL.CNoiseExecutor>(0, height,
                 () =>
                 {
                     return Parser.GetVMCopy();
@@ -146,7 +146,7 @@ namespace SimplexAutoExpression
             height = imgHeight;
             XScale = 1.0 / (double)width;
             YScale = 1.0 / (double)height;
-            Parser = new ANLManaged.ParserManaged(ExpressionToRender);
+            Parser = new ANL.Parser(ExpressionToRender);
 
             ElapsedParseTimeMs = 0;
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();

@@ -12,16 +12,16 @@
 
 #include <Windows.h>// for OutputDebugString, BSTR
 
-int32 FillSampleArea(int32 offsetX, int32 offsetY, int32 width, int32 height, uint32* DataDest, int32 DataDestSize)
+int32_t FillSampleArea(int32_t offsetX, int32_t offsetY, int32_t width, int32_t height, uint32_t* DataDest, int32_t DataDestSize)
 {
 	if (width <= 0 || height <= 0)
 		return 1;
 
 	//double pct;
-	//for (int32 i = 0; i < width * height; ++i)
+	//for (int32_t i = 0; i < width * height; ++i)
 	//{
 	//	pct = (double)i / (double)(width * height);
-	//	DataDest[i] = (uint32)(pct * UINT32_MAX);
+	//	DataDest[i] = (uint32_t)(pct * Uint32_t_MAX);
 	//}
 
 
@@ -52,15 +52,15 @@ int32 FillSampleArea(int32 offsetX, int32 offsetY, int32 width, int32 height, ui
 	double pct;
 	anl::CNoiseExecutor& vm = parser.GetVM();
 	anl::CInstructionIndex ii = parser.GetParseResult();
-	for (int32 y = 0; y < height; ++y)
+	for (int32_t y = 0; y < height; ++y)
 	{
-		for (int32 x = 0; x < width; ++x)
+		for (int32_t x = 0; x < width; ++x)
 		{
 			//pct = (double)i / (double)(width * height);
 			pct = vm.evaluateScalar(x * 0.05, y * 0.5, ii);
 			pct += 1.0;
 			pct /= 2;
-			DataDest[y * width + x] = (uint32)(pct * UINT32_MAX);
+			DataDest[y * width + x] = (uint32_t)(pct * UINT32_MAX);
 		}
 	}
 
@@ -80,7 +80,7 @@ BSTR CStrToBSTR(const char* str)
 }
 
 // returns non zero for error
-int32 MapExpressionToArea(int32 offsetX, int32 offsetY, int32 width, int32 height, const char* expression, BSTR* ErrorMsg, uint32* DataDest, int32 DataDestSize, int32* TotalFolds, int32* TotalInstructions)
+int32_t MapExpressionToArea(int32_t offsetX, int32_t offsetY, int32_t width, int32_t height, const char* expression, BSTR* ErrorMsg, uint32_t* DataDest, int32_t DataDestSize, int32_t* TotalFolds, int32_t* TotalInstructions)
 {
 	*ErrorMsg = nullptr;
 	if (width <= 0 || height <= 0)
@@ -114,15 +114,15 @@ int32 MapExpressionToArea(int32 offsetX, int32 offsetY, int32 width, int32 heigh
 	double pct;
 	double scaleX = 1.0 / width;
 	double scaleY = 1.0 / height;
-	for (int32 y = 0; y < height; ++y)
+	for (int32_t y = 0; y < height; ++y)
 	{
-		for (int32 x = 0; x < width; ++x)
+		for (int32_t x = 0; x < width; ++x)
 		{
 			//pct = (double)i / (double)(width * height);
 			pct = vm.evaluateScalar(offsetX + x * scaleX, offsetY + y * scaleY, ii);
 			pct /= 2.0;
 			pct += 0.5;
-			DataDest[y * width + x] = (uint32)(pct * UINT32_MAX);
+			DataDest[y * width + x] = (uint32_t)(pct * UINT32_MAX);
 		}
 	}
 	return 0;

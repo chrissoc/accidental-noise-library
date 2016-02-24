@@ -139,10 +139,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ANLManaged\ANLManaged.vcxproj">
-      <Project>{58aa1298-39e7-4905-ae49-c1f20e88fc84}</Project>
-      <Name>ANLManaged</Name>
-    </ProjectReference>
+    <Content Include="..\x64\Debug\Simplexd.dll">
+      <Link>Simplexd.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\x64\Release\Simplex.dll">
+      <Link>Simplex.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
