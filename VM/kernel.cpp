@@ -571,22 +571,22 @@ CInstructionIndex CKernel::select(CInstructionIndex low, CInstructionIndex high,
 CInstructionIndex CKernel::simpleFractalLayer(unsigned int basistype, CInstructionIndex interpindex, double layerscale, double layerfreq, unsigned int seed, bool rot,
             double angle, double ax, double ay, double az)
 {
-    CInstructionIndex base=nextIndex();
     switch(basistype)
     {
     case anl::OP_ValueBasis:
-        valueBasis(interpindex, seed);
+        valueBasis(interpindex, constant(seed));
         break;
     case anl::OP_GradientBasis:
-        gradientBasis(interpindex, seed);
+        gradientBasis(interpindex, constant(seed));
         break;
     case anl::OP_SimplexBasis:
-        simplexBasis(seed);
+        simplexBasis(constant(seed));
         break;
     default:
-        gradientBasis(interpindex, seed);
+        gradientBasis(interpindex, constant(seed));
         break;
     }
+	CInstructionIndex base = lastIndex();
     constant(layerscale);
     multiply(base,base+1);
     constant(layerfreq);
@@ -606,22 +606,22 @@ CInstructionIndex CKernel::simpleFractalLayer(unsigned int basistype, CInstructi
 CInstructionIndex CKernel::simpleFractalLayer(unsigned int basistype, CInstructionIndex interpindex, CInstructionIndex layerscale, CInstructionIndex layerfreq, unsigned int seed, bool rot,
 	double angle, double ax, double ay, double az)
 {
-	CInstructionIndex base = nextIndex();
 	switch (basistype)
 	{
 	case anl::OP_ValueBasis:
-		valueBasis(interpindex, seed);
+		valueBasis(interpindex, constant(seed));
 		break;
 	case anl::OP_GradientBasis:
-		gradientBasis(interpindex, seed);
+		gradientBasis(interpindex, constant(seed));
 		break;
 	case anl::OP_SimplexBasis:
-		simplexBasis(seed);
+		simplexBasis(constant(seed));
 		break;
 	default:
-		gradientBasis(interpindex, seed);
+		gradientBasis(interpindex, constant(seed));
 		break;
 	}
+	CInstructionIndex base = lastIndex();
 	base = multiply(base, layerscale);
 	CInstructionIndex sd = scaleDomain(base, layerfreq);
 	if (rot)
@@ -639,22 +639,22 @@ CInstructionIndex CKernel::simpleFractalLayer(unsigned int basistype, CInstructi
 CInstructionIndex CKernel::simpleRidgedLayer(unsigned int basistype, CInstructionIndex interpindex, double layerscale, double layerfreq, unsigned int seed, bool rot,
             double angle, double ax, double ay, double az)
 {
-    CInstructionIndex base=nextIndex();
     switch(basistype)
     {
     case anl::OP_ValueBasis:
-        valueBasis(interpindex, seed);
+        valueBasis(interpindex, constant(seed));
         break;
     case anl::OP_GradientBasis:
-        gradientBasis(interpindex, seed);
+        gradientBasis(interpindex, constant(seed));
         break;
     case anl::OP_SimplexBasis:
-        simplexBasis(seed);
+        simplexBasis(constant(seed));
         break;
     default:
-        gradientBasis(interpindex, seed);
+        gradientBasis(interpindex, constant(seed));
         break;
     }
+	CInstructionIndex base = lastIndex();
 	base=abs(base);
 	constant(1.0);
 	base=subtract(lastIndex(), base);
@@ -677,22 +677,22 @@ CInstructionIndex CKernel::simpleRidgedLayer(unsigned int basistype, CInstructio
 CInstructionIndex CKernel::simpleRidgedLayer(unsigned int basistype, CInstructionIndex interpindex, CInstructionIndex layerscale, CInstructionIndex layerfreq, unsigned int seed, bool rot,
 	double angle, double ax, double ay, double az)
 {
-	CInstructionIndex base = nextIndex();
 	switch (basistype)
 	{
 	case anl::OP_ValueBasis:
-		valueBasis(interpindex, seed);
+		valueBasis(interpindex, constant(seed));
 		break;
 	case anl::OP_GradientBasis:
-		gradientBasis(interpindex, seed);
+		gradientBasis(interpindex, constant(seed));
 		break;
 	case anl::OP_SimplexBasis:
-		simplexBasis(seed);
+		simplexBasis(constant(seed));
 		break;
 	default:
-		gradientBasis(interpindex, seed);
+		gradientBasis(interpindex, constant(seed));
 		break;
 	}
+	CInstructionIndex base = lastIndex();
 	base = abs(base);
 	base = subtract(one(), base);
 	base = multiply(base, layerscale);
@@ -712,22 +712,22 @@ CInstructionIndex CKernel::simpleRidgedLayer(unsigned int basistype, CInstructio
 CInstructionIndex CKernel::simpleBillowLayer(unsigned int basistype, CInstructionIndex interpindex, double layerscale, double layerfreq, unsigned int seed, bool rot,
 	double angle, double ax, double ay, double az)
 {
-	CInstructionIndex base=nextIndex();
     switch(basistype)
     {
     case anl::OP_ValueBasis:
-        valueBasis(interpindex, seed);
+        valueBasis(interpindex, constant(seed));
         break;
     case anl::OP_GradientBasis:
-        gradientBasis(interpindex, seed);
+        gradientBasis(interpindex, constant(seed));
         break;
     case anl::OP_SimplexBasis:
-        simplexBasis(seed);
+        simplexBasis(constant(seed));
         break;
     default:
-        gradientBasis(interpindex, seed);
+        gradientBasis(interpindex, constant(seed));
         break;
     }
+	CInstructionIndex base = lastIndex();
 	base=abs(base);
 	base=multiply(base,constant(2.0));
 	base=subtract(base,one());
@@ -751,22 +751,22 @@ CInstructionIndex CKernel::simpleBillowLayer(unsigned int basistype, CInstructio
 CInstructionIndex CKernel::simpleBillowLayer(unsigned int basistype, CInstructionIndex interpindex, CInstructionIndex layerscale, CInstructionIndex layerfreq, unsigned int seed, bool rot,
 	double angle, double ax, double ay, double az)
 {
-	CInstructionIndex base = nextIndex();
 	switch (basistype)
 	{
 	case anl::OP_ValueBasis:
-		valueBasis(interpindex, seed);
+		valueBasis(interpindex, constant(seed));
 		break;
 	case anl::OP_GradientBasis:
-		gradientBasis(interpindex, seed);
+		gradientBasis(interpindex, constant(seed));
 		break;
 	case anl::OP_SimplexBasis:
-		simplexBasis(seed);
+		simplexBasis(constant(seed));
 		break;
 	default:
-		gradientBasis(interpindex, seed);
+		gradientBasis(interpindex, constant(seed));
 		break;
 	}
+	CInstructionIndex base = lastIndex();
 	base = abs(base);
 	base = multiply(base, constant(2.0));
 	base = subtract(base, one());
@@ -786,7 +786,7 @@ CInstructionIndex CKernel::simpleBillowLayer(unsigned int basistype, CInstructio
 
 CInstructionIndex CKernel::simpleRidgedMultifractal(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot)
 {
-    if(numoctaves<1) return 0;
+    if(numoctaves<1) return zero();
 
 	CInstructionIndex interpindex=constant(interptype);
 	KISS rnd;
@@ -819,38 +819,37 @@ CInstructionIndex CKernel::simpleRidgedMultifractal(CInstructionIndex basistype,
 	if (!success)
 	{
 		nonConstArg = 0;
-		return 0;
+		return zero();
 	}
 
 	int numoctavesConst = (int)extractConst(numoctaves, success);
 	if (!success)
 	{
 		nonConstArg = 2;
-		return 0;
+		return zero();
 	}
 
 	unsigned int seedConst = (unsigned int)extractConst(seed, success);
 	if (!success)
 	{
 		nonConstArg = 4;
-		return 0;
+		return zero();
 	}
 
 	bool rotConst = extractConst(rot, success) != 0.0;
 	if (!success)
 	{
 		nonConstArg = 5;
-		return 0;
+		return zero();
 	}
 
-	if (numoctavesConst<1) return 0;
+	if (numoctavesConst<1) return zero();
 
 	KISS rnd;
 	rnd.setSeed(seedConst);
-	simpleRidgedLayer(basistypeConst, interptype, one(), multiply(frequency, one()), seedConst + 10, rotConst,
+	CInstructionIndex lastlayer = simpleRidgedLayer(basistypeConst, interptype, one(), multiply(frequency, one()), seedConst + 10, rotConst,
 		rnd.get01()*3.14159265, rnd.get01(), rnd.get01(), rnd.get01());
-	CInstructionIndex lastlayer = lastIndex();
-
+	
 	CInstructionIndex twoConst = constant(2.0);
 	
 	for (int c = 0; c<numoctavesConst - 1; ++c)
@@ -868,14 +867,13 @@ CInstructionIndex CKernel::simpleRidgedMultifractal(CInstructionIndex basistype,
 
 CInstructionIndex CKernel::simplefBm(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot)
 {
-    if(numoctaves<1) return 0;
+    if(numoctaves<1) return zero();
 
 	CInstructionIndex interpindex=constant(interptype);
 	KISS rnd;
 	rnd.setSeed(seed);
-	simpleFractalLayer(basistype, interpindex, 1.0, 1.0*frequency, seed+10,rot,
+	CInstructionIndex lastlayer = simpleFractalLayer(basistype, interpindex, 1.0, 1.0*frequency, seed+10,rot,
                                rnd.get01()*3.14159265, rnd.get01(), rnd.get01(), rnd.get01());
-	CInstructionIndex lastlayer=lastIndex();
 
 	for(int c=0; c<numoctaves-1; ++c)
 	{
@@ -899,37 +897,36 @@ CInstructionIndex CKernel::simplefBm(CInstructionIndex basistype, CInstructionIn
 	if (!success)
 	{
 		nonConstArg = 0;
-		return 0;
+		return zero();
 	}
 
 	int numoctavesConst = (int)extractConst(numoctaves, success);
 	if (!success)
 	{
 		nonConstArg = 2;
-		return 0;
+		return zero();
 	}
 
 	unsigned int seedConst = (unsigned int)extractConst(seed, success);
 	if (!success)
 	{
 		nonConstArg = 4;
-		return 0;
+		return zero();
 	}
 
 	bool rotConst = extractConst(rot, success) != 0.0;
 	if (!success)
 	{
 		nonConstArg = 5;
-		return 0;
+		return zero();
 	}
 
-	if (numoctavesConst<1) return 0;
+	if (numoctavesConst<1) return zero();
 
 	KISS rnd;
 	rnd.setSeed(seedConst);
-	simpleFractalLayer(basistypeConst, interptype, one(), frequency, seedConst + 10, rotConst,
+	CInstructionIndex lastlayer = simpleFractalLayer(basistypeConst, interptype, one(), frequency, seedConst + 10, rotConst,
 		rnd.get01()*3.14159265, rnd.get01(), rnd.get01(), rnd.get01());
-	CInstructionIndex lastlayer = lastIndex();
 
 	CInstructionIndex numTwo = constant(2.0);
 	for (int c = 0; c<numoctavesConst - 1; ++c)
@@ -947,14 +944,13 @@ CInstructionIndex CKernel::simplefBm(CInstructionIndex basistype, CInstructionIn
 
 CInstructionIndex CKernel::simpleBillow(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot)
 {
-    if(numoctaves<1) return 0;
+    if(numoctaves<1) return zero();
 
 	CInstructionIndex interpindex=constant(interptype);
 	KISS rnd;
 	rnd.setSeed(seed);
-	simpleBillowLayer(basistype, interpindex, 1.0, 1.0*frequency, seed+10,rot,
+	CInstructionIndex lastlayer = simpleBillowLayer(basistype, interpindex, 1.0, 1.0*frequency, seed+10,rot,
                                rnd.get01()*3.14159265, rnd.get01(), rnd.get01(), rnd.get01());
-	CInstructionIndex lastlayer=lastIndex();
 
 	for(int c=0; c<numoctaves-1; ++c)
 	{
@@ -978,37 +974,37 @@ CInstructionIndex CKernel::simpleBillow(CInstructionIndex basistype, CInstructio
 	if (!success)
 	{
 		nonConstArg = 0;
-		return 0;
+		return zero();
 	}
 
 	int numoctavesConst = (int)extractConst(numoctaves, success);
 	if (!success)
 	{
 		nonConstArg = 2;
-		return 0;
+		return zero();
 	}
 
 	unsigned int seedConst = (unsigned int)extractConst(seed, success);
 	if (!success)
 	{
 		nonConstArg = 4;
-		return 0;
+		return zero();
 	}
 
 	bool rotConst = extractConst(rot, success) != 0.0;
 	if (!success)
 	{
 		nonConstArg = 5;
-		return 0;
+		return zero();
 	}
 
-	if (numoctavesConst<1) return 0;
+	if (numoctavesConst<1) return zero();
 
 	KISS rnd;
 	rnd.setSeed(seedConst);
-	simpleBillowLayer(basistypeConst, interptype, one(), frequency, seedConst + 10, rotConst,
+
+	CInstructionIndex lastlayer = simpleBillowLayer(basistypeConst, interptype, one(), frequency, seedConst + 10, rotConst,
 		rnd.get01()*3.14159265, rnd.get01(), rnd.get01(), rnd.get01());
-	CInstructionIndex lastlayer = lastIndex();
 
 	for (int c = 0; c<numoctavesConst - 1; ++c)
 	{
@@ -1283,11 +1279,11 @@ int CKernel::constFold(CInstructionIndex startingIndex)
 		|| opcode == OP_Max
 		|| opcode == OP_Pow)
 	{
-		foldCount = constFold(i.sources_[0]);
+		foldCount = constFold((CInstructionIndex)i.sources_[0]);
 		Li = &kernel_[i.sources_[0]];
 		if (Li->opcode_ == OP_Constant)
 		{
-			foldCount += constFold(i.sources_[1]);
+			foldCount += constFold((CInstructionIndex)i.sources_[1]);
 			Ri = &kernel_[i.sources_[1]];
 			if (Ri->opcode_ == OP_Constant)
 			{
@@ -1303,7 +1299,7 @@ int CKernel::constFold(CInstructionIndex startingIndex)
 		|| opcode == OP_ATan
 		|| opcode == OP_Abs)
 	{
-		foldCount = constFold(i.sources_[0]);
+		foldCount = constFold((CInstructionIndex)i.sources_[0]);
 		Li = &kernel_[i.sources_[0]];
 		if (Li->opcode_ == OP_Constant)
 		{
@@ -1411,7 +1407,7 @@ int CKernel::constFoldAll()
 	int totalFolds = 0;
 	const int size = (int)kernel_.size();
 	for (int i = 0; i < size; ++i)
-		totalFolds += constFold(i);
+		totalFolds += constFold((CInstructionIndex)i);
 	return totalFolds;
 }
 

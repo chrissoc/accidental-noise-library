@@ -205,7 +205,7 @@ namespace anl
 			index_=0;
 		}
 
-		CInstructionIndex(unsigned int i)
+		explicit CInstructionIndex(unsigned int i)
 		{
 			index_=i;
 		}
