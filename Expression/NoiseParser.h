@@ -28,13 +28,13 @@ domainOperator ::= domainModifierLeft argumentList domainModifierRight
 argumentList ::= expression (',' argumentList)*
 functionCall ::= keyword ( '(' argumentList* ')' )?
 object ::= functionCall | grouping | negative | number | keyword
-domainPrecedence ::= domainOperator? (domainPrecedence | object)
+domainPrecedence ::= (domainOperator domainPrecedence) | object
 mult ::= domainPrecedence (('*' | '/') mult)?
 add ::= mult (('+' | '-') add)?
 
 grouping ::= '(' expression ')'
-negative ::= '-' expression
-expression ::= grouping | negative | add
+negative ::= '-' object
+expression ::= add | negative | grouping
 statement ::= expression ';'
 assignment ::= (keyword '=')? statement
 program ::= assignment program?

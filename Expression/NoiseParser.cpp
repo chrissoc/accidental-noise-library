@@ -1283,7 +1283,7 @@ namespace anl
 			return false;
 		}
 
-		if (expression() == false)
+		if (object() == false)
 		{
 			SetError("Attempting to negate nothing", t);
 			return false;
@@ -1302,21 +1302,30 @@ namespace anl
 			// since there is no constant to directly negate, we must multiply by -1.0
 			CInstructionIndex instruction = Stack.back();
 			Stack.pop_back();
-			Stack.push_back(Kernel.multiply(instruction, Kernel.constant(-0.1)));
+			Stack.push_back(Kernel.multiply(instruction, Kernel.constant(-1.0)));
 			return true;
 		}
 	}
 
 	bool NoiseParser::expression()
 	{
-		if (grouping())
+		//if (grouping())
+		//	return true;
+		//else if (negative())
+		//	return true;
+		//else if (add())
+		//	return true;
+		//else
+		//	return false;
+		if (add())
 			return true;
 		else if (negative())
 			return true;
-		else if (add())
+		else if (grouping())
 			return true;
 		else
 			return false;
+
 	}
 
 	bool NoiseParser::statement()
