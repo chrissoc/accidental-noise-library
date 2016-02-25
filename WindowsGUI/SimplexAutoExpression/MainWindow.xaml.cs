@@ -116,6 +116,7 @@ namespace SimplexAutoExpression
                 bool checkLimits = chkShowLimits.IsChecked.Value;
                 for(int i = 0, j = 0; i < buffer.Length; ++i, j += 3)
                 {
+
                     if (buffer[i] < min)
                         min = buffer[i];
                     if (buffer[i] > max)
@@ -339,6 +340,35 @@ namespace SimplexAutoExpression
         private void chkShowLimits_Checked(object sender, RoutedEventArgs e)
         {
             TimedReadAllTextAndRender(DirectoryToWatch + System.IO.Path.DirectorySeparatorChar + FileNameToWatch);
+        }
+
+        private void Window_Drop(object sender, DragEventArgs e)
+        {
+            string[] files = null;
+            string text = null;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                 files = e.Data.GetData(DataFormats.FileDrop) as string[];
+            }
+            else if(e.Data.GetDataPresent(DataFormats.StringFormat))
+            {
+                text = e.Data.GetData(DataFormats.StringFormat) as string;
+            }
+            
+            if(files != null && files.Length != 0)
+            {
+                if (File.Exists(files[0]))
+                {
+                    WatchExpressionFile(files[0]);
+                }
+            }
+            else if(text != null)
+            {
+                if (File.Exists(text))
+                {
+                    WatchExpressionFile(text);
+                }
+            }
         }
     }
 }

@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="631.304" MinHeight="100" MinWidth="100"
         Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing"
+        AllowDrop="True" Drop="Window_Drop"
         SizeChanged="Window_SizeChanged">
     <Grid>
         <DockPanel>
