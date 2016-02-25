@@ -23,12 +23,28 @@ namespace anl
 			DataIndex = RewindIndex;
 		RewindIndex = RewindIndex2;
 		RewindIndex2 = -1;
+
+		if (RewindLineNumber >= 0)
+			LineNumber = RewindLineNumber;
+		RewindLineNumber = RewindLineNumber2;
+		RewindLineNumber2 = -1;
+
+		if (RewindColumnStartOffset >= 0)
+			ColumnStartOffset = RewindColumnStartOffset;
+		RewindColumnStartOffset = RewindColumnStartOffset2;
+		RewindColumnStartOffset2 = -1;
 	}
 
 	void NoiseParser::Tokenizer::SetUnGetLocation()
 	{
 		RewindIndex2 = RewindIndex;
 		RewindIndex = DataIndex;
+
+		RewindLineNumber2 = RewindLineNumber;
+		RewindLineNumber = LineNumber;
+
+		RewindColumnStartOffset2 = RewindColumnStartOffset;
+		RewindColumnStartOffset = ColumnStartOffset;
 	}
 
 	NoiseParser::Token NoiseParser::Tokenizer::GetToken()
@@ -37,7 +53,7 @@ namespace anl
 
 		Token token;
 		token.token = Token::NONE;
-		token.tokenLocation = DataIndex;
+		token.tokenLocation = ColumnStartOffset - DataIndex;
 		token.number = 0.0;
 
 		bool makingFractional = false;
@@ -61,15 +77,20 @@ namespace anl
 			}
 
 			char c = Data[DataIndex];
-			token.tokenLocation = DataIndex;
+			token.tokenLocation = DataIndex - ColumnStartOffset;
+			token.lineNumber = LineNumber;
 			DataIndex++;
 			switch (c)
 			{
 			case ' ':
 			case '\t':
 			case '\r':
-			case '\n':
 				// ignore whitespace
+				break;
+			case '\n':
+				// ignore whitespace, but count lines
+				LineNumber++;
+				ColumnStartOffset = DataIndex;
 				break;
 			case '+':
 				token.token = Token::ADD;
@@ -181,7 +202,7 @@ namespace anl
 				if (IsEof() == false && Data[DataIndex] == '*')
 				{
 					DataIndex++;
-					// block comment, gobble untill end
+					// block comment, gobble untill end, but still count lines
 					bool done = false;
 					while (IsEof() == false && !done)
 					{
@@ -193,6 +214,12 @@ namespace anl
 								done = true;
 								DataIndex++;
 							}
+						}
+						else if (Data[DataIndex] == '\n')
+						{
+							DataIndex++;
+							LineNumber++;
+							ColumnStartOffset = DataIndex;
 						}
 						else
 						{
@@ -206,9 +233,13 @@ namespace anl
 					// line comment, gobble untill end
 					while (IsEof() == false && Data[DataIndex] != '\n')
 						DataIndex++;
-					// gobble the newline as well
+					// gobble the newline as well, and count the line number
 					if (IsEof() == false)
+					{
 						DataIndex++;
+						LineNumber++;
+						ColumnStartOffset = DataIndex;
+					}
 				}
 				else
 				{
@@ -241,7 +272,7 @@ namespace anl
 						}
 
 						if (IntegralDigitCount == 0 && FractionalDigitCount == 0)
-							token.tokenLocation = DataIndex;
+							token.tokenLocation = DataIndex - ColumnStartOffset;
 
 						token.token = Token::NUMBER;
 
@@ -345,7 +376,7 @@ namespace anl
 		{
 			ss << "Tokenizer error: " << tokens.GetLastError() << ". ";
 		}
-		ss << "Parse Error ln:" << cause.tokenLocation << " - " << msg;
+		ss << "Parse Error ln:" << cause.lineNumber << " col:" << cause.tokenLocation << " - " << msg;
 		ErrorMsgs.push_back(ss.str());
 		Error = true;
 	}
@@ -543,6 +574,8 @@ namespace anl
 		OperationToken = t.token;
 		if (t.token < Token::DOMAIN_OP_BEGIN || t.token >= Token::DOMAIN_OP_END)
 		{
+			if (tokens.IsError())
+				SetError("Malformed token", t);
 			tokens.UnGet();
 			return false;
 		}
@@ -1325,7 +1358,7 @@ namespace anl
 				{
 					ParseString msg = "Unrecognized keyword: ";
 					msg += variableName;
-					SetError(msg);
+					SetError(msg, t);
 					return false;
 				}
 			}
@@ -1343,7 +1376,7 @@ namespace anl
 		{
 			if (isAssignment)
 			{
-				SetError("Missing statement following assignment operator");
+				SetError("Missing statement following assignment operator", t);
 				return false;
 			}
 			return false;

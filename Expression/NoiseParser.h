@@ -89,6 +89,7 @@ namespace anl
 			double number;
 			ParseString keyword;
 			int tokenLocation;
+			int lineNumber;
 		};
 		enum BlendType {
 			BLEND_INVALID = -1,
@@ -150,6 +151,12 @@ namespace anl
 			int DataIndex;
 			int RewindIndex;// for UnGet()
 			int RewindIndex2;// for second UnGet()
+			int LineNumber;
+			int RewindLineNumber;
+			int RewindLineNumber2;
+			int ColumnStartOffset;
+			int RewindColumnStartOffset;
+			int RewindColumnStartOffset2;
 			ParseString LastError;
 
 		private:
@@ -157,7 +164,11 @@ namespace anl
 			bool IsEof();
 
 		public:
-			Tokenizer(ParseString input) : Data(input), DataIndex(0), RewindIndex(-1), RewindIndex2(-1) {}
+			Tokenizer(ParseString input) : Data(input), DataIndex(0), RewindIndex(-1), RewindIndex2(-1),
+				LineNumber(1), RewindLineNumber(-1), RewindLineNumber2(-1),// line number starts at 1 since we count lines from 1
+				ColumnStartOffset(0), RewindColumnStartOffset(-1), RewindColumnStartOffset2(-1)
+			{
+			}
 			ParseString GetLastError() { return LastError; }
 			bool IsError() { return LastError.length() != 0 ? true : false; }
 			void UnGet();
