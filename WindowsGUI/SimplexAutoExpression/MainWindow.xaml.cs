@@ -33,13 +33,23 @@ namespace SimplexAutoExpression
         string CurrentPendingExpression;
 
         System.Timers.Timer ResizeTimer = new System.Timers.Timer(1000);
+        System.Timers.Timer ProgressPollingTimer = new System.Timers.Timer(200);
 
         NoiseImageService ImageRenderService = new NoiseImageService();
 
         public MainWindow()
         {
             ResizeTimer.Elapsed += ResizeTimer_Elapsed;
+            ProgressPollingTimer.Elapsed += ProgressPollingTimer_Elapsed;
             InitializeComponent();
+        }
+
+        private void ProgressPollingTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            this.Dispatcher.InvokeAsync(new Action(() =>
+            {
+                progBarRenderProgress.Value = ImageRenderService.GetProgress();
+            }));
         }
 
         private void SetExpressionFileNotFoundError(bool clear)
@@ -86,6 +96,9 @@ namespace SimplexAutoExpression
             lblDimensions.Content = width.ToString() + "x" + height.ToString();
 
             WaitingForThumbnail = true;
+            progBarRenderProgress.Value = 0;
+            progBarRenderProgress.Visibility = Visibility.Visible;
+            // but dont start the progress bar progress timer, only do that once we are done with the thumbnail.
             if (ImageRenderService.StartRender(expression, out parseError, width, height) == false)
             {
                 SetExpressionFileParseError(false, parseError);
@@ -167,6 +180,11 @@ namespace SimplexAutoExpression
                     lblSceneMax.Foreground = Brushes.Purple;
 
                 imgImage.Source = BitmapSource.Create(width, height, 72, 72, PixelFormats.Rgb48, BitmapPalettes.Gray256, colorBuffer, width * sizeof(ushort) * 3);
+
+                ProgressPollingTimer.Stop();
+                progBarRenderProgress.Visibility = Visibility.Collapsed;
+                progBarRenderProgress.Value = 0;
+
                 if (WaitingForThumbnail)
                 {
                     string parseError;
@@ -178,6 +196,9 @@ namespace SimplexAutoExpression
                     h = w = Math.Min(w, h);
                     lblDimensions.Content = w.ToString() + "x" + h.ToString();
                     
+                    progBarRenderProgress.Value = 0;
+                    progBarRenderProgress.Visibility = Visibility.Visible;
+                    ProgressPollingTimer.Start();
                     if (ImageRenderService.StartRender(CurrentPendingExpression, out parseError, w, h) == false)
                     {
                         SetExpressionFileParseError(false, parseError);
@@ -355,18 +376,20 @@ namespace SimplexAutoExpression
                 text = e.Data.GetData(DataFormats.StringFormat) as string;
             }
             
-            if(files != null && files.Length != 0)
+            if (files != null && files.Length != 0)
             {
                 if (File.Exists(files[0]))
                 {
-                    WatchExpressionFile(files[0]);
+                    txtExpressionPath.Text = files[0];
+                    //WatchExpressionFile(files[0]);
                 }
             }
-            else if(text != null)
+            else if (text != null)
             {
                 if (File.Exists(text))
                 {
-                    WatchExpressionFile(text);
+                    txtExpressionPath.Text = text;
+                    //WatchExpressionFile(text);
                 }
             }
         }

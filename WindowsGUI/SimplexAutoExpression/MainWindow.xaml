@@ -13,8 +13,13 @@
         <DockPanel>
             <StackPanel DockPanel.Dock="Top">
                 <WrapPanel Margin="5">
-                    <TextBox Name="txtExpressionPath" Width="162" Height="26" HorizontalContentAlignment="Right" TextChanged="txtExpressionPath_TextChanged"/>
-                    <Button Name="btnBrowse" Height="25" Width="60" Click="btnBrowse_Click">Browse...</Button>
+                    <StackPanel>
+                        <WrapPanel>
+                            <TextBox Name="txtExpressionPath" Width="162" Height="26" HorizontalContentAlignment="Right" TextChanged="txtExpressionPath_TextChanged"/>
+                            <Button Name="btnBrowse" Height="25" Width="60" Click="btnBrowse_Click">Browse...</Button>
+                        </WrapPanel>
+                        <ProgressBar Name="progBarRenderProgress" Height="20" Margin="5" Visibility="Collapsed" Minimum="0.0" Maximum="1.0"/>
+                    </StackPanel>
                     <StackPanel>
                         <WrapPanel>
                             <Label>RenderTime (ms):</Label>

@@ -57,6 +57,8 @@ namespace SimplexAutoExpression
 
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
+            ProgressTotal = height;
+            ProgressDoneCount = 0;
             Parallel.For<ANL.CNoiseExecutor>(0, height,
                 () =>
                 {
@@ -80,6 +82,7 @@ namespace SimplexAutoExpression
                         
                         buffer[y * width + x] = (float)d;
                     }
+                    Interlocked.Increment(ref ProgressDoneCount);
                     return taskVmCopy;
                 },
                 taskVmCopy =>
@@ -94,7 +97,19 @@ namespace SimplexAutoExpression
             if (AbortRequest == false && RenderDoneCallback != null)
                 RenderDoneCallback(buffer, width, height);
 
+            // reset progress
+            ProgressDoneCount = 0;
+            ProgressTotal = 1;
+
             DoneWithRender = true;
+        }
+
+        private int ProgressTotal = 1;
+        private int ProgressDoneCount = 0;
+        // returns 0.0 to 1.0
+        public double GetProgress()
+        {
+            return (double)ProgressDoneCount / (double)ProgressTotal;
         }
 
         public long ElapsedRenderTimeInMs()
