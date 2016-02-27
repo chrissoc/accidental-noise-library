@@ -319,8 +319,7 @@ namespace anl
 			program(NodePtr in_assignment, NodePtr in_program) : Node(MyType)
 			{
 				Child.push_back(in_assignment);
-				if(in_program)
-					Child.push_back(in_program);
+				Child.push_back(in_program);
 			}
 			// program is a special case for Emit() since by design we only
 			// care about the last statement in the file we skip all previous

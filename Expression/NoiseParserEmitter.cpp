@@ -207,7 +207,7 @@ namespace anl
 		{
 			// as we recurse down, try to detect any assignment operations inorder to 
 			// make them available later
-			if (node->Child.size() == 2)
+			if (node->Child[0])
 			{
 				if (node->Child[0]->IsType(Node::ASSIGNMENT) == false)
 				{
@@ -216,21 +216,23 @@ namespace anl
 				else
 				{
 					assignment* assignmentNode = static_cast<assignment*>(node->Child[0].get());
-					if (assignmentNode->Child.size() == 2)
+					if (assignmentNode->Child[0])
 					{
 						// the first index in the assignment node is the keyword child.
 						std::string& key = assignmentNode->Child[0]->token.keyword;
 						if (VariableCandidates.find(key) != VariableCandidates.end())
-							SetError("Multiply defined variable: " + key, assignmentNode->Child[0]->token);
+							SetError("Multiply defined variable: " + key, assignmentNode->token);
 						else
 							VariableCandidates[key] = assignmentNode;
 					}
 				}
 			}
 
-			if (node->Child.size() == 2)
+			if (node->Child[1])
+			{
 				node->Child[1]->Emit(this);
-			else
+			}
+			else if (node->Child[0])
 			{
 				node->Child[0]->Emit(this);
 				if (IsError() == false)

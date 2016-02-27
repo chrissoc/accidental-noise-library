@@ -148,7 +148,6 @@
     <ClInclude Include="..\..\Expression\NoiseParserAST.h" />
     <ClInclude Include="..\..\Expression\NoiseParserEmitter.h" />
     <ClInclude Include="..\..\Expression\NoiseParserToken.h" />
-    <ClInclude Include="..\..\Expression\SimpleExpressionTestFramework.h" />
     <ClInclude Include="..\..\VM\BooleanBits.h" />
     <ClInclude Include="..\..\VM\coordinate.h" />
     <ClInclude Include="..\..\VM\hashing.h" />

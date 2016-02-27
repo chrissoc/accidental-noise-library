@@ -24,9 +24,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Expression\SimpleExpressionTestFramework.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\VM\BooleanBits.h">
       <Filter>Source Files\ANL\VM</Filter>
     </ClInclude>

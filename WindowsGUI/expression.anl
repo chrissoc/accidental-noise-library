@@ -95,8 +95,6 @@ SuperSimplex =
 funny = gradientBasis(BLEND_NONE, 12345);
 <s:10><r:90,0,0,true>funny;
 
-harhar = <  ;
-
 //<s:10>(0.5 * SuperSimplex +  0.5 * funny);
 
 //simpleBillow(OP_SimplexBasis, BLEND_QUINTIC, 5, 1, 654989732, 1);
