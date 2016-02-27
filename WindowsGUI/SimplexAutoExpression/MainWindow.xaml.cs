@@ -381,7 +381,6 @@ namespace SimplexAutoExpression
                 if (File.Exists(files[0]))
                 {
                     txtExpressionPath.Text = files[0];
-                    //WatchExpressionFile(files[0]);
                 }
             }
             else if (text != null)
@@ -389,7 +388,6 @@ namespace SimplexAutoExpression
                 if (File.Exists(text))
                 {
                     txtExpressionPath.Text = text;
-                    //WatchExpressionFile(text);
                 }
             }
         }
