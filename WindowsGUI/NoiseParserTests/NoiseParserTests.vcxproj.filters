@@ -14,58 +14,17 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Source Files\ANL">
-      <UniqueIdentifier>{f5a2c2d3-8747-4189-b931-52bbabd1346b}</UniqueIdentifier>
+      <UniqueIdentifier>{8d7d97ab-b753-4dfc-a645-b8f004afd2bd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\ANL\VM">
-      <UniqueIdentifier>{36499ea3-1ab0-4e75-8c9f-93478d46ff37}</UniqueIdentifier>
+      <UniqueIdentifier>{69e7fb7c-85c8-43c5-94a2-ef895aa5608d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\ANL\Expression">
-      <UniqueIdentifier>{dcabdc3b-d7c5-4b43-a409-fdb05e1633d3}</UniqueIdentifier>
+      <UniqueIdentifier>{2a40a65e-4679-4a7f-908a-e4ba25b3d2a5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="InterfaceCDLL.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NoiseParserInterfaceCDLL.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\coordinate.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\hashing.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\kernel.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\noise_gen.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\noise_lut.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\vm.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParser.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParserAST.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParserEmitter.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParserToken.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="InterfaceCDLL.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NoiseParserInterfaceCDLL.h">
+    <ClInclude Include="..\..\Expression\SimpleExpressionTestFramework.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\VM\BooleanBits.h">
@@ -113,5 +72,40 @@
     <ClInclude Include="..\..\Expression\NoiseParserToken.h">
       <Filter>Source Files\ANL\Expression</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Expression\SimpleExpressionTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\coordinate.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\hashing.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\kernel.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\noise_gen.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\noise_lut.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VM\vm.cpp">
+      <Filter>Source Files\ANL\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Expression\NoiseParser.cpp">
+      <Filter>Source Files\ANL\Expression</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Expression\NoiseParserAST.cpp">
+      <Filter>Source Files\ANL\Expression</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Expression\NoiseParserEmitter.cpp">
+      <Filter>Source Files\ANL\Expression</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Expression\NoiseParserToken.cpp">
+      <Filter>Source Files\ANL\Expression</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

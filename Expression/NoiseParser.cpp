@@ -1,4 +1,5 @@
 #include "NoiseParser.h"
+#include "NoiseParserAST.h"
 
 #include <math.h>
 #include <sstream>
@@ -47,7 +48,7 @@ namespace anl
 		RewindColumnStartOffset = ColumnStartOffset;
 	}
 
-	NoiseParser::Token NoiseParser::Tokenizer::GetToken()
+	Token NoiseParser::Tokenizer::GetToken()
 	{
 		LastError = "";
 
@@ -356,17 +357,7 @@ namespace anl
 
 	NoiseParser::~NoiseParser()
 	{
-		for (auto p : Variables)
-		{
-			delete p.second;
-		}
-	}
 
-	CInstructionIndex NoiseParser::TopNPop()
-	{
-		CInstructionIndex& top = Stack.back();
-		Stack.pop_back();
-		return top;
 	}
 
 	void NoiseParser::SetError(ParseString msg, const Token& cause)
@@ -406,210 +397,219 @@ namespace anl
 		return msgs;
 	}
 
-	NoiseParser::BlendType NoiseParser::KeywordToBlend(const ParseString& keyword)
+	EBlend::BlendType NoiseParser::KeywordToBlend(const std::string& keyword)
 	{
-		BlendType t = BLEND_INVALID;
+		EBlend::BlendType t =EBlend::BLEND_INVALID;
 		if (keyword == "BLEND_NONE")
-			t = BLEND_NONE;
+			t =EBlend::BLEND_NONE;
 		else if (keyword == "BLEND_LINEAR")
-			t = BLEND_LINEAR;
+			t =EBlend::BLEND_LINEAR;
 		else if (keyword == "BLEND_HERMITE")
-			t = BLEND_HERMITE;
+			t =EBlend::BLEND_HERMITE;
 		else if (keyword == "BLEND_QUINTIC")
-			t = BLEND_QUINTIC;
+			t =EBlend::BLEND_QUINTIC;
 		return t;
 	}
 
-	NoiseParser::Function NoiseParser::KeywordToFunc(const ParseString& keyword)
+	EFunction::Function NoiseParser::KeywordToFunc(const std::string& keyword)
 	{
-		Function f = FUNC_INVALID;
+		EFunction::Function f = EFunction::FUNC_INVALID;
 		if (keyword == "valueBasis")
-			f = FUNC_VALUE_BASIS;
+			f = EFunction::FUNC_VALUE_BASIS;
 		else if (keyword == "gradientBasis")
-			f = FUNC_GRADIENT_BASIS; 
+			f = EFunction::FUNC_GRADIENT_BASIS; 
 		else if (keyword == "simplexBasis")
-			f = FUNC_SIMPLEX_BASIS;
+			f = EFunction::FUNC_SIMPLEX_BASIS;
 		else if (keyword == "cellularBasis")
-			f = FUNC_CELLULAR_BASIS;
+			f = EFunction::FUNC_CELLULAR_BASIS;
 		else if (keyword == "max")
-			f = FUNC_MAX;
+			f = EFunction::FUNC_MAX;
 		else if (keyword == "min")
-			f = FUNC_MIN;
+			f = EFunction::FUNC_MIN;
 		else if (keyword == "abs")
-			f = FUNC_ABS;
+			f = EFunction::FUNC_ABS;
 		else if (keyword == "pow")
-			f = FUNC_POW;
+			f = EFunction::FUNC_POW;
 		else if (keyword == "bias")
-			f = FUNC_BIAS;
+			f = EFunction::FUNC_BIAS;
 		else if (keyword == "gain")
-			f = FUNC_GAIN;
+			f = EFunction::FUNC_GAIN;
 		else if (keyword == "cos")
-			f = FUNC_COS;
+			f = EFunction::FUNC_COS;
 		else if (keyword == "sin")
-			f = FUNC_SIN;
+			f = EFunction::FUNC_SIN;
 		else if (keyword == "tan")
-			f = FUNC_TAN;
+			f = EFunction::FUNC_TAN;
 		else if (keyword == "acos")
-			f = FUNC_ACOS;
+			f = EFunction::FUNC_ACOS;
 		else if (keyword == "asin")
-			f = FUNC_ASIN;
+			f = EFunction::FUNC_ASIN;
 		else if (keyword == "atan")
-			f = FUNC_ATAN;
+			f = EFunction::FUNC_ATAN;
 		else if (keyword == "tiers")
-			f = FUNC_TIERS;
+			f = EFunction::FUNC_TIERS;
 		else if (keyword == "smoothTiers")
-			f = FUNC_SMOOTH_TIERS;
+			f = EFunction::FUNC_SMOOTH_TIERS;
 		else if (keyword == "blend")
-			f = FUNC_BLEND;
+			f = EFunction::FUNC_BLEND;
 		else if (keyword == "select")
-			f = FUNC_SELECT;
+			f = EFunction::FUNC_SELECT;
 		else if (keyword == "simpleRidgedMultifractal")
-			f = FUNC_SIMPLE_RIDGED_MULTIFRACTAL;
+			f = EFunction::FUNC_SIMPLE_RIDGED_MULTIFRACTAL;
 		else if (keyword == "simplefBm")
-			f = FUNC_SIMPLE_FBM;
+			f = EFunction::FUNC_SIMPLE_FBM;
 		else if (keyword == "simpleBillow")
-			f = FUNC_SIMPLE_BILLOW;
+			f = EFunction::FUNC_SIMPLE_BILLOW;
 		else if (keyword == "x")
-			f = FUNC_X;
+			f = EFunction::FUNC_X;
 		else if (keyword == "y")
-			f = FUNC_Y;
+			f = EFunction::FUNC_Y;
 		else if (keyword == "z")
-			f = FUNC_Z;
+			f = EFunction::FUNC_Z;
 		else if (keyword == "w")
-			f = FUNC_W;
+			f = EFunction::FUNC_W;
 		else if (keyword == "u")
-			f = FUNC_U;
+			f = EFunction::FUNC_U;
 		else if (keyword == "v")
-			f = FUNC_V;
+			f = EFunction::FUNC_V;
 		else if (keyword == "dx")
-			f = FUNC_DX;
+			f = EFunction::FUNC_DX;
 		else if (keyword == "dy")
-			f = FUNC_DY;
+			f = EFunction::FUNC_DY;
 		else if (keyword == "dz")
-			f = FUNC_DZ;
+			f = EFunction::FUNC_DZ;
 		else if (keyword == "dw")
-			f = FUNC_DW;
+			f = EFunction::FUNC_DW;
 		else if (keyword == "du")
-			f = FUNC_DU;
+			f = EFunction::FUNC_DU;
 		else if (keyword == "dv")
-			f = FUNC_DV;
+			f = EFunction::FUNC_DV;
 		else if (keyword == "sigmoid")
-			f = FUNC_SIGMOID;
+			f = EFunction::FUNC_SIGMOID;
 		else if (keyword == "scaleOffset")
-			f = FUNC_SCALE_OFFSET;
+			f = EFunction::FUNC_SCALE_OFFSET;
 		else if (keyword == "radial")
-			f = FUNC_RADIAL;
+			f = EFunction::FUNC_RADIAL;
 		else if (keyword == "clamp")
-			f = FUNC_CLAMP;
+			f = EFunction::FUNC_CLAMP;
 		else if (keyword == "rgba")
-			f = FUNC_RGBA;
+			f = EFunction::FUNC_RGBA;
 		else if (keyword == "color")
-			f = FUNC_COLOR;
+			f = EFunction::FUNC_COLOR;
 		else if (keyword == "hexTile")
-			f = FUNC_HEX_TILE;
+			f = EFunction::FUNC_HEX_TILE;
 		else if (keyword == "hexBump")
-			f = FUNC_HEX_BUMP;
+			f = EFunction::FUNC_HEX_BUMP;
 		return f;
 	}
 	
-	bool NoiseParser::KeywordToVariable(const ParseString& keyword)
+	bool NoiseParser::IsKeyword_OP_ValueBasis(const std::string& keyword)
 	{
-		// check constants first
-		CInstructionIndex newInstruction(NOP);
-		BlendType bt = KeywordToBlend(keyword);
-		if (keyword == "pi")
-			newInstruction = Kernel.pi();
-		else if (keyword == "e")
-			newInstruction = Kernel.e();
-		else if (keyword == "OP_ValueBasis")
-			newInstruction = Kernel.constant(OP_ValueBasis);
-		else if(keyword == "OP_GradientBasis")
-			newInstruction = Kernel.constant(OP_GradientBasis);
-		else if (keyword == "OP_SimplexBasis")
-			newInstruction = Kernel.constant(OP_SimplexBasis);
-		else if (keyword == "true" || keyword == "TRUE" || keyword == "True")
-			newInstruction = Kernel.one();
-		else if (keyword == "false" || keyword == "FALSE" || keyword == "False")
-			newInstruction = Kernel.zero();
-		else if (bt != BLEND_INVALID)
-			newInstruction = Kernel.constant(bt);
-
-		if (newInstruction != NOP)
-		{
-			Stack.push_back(newInstruction);
-			return true;// found the constant
-		}
-		
-
-		auto var = Variables.find(keyword);
-		if (var != Variables.end())
-		{
-			Stack.push_back(*var->second);
+		if (keyword == "OP_ValueBasis")
 			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 
-	void NoiseParser::AddVariable(const ParseString& keyword, const CInstructionIndex& value)
+	bool NoiseParser::IsKeyword_OP_GradientBasis(const std::string& keyword)
 	{
-		auto var = Variables.find(keyword);
-		if (var != Variables.end())
-		{
-			ParseString msg = "variable initilized multiple times: ";
-			msg += keyword;
-			SetError(msg);
-			return;
-		}
-
-		// CInstructionIndex's private constructor prevents us from storing the class within std::map directly
-		Variables[keyword] = new CInstructionIndex(value);
+		if (keyword == "OP_GradientBasis")
+			return true;
+		return false;
 	}
 
-	bool NoiseParser::domainOperator(int& argsFound, Token::TokenType& OperationToken)
+	bool NoiseParser::IsKeyword_OP_SimplexBasis(const std::string& keyword)
 	{
-		Token t = tokens.GetToken();
-		OperationToken = t.token;
-		if (t.token < Token::DOMAIN_OP_BEGIN || t.token >= Token::DOMAIN_OP_END)
+		if (keyword == "OP_SimplexBasis")
+			return true;
+		return false;
+	}
+
+	bool NoiseParser::IsKeyword_True(const std::string& keyword)
+	{
+		if (keyword == "true" || keyword == "TRUE" || keyword == "True")
+			return true;
+		return false;
+	}
+
+	bool NoiseParser::IsKeyword_False(const std::string& keyword)
+	{
+		if (keyword == "false" || keyword == "FALSE" || keyword == "False")
+			return true;
+		return false;
+	}
+
+	bool NoiseParser::IsKeyword_e(const std::string& keyword)
+	{
+		if (keyword == "e")
+			return true;
+		return false;
+	}
+
+	bool NoiseParser::IsKeyword_pi(const std::string& keyword)
+	{
+		if (keyword == "pi")
+			return true;
+		return false;
+	}
+
+	bool NoiseParser::domainOperator()
+	{
+		Token opToken = tokens.GetToken();
+		if (opToken.token < Token::DOMAIN_OP_BEGIN || opToken.token >= Token::DOMAIN_OP_END)
 		{
 			if (tokens.IsError())
-				SetError("Malformed token", t);
+				SetError("Malformed token", opToken);
 			tokens.UnGet();
 			return false;
 		}
 
-		if (argumentList(argsFound) == false)
+		if (argumentList() == false)
 		{
-			SetError("domainOperator '< expression >' requires an expression", t);
+			SetError("domainOperator '< expression >' requires an expression", opToken);
 			return false;
 		}
 		
-		t = tokens.GetToken();
+		Token t = tokens.GetToken();
 		if (t.token != Token::R_CHEVRON)
 		{
 			SetError("Unable to find closing chevron '>'", t);
 			return false;
 		}
+
+		NodePtr args = newStack.back();
+		newStack.pop_back();
+		newStack.push_back(std::make_shared<NoiseParserAST::domainOperator>(opToken, args));
+
 		return true;
 	}
 
-	bool NoiseParser::argumentList(int& argsFound)
+	bool NoiseParser::argumentList()
 	{
+		NodePtr argList = nullptr;
+		NodePtr arg = nullptr;
 		if (expression())
 		{
-			argsFound += 1;
+			arg = newStack.back();
+			newStack.pop_back();
 
 			Token t = tokens.GetToken();
 			if (t.token == Token::COMMA)
-				argumentList(argsFound);
+			{
+				argumentList();
+				argList = newStack.back();
+				newStack.pop_back();
+			}
 			else
+			{
 				tokens.UnGet();
+			}
+			newStack.push_back(std::make_shared<NoiseParserAST::argumentList>(arg, argList));
 			return true;// return true, found atleast one.
 		}
 		else
 		{
+			// return an object even if its empty
+			newStack.push_back(std::make_shared<NoiseParserAST::argumentList>(arg, argList));
 			return false;
 		}
 	}
@@ -623,15 +623,17 @@ namespace anl
 			return false;
 		}
 
-		Function func = KeywordToFunc(t.keyword);
+		EFunction::Function func = KeywordToFunc(t.keyword);
 		Token funcToken = t;
-		if (func == FUNC_INVALID)
+		if (func == EFunction::FUNC_INVALID)
 		{
 			// not a known function, it had better be a constant or a variable
 			//SetError("Unexpected 'function' name", t);
 			tokens.UnGet();
 			return false;
 		}
+
+		NodePtr funcNode = std::make_shared<NoiseParserAST::keyword>(funcToken);
 
 		t = tokens.GetToken();
 		if (t.token != Token::L_PAREN)
@@ -642,8 +644,7 @@ namespace anl
 			return false;
 		}
 
-		int argsFound = 0;
-		argumentList(argsFound);
+		argumentList();
 
 		t = tokens.GetToken();
 		if (t.token != Token::R_PAREN)
@@ -652,430 +653,43 @@ namespace anl
 			return false;
 		}
 
-		int nonConstArgIndex;
-
-		auto args = Stack.end() - argsFound;
-		CInstructionIndex instruction = NOP;
-
-		// we now have the name of the function and all the arguments
-		switch (func)
-		{
-		case FUNC_VALUE_BASIS:
-			if (argsFound != 2)
-			{
-				SetError("valueBasis accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.valueBasis(args[0], args[1]);
-			break;
-		case FUNC_GRADIENT_BASIS:
-			if (argsFound != 2)
-			{
-				SetError("GradientBasis accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.gradientBasis(args[0], args[1]);
-			break;
-		case FUNC_SIMPLEX_BASIS:
-			if (argsFound != 1)
-			{
-				SetError("SimplexBasis accepts 1 arguemnt", funcToken);
-				return false;
-			}
-			instruction = Kernel.simplexBasis(args[0]);
-			break;
-		case FUNC_CELLULAR_BASIS:
-			if (argsFound != 10)
-			{
-				SetError("cellularBasis accepts 10 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.cellularBasis(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
-			break;
-		case FUNC_MAX:
-			if (argsFound != 2)
-			{
-				SetError("max accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.maximum(args[0], args[1]);
-			break;
-		case FUNC_MIN:
-			if (argsFound != 2)
-			{
-				SetError("min accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.minimum(args[0], args[1]);
-			break;
-		case FUNC_ABS:
-			if (argsFound != 1)
-			{
-				SetError("abs accepts 1 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.abs(args[0]);
-			break;
-		case FUNC_POW:
-			if (argsFound != 2)
-			{
-				SetError("pow accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.pow(args[0], args[1]);
-			break;
-		case FUNC_BIAS:
-			if (argsFound != 2)
-			{
-				SetError("bias accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.bias(args[0], args[1]);
-			break;
-		case FUNC_GAIN:
-			if (argsFound != 2)
-			{
-				SetError("gain accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.gain(args[0], args[1]);
-			break;
-		case FUNC_COS:
-			if (argsFound != 1)
-			{
-				SetError("cos accepts 1 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.cos(args[0]);
-			break;
-		case FUNC_SIN:
-			if (argsFound != 1)
-			{
-				SetError("sin accepts 1 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.sin(args[0]);
-			break;
-		case FUNC_TAN:
-			if (argsFound != 1)
-			{
-				SetError("tan accepts 1 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.tan(args[0]);
-			break;
-		case FUNC_ACOS:
-			if (argsFound != 1)
-			{
-				SetError("acos accepts 1 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.acos(args[0]);
-			break;
-		case FUNC_ASIN:
-			if (argsFound != 1)
-			{
-				SetError("asin accepts 1 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.asin(args[0]);
-			break;
-		case FUNC_ATAN:
-			if (argsFound != 1)
-			{
-				SetError("atan accepts 1 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.atan(args[0]);
-			break;
-		case FUNC_TIERS:
-			if (argsFound != 2)
-			{
-				SetError("tiers accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.tiers(args[0], args[1]);
-			break;
-		case FUNC_SMOOTH_TIERS:
-			if (argsFound != 2)
-			{
-				SetError("smoothTiers accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.smoothTiers(args[0], args[1]);
-			break;
-		case FUNC_BLEND:
-			if (argsFound != 3)
-			{
-				SetError("blend accepts 3 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.blend(args[0], args[1], args[2]);
-			break;
-		case FUNC_SELECT:
-			if (argsFound != 5)
-			{
-				SetError("select accepts 5 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.select(args[0], args[1], args[2], args[3], args[4]);
-			break;
-		case FUNC_SIMPLE_RIDGED_MULTIFRACTAL:
-			if (argsFound != 6 && argsFound != 5)
-			{
-				SetError("simpleRidgedMultifractal accepts 5 or 6 arguemnts", funcToken);
-				return false;
-			}
-			else
-			{
-				CInstructionIndex boolRot = Kernel.one(); // default to true;
-				if (argsFound == 6)
-					boolRot = args[5];
-				instruction = Kernel.simpleRidgedMultifractal(args[0], args[1], args[2], args[3], args[4], boolRot, nonConstArgIndex);
-				if (nonConstArgIndex >= 0)
-				{
-					ParseString msg = "simpleRidgedMultifractal requires argument index ";
-					msg += std::to_string(nonConstArgIndex);
-					msg += " to be constant";
-					SetError(msg);
-					return false;
-				}
-			}
-			break;
-		case FUNC_SIMPLE_FBM:
-			if (argsFound != 6 && argsFound != 5)
-			{
-				SetError("simplefBm accepts 5 or 6 arguemnts", funcToken);
-				return false;
-			}
-			else
-			{
-				CInstructionIndex boolRot = Kernel.one(); // default to true;
-				if (argsFound == 6)
-					boolRot = args[5];
-				instruction = Kernel.simplefBm(args[0], args[1], args[2], args[3], args[4], args[5], nonConstArgIndex);
-				if (nonConstArgIndex >= 0)
-				{
-					ParseString msg = "simplefBm requires argument index ";
-					msg += std::to_string(nonConstArgIndex);
-					msg += " to be constant";
-					SetError(msg);
-					return false;
-				}
-			}
-			break;
-		case FUNC_SIMPLE_BILLOW:
-			if (argsFound != 6 && argsFound != 5)
-			{
-				SetError("simpleBillow accepts 5 or 6 arguemnts", funcToken);
-				return false;
-			}
-			else
-			{
-				CInstructionIndex boolRot = Kernel.one(); // default to true;
-				if (argsFound == 6)
-					boolRot = args[5];
-				instruction = Kernel.simpleBillow(args[0], args[1], args[2], args[3], args[4], boolRot, nonConstArgIndex);
-				if (nonConstArgIndex >= 0)
-				{
-					ParseString msg = "simpleBillow requires argument index ";
-					msg += std::to_string(nonConstArgIndex);
-					msg += " to be constant";
-					SetError(msg);
-					return false;
-				}
-			}
-			break;
-		case FUNC_X:
-			if (argsFound != 0)
-			{
-				SetError("x accepts 0 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.x();
-			break;
-		case FUNC_Y:
-			if (argsFound != 0)
-			{
-				SetError("y accepts 0 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.y();
-			break;
-		case FUNC_Z:
-			if (argsFound != 0)
-			{
-				SetError("z accepts 0 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.z();
-			break;
-		case FUNC_W:
-			if (argsFound != 0)
-			{
-				SetError("w accepts 0 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.w();
-			break;
-		case FUNC_U:
-			if (argsFound != 0)
-			{
-				SetError("u accepts 0 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.u();
-			break;
-		case FUNC_V:
-			if (argsFound != 0)
-			{
-				SetError("v accepts 0 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.v();
-			break;
-		case FUNC_DX:
-			if (argsFound != 2)
-			{
-				SetError("dx accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.dx(args[0], args[1]);
-			break;
-		case FUNC_DY:
-			if (argsFound != 2)
-			{
-				SetError("dy accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.dy(args[0], args[1]);
-			break;
-		case FUNC_DZ:
-			if (argsFound != 2)
-			{
-				SetError("dz accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.dz(args[0], args[1]);
-			break;
-		case FUNC_DW:
-			if (argsFound != 2)
-			{
-				SetError("dw accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.dw(args[0], args[1]);
-			break;
-		case FUNC_DU:
-			if (argsFound != 2)
-			{
-				SetError("du accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.du(args[0], args[1]);
-			break;
-		case FUNC_DV:
-			if (argsFound != 2)
-			{
-				SetError("dv accepts 2 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.dv(args[0], args[1]);
-			break;
-		case FUNC_SIGMOID:
-			if (argsFound != 1 && argsFound != 3)
-			{
-				SetError("sigmoid accepts 1 or 3 arguemnts", funcToken);
-				return false;
-			}
-			if(argsFound == 1)
-				instruction = Kernel.sigmoid(args[0]);
-			else
-				instruction = Kernel.sigmoid(args[0], args[1], args[2]);
-			break;
-		case FUNC_SCALE_OFFSET:
-			if (argsFound != 3)
-			{
-				SetError("scaleOffset accepts 3 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.scaleOffset(args[0], args[1], args[2]);
-			break;
-		case FUNC_RADIAL:
-			if (argsFound != 0)
-			{
-				SetError("radial accepts 0 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.radial();
-			break;
-		case FUNC_CLAMP:
-			if (argsFound != 3)
-			{
-				SetError("clamp accepts 3 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.clamp(args[0], args[1], args[2]);
-			break;
-		case FUNC_RGBA:
-		case FUNC_COLOR:
-			if (argsFound != 4)
-			{
-				SetError("rgba/color accepts 4 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.combineRGBA(args[0], args[1], args[2], args[3]);
-			break;
-		case FUNC_HEX_TILE:
-			if (argsFound != 1)
-			{
-				SetError("hexTile accepts 1 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.hexTile(args[0]);
-			break;
-		case FUNC_HEX_BUMP:
-			if (argsFound != 0)
-			{
-				SetError("hexBump accepts 0 arguemnts", funcToken);
-				return false;
-			}
-			instruction = Kernel.hexBump();
-			break;
-		default:
-			SetError("Unkown function type", funcToken);
-			return false;
-		}
-
-		Stack.erase(Stack.end() - argsFound, Stack.end());
-		Stack.push_back(instruction);
+		NodePtr args = newStack.back();
+		newStack.pop_back();
+		newStack.push_back(std::make_shared<NoiseParserAST::functionCall>(funcNode, args));
+		
 		return true;
 	}
 
 	bool NoiseParser::object()
 	{
+		bool foundSimple = false;
 		if (functionCall())
-			return true;
+			foundSimple = true;
 		else if (grouping())
-			return true;
+			foundSimple = true;
 		else if (negative())
+			foundSimple = true;
+
+		if (foundSimple)
+		{
+			NodePtr obj = newStack.back();
+			newStack.pop_back();
+			newStack.push_back(std::make_shared<NoiseParserAST::object>(obj));
 			return true;
+		}
 
 		Token t = tokens.GetToken();
 		if (t.token == Token::NUMBER)
 		{
-			Stack.push_back(Kernel.constant(t.number));
+			NodePtr num = std::make_shared<NoiseParserAST::number>(t);
+			newStack.push_back(std::make_shared<NoiseParserAST::object>(num));
 			return true;
 		}
 		else if (t.token == Token::KEYWORD)
 		{
-			if (KeywordToVariable(t.keyword))
-				return true;
-			else
-			{
-				SetError("Variable undefined: " + t.keyword, t);
-				return false;
-			}
+			NodePtr key = std::make_shared<NoiseParserAST::keyword>(t);
+			newStack.push_back(std::make_shared<NoiseParserAST::object>(key));
+			return true;
 		}
 		else
 		{
@@ -1086,16 +700,32 @@ namespace anl
 
 	bool NoiseParser::domainPrecedence()
 	{
-		Token::TokenType tt;
-		int argsFound = 0;
+		NodePtr domainOp = nullptr;
+		NodePtr domainPrec = nullptr;
+		NodePtr obj = nullptr;
+
 		// optional
-		bool hasDomainOperator = domainOperator(argsFound, tt);
+		bool hasDomainOperator = domainOperator();
+		if (hasDomainOperator)
+		{
+			domainOp = newStack.back();
+			newStack.pop_back();
+		}
+
 
 		bool foundExpr = false;
 		if (hasDomainOperator && domainPrecedence())
+		{
 			foundExpr = true;
+			domainPrec = newStack.back();
+			newStack.pop_back();
+		}
 		else if (object())
+		{
 			foundExpr = true;
+			obj = newStack.back();
+			newStack.pop_back();
+		}
 
 		if (hasDomainOperator && foundExpr == false)
 		{
@@ -1107,82 +737,7 @@ namespace anl
 			return false;
 		}
 
-		CInstructionIndex instruction = Stack.back();
-		Stack.pop_back();
-		auto args = Stack.end() - argsFound;
-
-		if (hasDomainOperator && argsFound == 1)
-		{
-			switch (tt)
-			{
-			case Token::DOMAIN_SCALE:
-				instruction = Kernel.scaleDomain(instruction, args[0]);
-				break;
-			case Token::DOMAIN_SCALE_X:
-				instruction = Kernel.scaleX(instruction, args[0]);
-				break;
-			case Token::DOMAIN_SCALE_Y:
-				instruction = Kernel.scaleY(instruction, args[0]);
-				break;
-			case Token::DOMAIN_SCALE_Z:
-				instruction = Kernel.scaleZ(instruction, args[0]);
-				break;
-			case Token::DOMAIN_SCALE_W:
-				instruction = Kernel.scaleW(instruction, args[0]);
-				break;
-			case Token::DOMAIN_SCALE_U:
-				instruction = Kernel.scaleU(instruction, args[0]);
-				break;
-			case Token::DOMAIN_SCALE_V:
-				instruction = Kernel.scaleV(instruction, args[0]);
-				break;
-			case Token::DOMAIN_TRANSLATE:
-				instruction = Kernel.translateDomain(instruction, args[0]);
-				break;
-			case Token::DOMAIN_TRANSLATE_X:
-				instruction = Kernel.translateX(instruction, args[0]);
-				break;
-			case Token::DOMAIN_TRANSLATE_Y:
-				instruction = Kernel.translateY(instruction, args[0]);
-				break;
-			case Token::DOMAIN_TRANSLATE_Z:
-				instruction = Kernel.translateZ(instruction, args[0]);
-				break;
-			case Token::DOMAIN_TRANSLATE_W:
-				instruction = Kernel.translateW(instruction, args[0]);
-				break;
-			case Token::DOMAIN_TRANSLATE_U:
-				instruction = Kernel.translateU(instruction, args[0]);
-				break;
-			case Token::DOMAIN_TRANSLATE_V:
-				instruction = Kernel.translateV(instruction, args[0]);
-				break;
-			default:
-				SetError("Unrecognized token in domainPrecedence");
-				return false;
-				break;
-			}
-		}
-		else if (hasDomainOperator)
-		{
-			if (argsFound != 4)
-			{
-				SetError("rotate domain operation requires 4 arguments");
-				return false;
-			}
-			switch (tt)
-			{
-			case Token::DOMAIN_ROTATE:
-				instruction = Kernel.rotateDomain(instruction, args[0], args[1], args[2], args[3]);
-				break;
-			default:
-				SetError("Unrecognized token in domainPrecedence (multi arg section)");
-				return false;
-				break;
-			}
-		}
-		Stack.erase(Stack.end() - argsFound, Stack.end());
-		Stack.push_back(instruction);
+		newStack.push_back(std::make_shared<NoiseParserAST::domainPrecedence>(domainOp, domainPrec, obj));
 		return true;
 	}
 
@@ -1201,14 +756,12 @@ namespace anl
 
 		if (mult())
 		{
-			auto right = Stack.back();
-			Stack.pop_back();
-			auto left = Stack.back();
-			Stack.pop_back();
-			if (t.token == Token::MULT)
-				Stack.push_back(Kernel.multiply(left, right));
-			else
-				Stack.push_back(Kernel.divide(left, right));
+			NodePtr right = newStack.back();
+			newStack.pop_back();
+			NodePtr left = newStack.back();
+			newStack.pop_back();
+
+			newStack.push_back(std::make_shared<NoiseParserAST::mult>(t, left, right));
 			return true;
 		}
 		else
@@ -1233,14 +786,13 @@ namespace anl
 
 		if (add())
 		{
-			auto right = Stack.back();
-			Stack.pop_back();
-			auto left = Stack.back();
-			Stack.pop_back();
-			if (t.token == Token::ADD)
-				Stack.push_back(Kernel.add(left, right));
-			else
-				Stack.push_back(Kernel.subtract(left, right));
+			NodePtr right = newStack.back();
+			newStack.pop_back();
+			NodePtr left = newStack.back();
+			newStack.pop_back();
+
+			newStack.push_back(std::make_shared<NoiseParserAST::add>(t, left, right));
+
 			return true;
 		}
 		else
@@ -1271,6 +823,13 @@ namespace anl
 			SetError("Missing closing parenthesis", t);
 			return false;
 		}
+
+		// for these simple pass through portions of the grammer, just wrap the
+		// node we are passing the the appropriately named node type.
+		NodePtr node = newStack.back();
+		newStack.pop_back();
+		newStack.push_back(std::make_shared<NoiseParserAST::grouping>(node));
+
 		return true;
 	}
 
@@ -1289,49 +848,48 @@ namespace anl
 			return false;
 		}
 
-		const SInstruction& i = (*Kernel.getKernel())[Stack.back().GetIndex()];
-		if (i.opcode_ == OP_Constant)
-		{
-			// negate the constant, but don't change it directly just incase something else is referencing it.
-			Stack.pop_back();
-			Stack.push_back(Kernel.constant(-i.outfloat_));
-			return true;
-		}
-		else
-		{
-			// since there is no constant to directly negate, we must multiply by -1.0
-			CInstructionIndex instruction = Stack.back();
-			Stack.pop_back();
-			Stack.push_back(Kernel.multiply(instruction, Kernel.constant(-1.0)));
-			return true;
-		}
+		// for these simple pass through portions of the grammer, just wrap the
+		// node we are passing the the appropriately named node type.
+		NodePtr node = newStack.back();
+		newStack.pop_back();
+		newStack.push_back(std::make_shared<NoiseParserAST::negative>(t, node));
+		return true;
 	}
 
 	bool NoiseParser::expression()
 	{
-		//if (grouping())
-		//	return true;
-		//else if (negative())
-		//	return true;
-		//else if (add())
-		//	return true;
-		//else
-		//	return false;
+		bool result;
 		if (add())
-			return true;
+			result = true;
 		else if (negative())
-			return true;
+			result = true;
 		else if (grouping())
-			return true;
+			result = true;
 		else
-			return false;
+			result = false;
 
+		if (result)
+		{
+			// for these simple pass through portions of the grammer, just wrap the
+			// node we are passing the the appropriately named node type.
+			NodePtr node = newStack.back();
+			newStack.pop_back();
+			newStack.push_back(std::make_shared<NoiseParserAST::expression>(node));
+		}
+
+		return result;
 	}
 
 	bool NoiseParser::statement()
 	{
 		if (expression() == false)
 			return false;
+
+		// for these simple pass through portions of the grammer, just wrap the
+		// node we are passing the the appropriately named node type.
+		NodePtr node = newStack.back();
+		newStack.pop_back();
+		newStack.push_back(std::make_shared<NoiseParserAST::statement>(node));
 
 		Token t = tokens.GetToken();
 		if (t.token != Token::SEMI_COLON)
@@ -1348,31 +906,22 @@ namespace anl
 		CInstructionIndex variableValue(NOP);
 		bool isAssignment = false;
 
-		Token t = tokens.GetToken();
-		if (t.token == Token::KEYWORD)
+		Token keywordToken = tokens.GetToken();
+		NodePtr keyword = nullptr;
+		if (keywordToken.token == Token::KEYWORD)
 		{
-			bool isKeyword = KeywordToVariable(t.keyword);
-			// we wanted to see if it existed, not actually get it, so discard it from the stack.
-			if(isKeyword)
-				Stack.pop_back();
-			if (KeywordToBlend(t.keyword) == BLEND_INVALID && KeywordToFunc(t.keyword) == FUNC_INVALID && isKeyword == false)
+			variableName = keywordToken.keyword;
+			Token t = tokens.GetToken();
+			if (t.token == Token::ASSIGNMENT)
 			{
-				variableName = t.keyword;
-				t = tokens.GetToken();
-				if (t.token == Token::ASSIGNMENT)
-				{
-					isAssignment = true;
-				}
-				else
-				{
-					ParseString msg = "Unrecognized keyword: ";
-					msg += variableName;
-					SetError(msg, t);
-					return false;
-				}
+				keyword = std::make_shared<NoiseParserAST::keyword>(keywordToken);
+				isAssignment = true;
 			}
 			else
 			{
+				// the keyword we thought we were supposed to assign to, turns out to be a
+				// variable reference, put it back and try for a statment
+				tokens.UnGet();
 				tokens.UnGet();
 			}
 		}
@@ -1384,19 +933,14 @@ namespace anl
 		if (statement() == false)
 		{
 			if (isAssignment)
-			{
-				SetError("Missing statement following assignment operator", t);
-				return false;
-			}
+				SetError("Missing statement following assignment operator", keywordToken);
 			return false;
 		}
 		else
 		{
-			if(isAssignment)
-				AddVariable(variableName, Stack.back());
-			// don't pop stack here since we use the top of the stack to communicate the last statment
-			// seen as the statment to run. Yes this will grow the stack by one for each assignment.
-			//Stack.pop_back();
+			NodePtr statementPtr = newStack.back();
+			newStack.pop_back();
+			newStack.push_back(std::make_shared<NoiseParserAST::assignment>(keywordToken, keyword, statementPtr));
 			return true;
 		}
 	}
@@ -1406,22 +950,29 @@ namespace anl
 		if (assignment() == false)
 			return false;
 
-		program();
+		NodePtr assignmentPtr = newStack.back();
+		newStack.pop_back();
+
+		NodePtr programPtr = nullptr;
+		if (program())
+		{
+			programPtr = newStack.back();
+			newStack.pop_back();
+		}
+
+		newStack.push_back(std::make_shared<NoiseParserAST::program>(assignmentPtr, programPtr));
 		return true;
 	}
 
 	bool NoiseParser::Parse()
 	{
 		// return true if there was an expression found and no error
-		Stack.clear();
 		bool success = program();
 		//bool success = true;
-		//ParseResult = Kernel.simpleBillow(OP_SimplexBasis, BLEND_QUINTIC, 5, 1.0, 654989732, true);
+		//ParseResult = Kernel.simpleBillow(OP_SimplexBasis,EBlend::BLEND_QUINTIC, 5, 1.0, 654989732, true);
 
-		if (Stack.size())
-			ParseResult = Stack.back();
-		else
-			ParseResult = NOP;
+		
+		ParseResult = NOP;
 
 		Token t;
 		if (IsEof(t) == false)
@@ -1433,8 +984,29 @@ namespace anl
 
 		if (success)
 		{
-			Kernel.optimize(TotalFolds, TotalInstructions);
+			//Kernel.optimize(TotalFolds, TotalInstructions);
+			NodePtr ASTRoot = newStack.back();
+
+			// ShapeUp is required before emitting
+			ASTRoot->ShapeUpAll();
+			// RemoveIntermidiates is technically optional at the moment 
+			//ASTRoot->RemoveIntermidiates();
+
+			NoiseParserAST::ANLEmitter emitter(Kernel);
+			ASTRoot->Emit(&emitter);
+			if (emitter.IsError())
+			{
+				std::string msgs = emitter.FormErrorMsgs();
+				SetError("ANLEmitter Error: " + msgs);
+				success = false;
+			}
+			else
+			{
+				ParseResult = emitter.GetProgramStart();
+			}
 		}
+
+		newStack.clear();
 
 		return success;
 	}
