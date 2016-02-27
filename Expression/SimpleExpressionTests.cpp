@@ -359,6 +359,7 @@ int main(int argc, const char* args[])
 	TSE("var = 5.0; varb = 3.0; varb;", 3.0);
 
 	TSE("billowtest = 0.5;<s:5>billowtest;", 0.5);
+	TEPE("a = 5; a= 6;");
 
 
 	if (ErrorCount != 0)
