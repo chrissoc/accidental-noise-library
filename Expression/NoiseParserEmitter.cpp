@@ -111,15 +111,16 @@ namespace anl
 		void ANLEmitter::Emit(functionCall * node)
 		{
 			// we dont actually emit with keywords, we just read their value.
-			keyword* kw = dynamic_cast<keyword*>(node->Child[0].get());
+			if (node->Child[0]->IsType(Node::KEYWORD) == false)
+				SetError("Improper functionCall Node setup, Child[0] must be a keyword.", node->token);
 
 			node->Child[1]->Emit(this);
 			
 			int argc = StackIntegers.back();
 			StackIntegers.pop_back();
 
-			EFunction::Function func = NoiseParser::KeywordToFunc(kw->token.keyword);
-			SetupFunctionCall(argc, func, kw->token);
+			EFunction::Function func = NoiseParser::KeywordToFunc(node->Child[0]->token.keyword);
+			SetupFunctionCall(argc, func, node->Child[0]->token);
 			// setup function call removes the arguments and places the result on the stack.
 		}
 		void ANLEmitter::Emit(object * node)
@@ -208,9 +209,13 @@ namespace anl
 			// make them available later
 			if (node->Child.size() == 2)
 			{
-				assignment* assignmentNode = dynamic_cast<assignment*>(node->Child[0].get());
-				if (assignmentNode != nullptr)
+				if (node->Child[0]->IsType(Node::ASSIGNMENT) == false)
 				{
+					SetError("program node Child[0] must be of type ASSIGNMENT", node->Child[0]->token);
+				}
+				else
+				{
+					assignment* assignmentNode = static_cast<assignment*>(node->Child[0].get());
 					if (assignmentNode->Child.size() == 2)
 					{
 						// the first index in the assignment node is the keyword child.
