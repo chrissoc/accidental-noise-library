@@ -576,9 +576,9 @@ namespace anl
 			return false;
 		}
 
-		NodePtr args = newStack.back();
-		newStack.pop_back();
-		newStack.push_back(std::make_shared<NoiseParserAST::domainOperator>(opToken, args));
+		NodePtr args = Stack.back();
+		Stack.pop_back();
+		Stack.push_back(std::make_shared<NoiseParserAST::domainOperator>(opToken, args));
 
 		return true;
 	}
@@ -589,27 +589,27 @@ namespace anl
 		NodePtr arg = nullptr;
 		if (expression())
 		{
-			arg = newStack.back();
-			newStack.pop_back();
+			arg = Stack.back();
+			Stack.pop_back();
 
 			Token t = tokens.GetToken();
 			if (t.token == Token::COMMA)
 			{
 				argumentList();
-				argList = newStack.back();
-				newStack.pop_back();
+				argList = Stack.back();
+				Stack.pop_back();
 			}
 			else
 			{
 				tokens.UnGet();
 			}
-			newStack.push_back(std::make_shared<NoiseParserAST::argumentList>(arg, argList));
+			Stack.push_back(std::make_shared<NoiseParserAST::argumentList>(arg, argList));
 			return true;// return true, found atleast one.
 		}
 		else
 		{
 			// return an object even if its empty
-			newStack.push_back(std::make_shared<NoiseParserAST::argumentList>(arg, argList));
+			Stack.push_back(std::make_shared<NoiseParserAST::argumentList>(arg, argList));
 			return false;
 		}
 	}
@@ -653,9 +653,9 @@ namespace anl
 			return false;
 		}
 
-		NodePtr args = newStack.back();
-		newStack.pop_back();
-		newStack.push_back(std::make_shared<NoiseParserAST::functionCall>(funcNode, args));
+		NodePtr args = Stack.back();
+		Stack.pop_back();
+		Stack.push_back(std::make_shared<NoiseParserAST::functionCall>(funcNode, args));
 		
 		return true;
 	}
@@ -672,9 +672,9 @@ namespace anl
 
 		if (foundSimple)
 		{
-			NodePtr obj = newStack.back();
-			newStack.pop_back();
-			newStack.push_back(std::make_shared<NoiseParserAST::object>(obj));
+			NodePtr obj = Stack.back();
+			Stack.pop_back();
+			Stack.push_back(std::make_shared<NoiseParserAST::object>(obj));
 			return true;
 		}
 
@@ -682,13 +682,13 @@ namespace anl
 		if (t.token == Token::NUMBER)
 		{
 			NodePtr num = std::make_shared<NoiseParserAST::number>(t);
-			newStack.push_back(std::make_shared<NoiseParserAST::object>(num));
+			Stack.push_back(std::make_shared<NoiseParserAST::object>(num));
 			return true;
 		}
 		else if (t.token == Token::KEYWORD)
 		{
 			NodePtr key = std::make_shared<NoiseParserAST::keyword>(t);
-			newStack.push_back(std::make_shared<NoiseParserAST::object>(key));
+			Stack.push_back(std::make_shared<NoiseParserAST::object>(key));
 			return true;
 		}
 		else
@@ -708,8 +708,8 @@ namespace anl
 		bool hasDomainOperator = domainOperator();
 		if (hasDomainOperator)
 		{
-			domainOp = newStack.back();
-			newStack.pop_back();
+			domainOp = Stack.back();
+			Stack.pop_back();
 		}
 
 
@@ -717,14 +717,14 @@ namespace anl
 		if (hasDomainOperator && domainPrecedence())
 		{
 			foundExpr = true;
-			domainPrec = newStack.back();
-			newStack.pop_back();
+			domainPrec = Stack.back();
+			Stack.pop_back();
 		}
 		else if (object())
 		{
 			foundExpr = true;
-			obj = newStack.back();
-			newStack.pop_back();
+			obj = Stack.back();
+			Stack.pop_back();
 		}
 
 		if (hasDomainOperator && foundExpr == false)
@@ -737,7 +737,7 @@ namespace anl
 			return false;
 		}
 
-		newStack.push_back(std::make_shared<NoiseParserAST::domainPrecedence>(domainOp, domainPrec, obj));
+		Stack.push_back(std::make_shared<NoiseParserAST::domainPrecedence>(domainOp, domainPrec, obj));
 		return true;
 	}
 
@@ -756,12 +756,12 @@ namespace anl
 
 		if (mult())
 		{
-			NodePtr right = newStack.back();
-			newStack.pop_back();
-			NodePtr left = newStack.back();
-			newStack.pop_back();
+			NodePtr right = Stack.back();
+			Stack.pop_back();
+			NodePtr left = Stack.back();
+			Stack.pop_back();
 
-			newStack.push_back(std::make_shared<NoiseParserAST::mult>(t, left, right));
+			Stack.push_back(std::make_shared<NoiseParserAST::mult>(t, left, right));
 			return true;
 		}
 		else
@@ -786,12 +786,12 @@ namespace anl
 
 		if (add())
 		{
-			NodePtr right = newStack.back();
-			newStack.pop_back();
-			NodePtr left = newStack.back();
-			newStack.pop_back();
+			NodePtr right = Stack.back();
+			Stack.pop_back();
+			NodePtr left = Stack.back();
+			Stack.pop_back();
 
-			newStack.push_back(std::make_shared<NoiseParserAST::add>(t, left, right));
+			Stack.push_back(std::make_shared<NoiseParserAST::add>(t, left, right));
 
 			return true;
 		}
@@ -826,9 +826,9 @@ namespace anl
 
 		// for these simple pass through portions of the grammer, just wrap the
 		// node we are passing the the appropriately named node type.
-		NodePtr node = newStack.back();
-		newStack.pop_back();
-		newStack.push_back(std::make_shared<NoiseParserAST::grouping>(node));
+		NodePtr node = Stack.back();
+		Stack.pop_back();
+		Stack.push_back(std::make_shared<NoiseParserAST::grouping>(node));
 
 		return true;
 	}
@@ -850,9 +850,9 @@ namespace anl
 
 		// for these simple pass through portions of the grammer, just wrap the
 		// node we are passing the the appropriately named node type.
-		NodePtr node = newStack.back();
-		newStack.pop_back();
-		newStack.push_back(std::make_shared<NoiseParserAST::negative>(t, node));
+		NodePtr node = Stack.back();
+		Stack.pop_back();
+		Stack.push_back(std::make_shared<NoiseParserAST::negative>(t, node));
 		return true;
 	}
 
@@ -872,9 +872,9 @@ namespace anl
 		{
 			// for these simple pass through portions of the grammer, just wrap the
 			// node we are passing the the appropriately named node type.
-			NodePtr node = newStack.back();
-			newStack.pop_back();
-			newStack.push_back(std::make_shared<NoiseParserAST::expression>(node));
+			NodePtr node = Stack.back();
+			Stack.pop_back();
+			Stack.push_back(std::make_shared<NoiseParserAST::expression>(node));
 		}
 
 		return result;
@@ -887,9 +887,9 @@ namespace anl
 
 		// for these simple pass through portions of the grammer, just wrap the
 		// node we are passing the the appropriately named node type.
-		NodePtr node = newStack.back();
-		newStack.pop_back();
-		newStack.push_back(std::make_shared<NoiseParserAST::statement>(node));
+		NodePtr node = Stack.back();
+		Stack.pop_back();
+		Stack.push_back(std::make_shared<NoiseParserAST::statement>(node));
 
 		Token t = tokens.GetToken();
 		if (t.token != Token::SEMI_COLON)
@@ -938,9 +938,9 @@ namespace anl
 		}
 		else
 		{
-			NodePtr statementPtr = newStack.back();
-			newStack.pop_back();
-			newStack.push_back(std::make_shared<NoiseParserAST::assignment>(keywordToken, keyword, statementPtr));
+			NodePtr statementPtr = Stack.back();
+			Stack.pop_back();
+			Stack.push_back(std::make_shared<NoiseParserAST::assignment>(keywordToken, keyword, statementPtr));
 			return true;
 		}
 	}
@@ -950,17 +950,17 @@ namespace anl
 		if (assignment() == false)
 			return false;
 
-		NodePtr assignmentPtr = newStack.back();
-		newStack.pop_back();
+		NodePtr assignmentPtr = Stack.back();
+		Stack.pop_back();
 
 		NodePtr programPtr = nullptr;
 		if (program())
 		{
-			programPtr = newStack.back();
-			newStack.pop_back();
+			programPtr = Stack.back();
+			Stack.pop_back();
 		}
 
-		newStack.push_back(std::make_shared<NoiseParserAST::program>(assignmentPtr, programPtr));
+		Stack.push_back(std::make_shared<NoiseParserAST::program>(assignmentPtr, programPtr));
 		return true;
 	}
 
@@ -985,7 +985,7 @@ namespace anl
 		if (success)
 		{
 			//Kernel.optimize(TotalFolds, TotalInstructions);
-			NodePtr ASTRoot = newStack.back();
+			NodePtr ASTRoot = Stack.back();
 
 			// ShapeUp is required before emitting
 			ASTRoot->ShapeUpAll();
@@ -1006,7 +1006,7 @@ namespace anl
 			}
 		}
 
-		newStack.clear();
+		Stack.clear();
 
 		return success;
 	}

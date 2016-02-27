@@ -89,7 +89,7 @@ namespace anl
 		CInstructionIndex NOP;
 		CInstructionIndex ParseResult;
 		std::vector<ParseString> ErrorMsgs;
-		std::vector<NodePtr> newStack;
+		std::vector<NodePtr> Stack;
 		int TotalFolds, TotalInstructions;
 		bool Error;
 
