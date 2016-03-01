@@ -314,6 +314,7 @@ int main(int argc, const char* args[])
 	TEM("dx(x(), 0.5);", rlist);
 
 	TSE("<s:2>22.0;", 22.0);
+	TSE("-<s:2>22.0;", 22.0);
 	TSE("<t:2>22.0;", 22.0);
 	TSE("<tx:2>22.0;", 22.0);
 	TSE("<ty:2>22.0;", 22.0);

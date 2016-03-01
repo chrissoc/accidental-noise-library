@@ -990,7 +990,7 @@ namespace anl
 			// ShapeUp is required before emitting
 			ASTRoot->ShapeUpAll();
 			// RemoveIntermidiates is technically optional at the moment 
-			//ASTRoot->RemoveIntermidiates();
+			ASTRoot->RemoveIntermidiates();
 
 			NoiseParserAST::ANLEmitter emitter(Kernel);
 			ASTRoot->Emit(&emitter);

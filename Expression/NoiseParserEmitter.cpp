@@ -211,7 +211,9 @@ namespace anl
 			{
 				if (node->Child[0]->IsType(Node::ASSIGNMENT) == false)
 				{
-					SetError("program node Child[0] must be of type ASSIGNMENT", node->Child[0]->token);
+					//SetError("program node Child[0] must be of type ASSIGNMENT", node->Child[0]->token);
+					// The assignment node may be removed if there is no actual assignment done and its
+					// just a pass through.
 				}
 				else
 				{
