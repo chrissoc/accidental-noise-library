@@ -36,7 +36,7 @@ mult ::= domainPrecedence (('*' | '/') mult)?
 add ::= mult (('+' | '-') add)?
 
 grouping ::= '(' expression ')'
-negative ::= '-' object
+negative ::= '-' (object | domainPrecendence)
 expression ::= add | negative | grouping
 statement ::= expression ';'
 assignment ::= (keyword '=')? statement

@@ -842,7 +842,7 @@ namespace anl
 			return false;
 		}
 
-		if (object() == false)
+		if (object() == false && domainPrecedence() == false)
 		{
 			SetError("Attempting to negate nothing", t);
 			return false;
