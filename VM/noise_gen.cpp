@@ -1332,17 +1332,17 @@ double anl::simplex_noise6D(double x, double y, double z, double w, double u, do
         int i=newDistOrder[c];
         if(i!=-1) intLoc[i]+=1;
 
-        double u[6];
+        double u6[6];
         for(int d=0; d<6; ++d)
         {
-            u[d]=cellDist[d]-(intLoc[d]-skewLoc[d])+skewOffset;
+            u6[d]=cellDist[d]-(intLoc[d]-skewLoc[d])+skewOffset;
         }
 
         double t=cornerFaceSqrd;
 
         for(int d=0; d<6; ++d)
         {
-            t-=u[d]*u[d];
+            t-=u6[d]*u6[d];
         }
 
         if(t>0.0)
@@ -1352,7 +1352,7 @@ double anl::simplex_noise6D(double x, double y, double z, double w, double u, do
             double gr=0.0;
             for(int d=0; d<6; ++d)
             {
-                gr+=vec[d]*u[d];
+                gr+=vec[d]*u6[d];
             }
 
             n+=gr*t*t*t*t;
