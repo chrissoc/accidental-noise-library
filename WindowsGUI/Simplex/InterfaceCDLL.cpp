@@ -5,8 +5,8 @@
 #include "..\..\VM\kernel.h"
 #include "..\..\VM\instruction.h"
 
-#include "..\..\Expression\NoiseBuilder.h"
-#include "..\..\Expression\NoiseParser.h"
+#include "..\..\lang\NoiseBuilder.h"
+#include "..\..\lang\NoiseParser.h"
 
 #include <iostream>
 
@@ -40,7 +40,7 @@ int32_t FillSampleArea(int32_t offsetX, int32_t offsetY, int32_t width, int32_t 
 	//auto noise = 0.5 * GradientBasis(kernel, BLEND_NONE, 12345)[0.5][1.5] + 0.5 * SimplexBasis(kernel, 12345)(0.5);
 	//anl::CInstructionIndex ii = noise.GetIndex();
 
-	anl::NoiseParser parser("0.5 * GradientBasis(BLEND_NONE, 12345)[1.0][0.1]");
+	anl::lang::NoiseParser parser("0.5 * GradientBasis(BLEND_NONE, 12345)[1.0][0.1]");
 	if (parser.Parse() == false)
 	{
 		//std::cout << parser.FormErrorMsgs() << std::endl;
@@ -95,7 +95,7 @@ int32_t MapExpressionToArea(int32_t offsetX, int32_t offsetY, int32_t width, int
 		return 2;
 	}
 
-	anl::NoiseParser parser(expression);
+	anl::lang::NoiseParser parser(expression);
 
 	if (parser.Parse() == false)
 	{

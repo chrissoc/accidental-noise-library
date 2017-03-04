@@ -4,8 +4,8 @@
 #include "..\..\VM\kernel.h"
 #include "..\..\VM\instruction.h"
 
-#include "..\..\Expression\NoiseBuilder.h"
-#include "..\..\Expression\NoiseParser.h"
+#include "..\..\lang\NoiseBuilder.h"
+#include "..\..\lang\NoiseParser.h"
 
 #include <Windows.h> // for BSTR
 #include <stdint.h>
@@ -18,17 +18,17 @@
 extern "C" DLL_EXPORT void CInstructionIndex_dtor(anl::CInstructionIndex* idx);
 
 /************ Parser ****************/
-extern "C" DLL_EXPORT anl::NoiseParser* Parser_ctor(const char* expression);
-extern "C" DLL_EXPORT void Parser_dtor(anl::NoiseParser* parser);
+extern "C" DLL_EXPORT anl::lang::NoiseParser* Parser_ctor(const char* expression);
+extern "C" DLL_EXPORT void Parser_dtor(anl::lang::NoiseParser* parser);
 // returns non-zero for true
-extern "C" DLL_EXPORT int32_t Parser_Parse(anl::NoiseParser* parser);
-extern "C" DLL_EXPORT char* Parser_FormErrorMsgs(anl::NoiseParser* parser);
-extern "C" DLL_EXPORT int32_t Parser_GetTotalFolds(anl::NoiseParser* parser);
-extern "C" DLL_EXPORT int32_t Parser_GetTotalInstructions(anl::NoiseParser* parser);
+extern "C" DLL_EXPORT int32_t Parser_Parse(anl::lang::NoiseParser* parser);
+extern "C" DLL_EXPORT char* Parser_FormErrorMsgs(anl::lang::NoiseParser* parser);
+extern "C" DLL_EXPORT int32_t Parser_GetTotalFolds(anl::lang::NoiseParser* parser);
+extern "C" DLL_EXPORT int32_t Parser_GetTotalInstructions(anl::lang::NoiseParser* parser);
 // the object pointed to by the returned CKernel has a lifetime tied to the parser, no need to free.
-extern "C" DLL_EXPORT anl::CKernel* Parser_GetKernelRef(anl::NoiseParser* parser);
+extern "C" DLL_EXPORT anl::CKernel* Parser_GetKernelRef(anl::lang::NoiseParser* parser);
 // the CInstructionIndex returned must be freed by a call to CInstructionIndex_dtor
-extern "C" DLL_EXPORT anl::CInstructionIndex* Parser_GetInstructionIndexRoot(anl::NoiseParser* parser);
+extern "C" DLL_EXPORT anl::CInstructionIndex* Parser_GetInstructionIndexRoot(anl::lang::NoiseParser* parser);
 
 /************ CNoiseExecutor ****************/
 extern "C" DLL_EXPORT anl::CNoiseExecutor* CNoiseExecutor_ctor(anl::CKernel* kernel);

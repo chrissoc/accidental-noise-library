@@ -19,8 +19,8 @@
     <Filter Include="Source Files\ANL\VM">
       <UniqueIdentifier>{36499ea3-1ab0-4e75-8c9f-93478d46ff37}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ANL\Expression">
-      <UniqueIdentifier>{dcabdc3b-d7c5-4b43-a409-fdb05e1633d3}</UniqueIdentifier>
+    <Filter Include="Source Files\ANL\lang">
+      <UniqueIdentifier>{e5de604c-6bae-4d24-93f1-3fee8f4a30a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,17 +48,17 @@
     <ClCompile Include="..\..\VM\vm.cpp">
       <Filter>Source Files\ANL\VM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParser.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClCompile Include="..\..\lang\NoiseBuilder.cpp">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParserAST.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClCompile Include="..\..\lang\NoiseParser.cpp">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParserEmitter.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClCompile Include="..\..\lang\NoiseParserAST.cpp">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParserToken.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClCompile Include="..\..\lang\NoiseParserEmitter.cpp">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,17 +101,20 @@
     <ClInclude Include="..\..\VM\vm.h">
       <Filter>Source Files\ANL\VM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Expression\NoiseParser.h">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClInclude Include="..\..\lang\NoiseBuilder.h">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Expression\NoiseParserAST.h">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClInclude Include="..\..\lang\NoiseParser.h">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Expression\NoiseParserEmitter.h">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClInclude Include="..\..\lang\NoiseParserAST.h">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Expression\NoiseParserToken.h">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClInclude Include="..\..\lang\NoiseParserEmitter.h">
+      <Filter>Source Files\ANL\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lang\NoiseParserToken.h">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

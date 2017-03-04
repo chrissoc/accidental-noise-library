@@ -15,22 +15,22 @@ void CInstructionIndex_dtor(anl::CInstructionIndex* idx)
 }
 
 /************ Parser ****************/
-anl::NoiseParser* Parser_ctor(const char* expression)
+anl::lang::NoiseParser* Parser_ctor(const char* expression)
 {
-	return new anl::NoiseParser(expression);
+	return new anl::lang::NoiseParser(expression);
 }
 
-void Parser_dtor(anl::NoiseParser* parser)
+void Parser_dtor(anl::lang::NoiseParser* parser)
 {
 	delete parser;
 }
 // returns non-zero for true
-int32_t Parser_Parse(anl::NoiseParser* parser)
+int32_t Parser_Parse(anl::lang::NoiseParser* parser)
 {
 	return parser->Parse() ? 1 : 0;
 }
 
-char* Parser_FormErrorMsgs(anl::NoiseParser* parser)
+char* Parser_FormErrorMsgs(anl::lang::NoiseParser* parser)
 {
 	std::string msg = parser->FormErrorMsgs();
 	char* str = (char*)CoTaskMemAlloc(msg.size() + 1);
@@ -38,22 +38,22 @@ char* Parser_FormErrorMsgs(anl::NoiseParser* parser)
 	return str;
 }
 
-int32_t Parser_GetTotalFolds(anl::NoiseParser* parser)
+int32_t Parser_GetTotalFolds(anl::lang::NoiseParser* parser)
 {
 	return parser->GetTotalFolds();
 }
 
-int32_t Parser_GetTotalInstructions(anl::NoiseParser* parser)
+int32_t Parser_GetTotalInstructions(anl::lang::NoiseParser* parser)
 {
 	return parser->GetTotalInstructions();
 }
 
-anl::CKernel* Parser_GetKernelRef(anl::NoiseParser* parser)
+anl::CKernel* Parser_GetKernelRef(anl::lang::NoiseParser* parser)
 {
 	return &parser->GetKernel();
 }
 
-anl::CInstructionIndex* Parser_GetInstructionIndexRoot(anl::NoiseParser* parser)
+anl::CInstructionIndex* Parser_GetInstructionIndexRoot(anl::lang::NoiseParser* parser)
 {
 	return new anl::CInstructionIndex(parser->GetParseResult());
 }

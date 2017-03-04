@@ -75,12 +75,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)d</TargetName>
+    <OutDir>$(ProjectDir)\..\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)\..\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -144,10 +146,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Expression\NoiseParser.h" />
-    <ClInclude Include="..\..\Expression\NoiseParserAST.h" />
-    <ClInclude Include="..\..\Expression\NoiseParserEmitter.h" />
-    <ClInclude Include="..\..\Expression\NoiseParserToken.h" />
+    <ClInclude Include="..\..\lang\NoiseBuilder.h" />
+    <ClInclude Include="..\..\lang\NoiseParser.h" />
+    <ClInclude Include="..\..\lang\NoiseParserAST.h" />
+    <ClInclude Include="..\..\lang\NoiseParserEmitter.h" />
+    <ClInclude Include="..\..\lang\NoiseParserToken.h" />
     <ClInclude Include="..\..\VM\BooleanBits.h" />
     <ClInclude Include="..\..\VM\coordinate.h" />
     <ClInclude Include="..\..\VM\hashing.h" />
@@ -163,10 +166,10 @@
     <ClInclude Include="NoiseParserInterfaceCDLL.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Expression\NoiseParser.cpp" />
-    <ClCompile Include="..\..\Expression\NoiseParserAST.cpp" />
-    <ClCompile Include="..\..\Expression\NoiseParserEmitter.cpp" />
-    <ClCompile Include="..\..\Expression\NoiseParserToken.cpp" />
+    <ClCompile Include="..\..\lang\NoiseBuilder.cpp" />
+    <ClCompile Include="..\..\lang\NoiseParser.cpp" />
+    <ClCompile Include="..\..\lang\NoiseParserAST.cpp" />
+    <ClCompile Include="..\..\lang\NoiseParserEmitter.cpp" />
     <ClCompile Include="..\..\VM\coordinate.cpp" />
     <ClCompile Include="..\..\VM\hashing.cpp" />
     <ClCompile Include="..\..\VM\kernel.cpp" />
