@@ -155,7 +155,7 @@ static void SetTestSuccess(const std::string& file, int line, const std::string&
 
 static void TestSimpleExpression(std::string file, int line, std::string expression, double expectedResult, double tolerance = RECOMENDED_TOLERANCE)
 {
-	anl::NoiseParser parser(expression);
+	anl::lang::NoiseParser parser(expression);
 
 	bool success = parser.Parse();
 	if (!success)
@@ -196,7 +196,7 @@ static void TestSimpleExpression(std::string file, int line, std::string express
 
 static void TestExpressionMultiple(std::string file, int line, std::string expression, double expectedResult[5], double tolerance = RECOMENDED_TOLERANCE)
 {
-	anl::NoiseParser parser(expression);
+	anl::lang::NoiseParser parser(expression);
 
 	bool success = parser.Parse();
 	if (!success)
@@ -237,7 +237,7 @@ static void TestExpressionMultiple(std::string file, int line, std::string expre
 
 static void TestSimpleExpressionForParseError(std::string file, int line, std::string expression)
 {
-	anl::NoiseParser parser(expression);
+	anl::lang::NoiseParser parser(expression);
 
 	bool success = parser.Parse();
 

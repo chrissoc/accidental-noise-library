@@ -4,77 +4,80 @@
 #include "../VM/kernel.h"
 #include "../VM/instruction.h"
 
-enum BlendType {
-	BLEND_NONE = 0,
-	BLEND_LINEAR = 1,
-	BLEND_HERMITE = 2,
-	BLEND_QUINTIC = 3,
-};
+namespace anl {
+	namespace lang {
 
-class INoiseSource
-{
-protected:
-	anl::CKernel& Kernel;
-	anl::CInstructionIndex Index;
+		enum BlendType {
+			BLEND_NONE = 0,
+			BLEND_LINEAR = 1,
+			BLEND_HERMITE = 2,
+			BLEND_QUINTIC = 3,
+		};
 
-	int ComponentScalingCount;
-	bool ScalingFinilized;
-	bool Error;
+		class INoiseSource
+		{
+		protected:
+			anl::CKernel& Kernel;
+			anl::CInstructionIndex Index;
 
-public:
-	INoiseSource(anl::CKernel& kernel, anl::CInstructionIndex index);
-	virtual ~INoiseSource();
+			int ComponentScalingCount;
+			bool ScalingFinilized;
+			bool Error;
 
-public:
-	anl::CInstructionIndex GetIndex();
+		public:
+			INoiseSource(anl::CKernel& kernel, anl::CInstructionIndex index);
+			virtual ~INoiseSource();
 
-	// component scaling, first use is for x, then second for y, etc...
-	INoiseSource& operator[](double scale);
+		public:
+			anl::CInstructionIndex GetIndex();
 
-	// Domain scaling, use once to scale the entire input domain
-	INoiseSource& operator()(double scale);
+			// component scaling, first use is for x, then second for y, etc...
+			INoiseSource& operator[](double scale);
 
-	// scales the output
-	INoiseSource& operator*=(double scale);
-	INoiseSource& operator*(double scale);
+			// Domain scaling, use once to scale the entire input domain
+			INoiseSource& operator()(double scale);
 
-	INoiseSource& operator+=(double value);
-	INoiseSource& operator+(double value);
-	INoiseSource& operator+=(INoiseSource& other);
-	INoiseSource& operator+(INoiseSource& other);
+			// scales the output
+			INoiseSource& operator*=(double scale);
+			INoiseSource& operator*(double scale);
 
-	INoiseSource& operator-=(double value);
-	INoiseSource& operator-(double value);
-	INoiseSource& operator-=(INoiseSource& other);
-	INoiseSource& operator-(INoiseSource& other);
+			INoiseSource& operator+=(double value);
+			INoiseSource& operator+(double value);
+			INoiseSource& operator+=(INoiseSource& other);
+			INoiseSource& operator+(INoiseSource& other);
 
-	friend INoiseSource& operator+=(double value, INoiseSource& self);
-	friend INoiseSource& operator+(double value, INoiseSource& self);
-	friend INoiseSource& operator-=(double value, INoiseSource& self);
-	friend INoiseSource& operator-(double value, INoiseSource& self);
-	friend INoiseSource& operator*=(double scale, INoiseSource& self);
-	friend INoiseSource& operator*(double scale, INoiseSource& self);
-};
+			INoiseSource& operator-=(double value);
+			INoiseSource& operator-(double value);
+			INoiseSource& operator-=(INoiseSource& other);
+			INoiseSource& operator-(INoiseSource& other);
 
-class GradientBasis : public INoiseSource
-{
-public:
-	GradientBasis(anl::CKernel& kernel, BlendType blendType, unsigned int seed)
-		: INoiseSource(kernel, kernel.gradientBasis(kernel.constant(blendType), kernel.seed(seed)))
-	{
-	};
-};
+			friend INoiseSource& operator+=(double value, INoiseSource& self);
+			friend INoiseSource& operator+(double value, INoiseSource& self);
+			friend INoiseSource& operator-=(double value, INoiseSource& self);
+			friend INoiseSource& operator-(double value, INoiseSource& self);
+			friend INoiseSource& operator*=(double scale, INoiseSource& self);
+			friend INoiseSource& operator*(double scale, INoiseSource& self);
+		};
 
-class SimplexBasis : public INoiseSource
-{
-public:
-	SimplexBasis(anl::CKernel& kernel, unsigned int seed)
-		: INoiseSource(kernel, kernel.simplexBasis(kernel.seed(seed)))
-	{
-	};	
-};
+		class GradientBasis : public INoiseSource
+		{
+		public:
+			GradientBasis(anl::CKernel& kernel, BlendType blendType, unsigned int seed)
+				: INoiseSource(kernel, kernel.gradientBasis(kernel.constant(blendType), kernel.seed(seed)))
+			{
+			};
+		};
 
-// anl::CKernel k;
-// INoiseSource ns = 0.5 * GradientBasis(k, BLEND_NONE, 12359) + 0.5 * SimplexBasis(k, 98713)(0.5);
+		class SimplexBasis : public INoiseSource
+		{
+		public:
+			SimplexBasis(anl::CKernel& kernel, unsigned int seed)
+				: INoiseSource(kernel, kernel.simplexBasis(kernel.seed(seed)))
+			{
+			};
+		};
 
-
+		// anl::CKernel k;
+		// INoiseSource ns = 0.5 * GradientBasis(k, BLEND_NONE, 12359) + 0.5 * SimplexBasis(k, 98713)(0.5);
+	}
+}
