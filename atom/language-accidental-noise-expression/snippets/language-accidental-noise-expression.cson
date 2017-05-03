@@ -34,10 +34,10 @@
 # BASISs
   'valueBasis':
     'prefix': 'valueBasis'
-    'body': 'simplefBm(${1:BLEND_QUINTIC}, ${2:seed})'
+    'body': 'valueBasis(${1:BLEND_QUINTIC}, ${2:seed})'
   'gradientBasis':
     'prefix': 'gradientBasis'
-    'body': 'simplefBm(${1:BLEND_QUINTIC}, ${2:seed})'
+    'body': 'gradientBasis(${1:BLEND_QUINTIC}, ${2:seed})'
   'simplexBasis':
     'prefix': 'simplexBasis'
     'body': 'simplexBasis(${1:seed})'
@@ -48,10 +48,10 @@
 # BASISs reversed
   'BasisValue':
     'prefix': 'BasisValue'
-    'body': 'simplefBm(${1:BLEND_QUINTIC}, ${2:seed})'
+    'body': 'valueBasis(${1:BLEND_QUINTIC}, ${2:seed})'
   'BasisGradient':
     'prefix': 'BasisGradient'
-    'body': 'simplefBm(${1:BLEND_QUINTIC}, ${2:seed})'
+    'body': 'gradientBasis(${1:BLEND_QUINTIC}, ${2:seed})'
   'BasisSimplex':
     'prefix': 'BasisSimplex'
     'body': 'simplexBasis(${1:seed})'
@@ -71,17 +71,17 @@
     'body': 'OP_GradientBasis'
 #BLEND TYPES
   'BLEND_NONE':
-    'prefix': 'OP_ValueBasis'
-    'body': 'OP_ValueBasis'
+    'prefix': 'BLEND_NONE'
+    'body': 'BLEND_NONE'
   'BLEND_LINEAR':
-    'prefix': 'OP_SimplexBasis'
-    'body': 'OP_SimplexBasis'
+    'prefix': 'BLEND_LINEAR'
+    'body': 'BLEND_LINEAR'
   'BLEND_HERMITE':
-    'prefix': 'OP_GradientBasis'
-    'body': 'OP_GradientBasis'
+    'prefix': 'BLEND_HERMITE'
+    'body': 'BLEND_HERMITE'
   'BLEND_QUINTIC':
-    'prefix': 'OP_GradientBasis'
-    'body': 'OP_GradientBasis'
+    'prefix': 'BLEND_QUINTIC'
+    'body': 'BLEND_QUINTIC'
 
 #Simple functions
   'max':

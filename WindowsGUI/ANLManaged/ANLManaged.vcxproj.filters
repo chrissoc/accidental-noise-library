@@ -16,11 +16,11 @@
     <Filter Include="Source Files\ANL">
       <UniqueIdentifier>{210045fe-42c8-42e6-a7e1-a344c5ce0206}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ANL\Expression">
-      <UniqueIdentifier>{f0837bb2-2bd5-4605-8ec2-0777ec915cbd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\ANL\VM">
       <UniqueIdentifier>{beae35d4-4b81-4a1c-98bf-970fb0769ef3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ANL\lang">
+      <UniqueIdentifier>{f0837bb2-2bd5-4605-8ec2-0777ec915cbd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -32,9 +32,6 @@
     </ClInclude>
     <ClInclude Include="ParserManaged.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Expression\NoiseParser.h">
-      <Filter>Source Files\ANL\Expression</Filter>
     </ClInclude>
     <ClInclude Include="..\..\VM\BooleanBits.h">
       <Filter>Source Files\ANL\VM</Filter>
@@ -69,6 +66,9 @@
     <ClInclude Include="..\..\VM\vm.h">
       <Filter>Source Files\ANL\VM</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\lang\NoiseParser.h">
+      <Filter>Source Files\ANL\lang</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ANLManaged.cpp">
@@ -79,9 +79,6 @@
     </ClCompile>
     <ClCompile Include="ParserManaged.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParser.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
     </ClCompile>
     <ClCompile Include="..\..\VM\coordinate.cpp">
       <Filter>Source Files\ANL\VM</Filter>
@@ -101,9 +98,9 @@
     <ClCompile Include="..\..\VM\vm.cpp">
       <Filter>Source Files\ANL\VM</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClCompile Include="..\..\lang\NoiseParser.cpp">
+      <Filter>Source Files\ANL\lang</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">

@@ -4,7 +4,7 @@
 #include <vcclr.h>
 #using <System.dll>
 #include <msclr\marshal_cppstd.h>
-#include "../../Expression/NoiseParser.h"
+#include "../../lang/NoiseParser.h"
 
 using namespace System;
 
@@ -37,7 +37,7 @@ namespace ANLManaged {
 	public ref class ParserManaged
 	{
 	protected:
-		anl::NoiseParser* parser;
+		anl::lang::NoiseParser* parser;
 
 	public:
 

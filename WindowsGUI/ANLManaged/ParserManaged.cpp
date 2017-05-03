@@ -21,7 +21,7 @@ namespace ANLManaged {
 		return *ii;
 	}
 
-	ParserManaged::ParserManaged(String ^ expression) : parser(new anl::NoiseParser(msclr::interop::marshal_as<std::string>(expression))) 
+	ParserManaged::ParserManaged(String ^ expression) : parser(new anl::lang::NoiseParser(msclr::interop::marshal_as<std::string>(expression))) 
 	{
 	}
 

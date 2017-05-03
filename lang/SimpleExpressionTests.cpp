@@ -326,6 +326,8 @@ int main(int argc, const char* args[])
 	TSE("<sv:2>22.0;", 22.0);
 	TSE("<r:90,0,0,1>22.0;", 22.0);
 
+	TSE("blend(-1, 1, 0.5);", 0);
+
 	TEPE("<rx:1,1,1,1>5;");
 
 	TEPE("<r:>22.0;");

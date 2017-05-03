@@ -38,7 +38,7 @@
     'name': 'constant.other.symbol'
   }
   {
-    'match': '[a-z|A-Z]+'
+    'match': '[a-z|A-Z|_]+'
     'name': 'variable'
   }
   {

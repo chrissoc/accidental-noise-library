@@ -19,7 +19,7 @@ public:
 	private:
 		Type& word;
 		const Type mask;
-		BoolRef(Type& w, int bit) : word(w), mask(1 << bit) {}
+		BoolRef(Type& w, int bit) : word(w), mask(1ll << bit) {}
 	public:
 		BoolRef& operator=(bool value) 
 		{

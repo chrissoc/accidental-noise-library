@@ -39,25 +39,34 @@ namespace anl
 				// check constants first
 				std::string& key = node->token.keyword;
 				CInstructionIndex newInstruction(NOP);
+				bool NewInstructionSet = false;
 				EBlend::BlendType bt = NoiseParser::KeywordToBlend(key);
-				if (NoiseParser::IsKeyword_pi(key))
-					newInstruction = kernel.pi();
-				else if (NoiseParser::IsKeyword_e(key))
-					newInstruction = kernel.e();
-				else if (NoiseParser::IsKeyword_OP_ValueBasis(key))
-					newInstruction = kernel.constant(OP_ValueBasis);
-				else if (NoiseParser::IsKeyword_OP_GradientBasis(key))
-					newInstruction = kernel.constant(OP_GradientBasis);
-				else if (NoiseParser::IsKeyword_OP_SimplexBasis(key))
-					newInstruction = kernel.constant(OP_SimplexBasis);
-				else if (NoiseParser::IsKeyword_True(key))
-					newInstruction = kernel.one();
-				else if (NoiseParser::IsKeyword_False(key))
-					newInstruction = kernel.zero();
-				else if (bt != EBlend::BLEND_INVALID)
-					newInstruction = kernel.constant(bt);
+				if (NoiseParser::IsKeyword_pi(key)) {
+					newInstruction = kernel.pi(); NewInstructionSet = true;
+				}
+				else if (NoiseParser::IsKeyword_e(key)) {
+					newInstruction = kernel.e(); NewInstructionSet = true;
+				}
+				else if (NoiseParser::IsKeyword_OP_ValueBasis(key)) {
+					newInstruction = kernel.constant(OP_ValueBasis); NewInstructionSet = true;
+				}
+				else if (NoiseParser::IsKeyword_OP_GradientBasis(key)) {
+					newInstruction = kernel.constant(OP_GradientBasis); NewInstructionSet = true;
+				}
+				else if (NoiseParser::IsKeyword_OP_SimplexBasis(key)) {
+					newInstruction = kernel.constant(OP_SimplexBasis); NewInstructionSet = true;
+				}
+				else if (NoiseParser::IsKeyword_True(key)) {
+					newInstruction = kernel.one(); NewInstructionSet = true;
+				}
+				else if (NoiseParser::IsKeyword_False(key)) {
+					newInstruction = kernel.zero(); NewInstructionSet = true;
+				}
+				else if (bt != EBlend::BLEND_INVALID) {
+					newInstruction = kernel.constant(bt); NewInstructionSet = true;
+				}
 
-				if (newInstruction != NOP)
+				if (NewInstructionSet)
 				{
 					Stack.push_back(newInstruction);
 					return;// found the constant
@@ -84,6 +93,9 @@ namespace anl
 						std::string msg = "Undeclared variable: ";
 						msg += key;
 						SetError(msg, node->token);
+						// push a zero in its place to allow use to continue emitting and potentially detect more errors,
+						// and not crash.
+						Stack.push_back(kernel.zero());
 					}
 				}
 			}

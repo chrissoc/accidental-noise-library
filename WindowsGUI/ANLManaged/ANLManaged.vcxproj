@@ -133,7 +133,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Expression\NoiseParser.h" />
+    <ClInclude Include="..\..\lang\NoiseParser.h" />
     <ClInclude Include="..\..\VM\BooleanBits.h" />
     <ClInclude Include="..\..\VM\coordinate.h" />
     <ClInclude Include="..\..\VM\hashing.h" />
@@ -150,7 +150,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Expression\NoiseParser.cpp" />
+    <ClCompile Include="..\..\lang\NoiseParser.cpp" />
     <ClCompile Include="..\..\VM\coordinate.cpp" />
     <ClCompile Include="..\..\VM\hashing.cpp" />
     <ClCompile Include="..\..\VM\kernel.cpp" />
@@ -160,9 +160,6 @@
     <ClCompile Include="ANLManaged.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="ParserManaged.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />

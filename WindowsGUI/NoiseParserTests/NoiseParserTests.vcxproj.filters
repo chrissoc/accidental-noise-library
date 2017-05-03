@@ -19,7 +19,7 @@
     <Filter Include="Source Files\ANL\VM">
       <UniqueIdentifier>{69e7fb7c-85c8-43c5-94a2-ef895aa5608d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ANL\Expression">
+    <Filter Include="Source Files\ANL\lang">
       <UniqueIdentifier>{2a40a65e-4679-4a7f-908a-e4ba25b3d2a5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -57,23 +57,17 @@
     <ClInclude Include="..\..\VM\vm.h">
       <Filter>Source Files\ANL\VM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Expression\NoiseParser.h">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClInclude Include="..\..\lang\NoiseParser.h">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Expression\NoiseParserAST.h">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClInclude Include="..\..\lang\NoiseParserAST.h">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Expression\NoiseParserEmitter.h">
-      <Filter>Source Files\ANL\Expression</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Expression\NoiseParserToken.h">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClInclude Include="..\..\lang\NoiseParserToken.h">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Expression\SimpleExpressionTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\VM\coordinate.cpp">
       <Filter>Source Files\ANL\VM</Filter>
     </ClCompile>
@@ -92,17 +86,17 @@
     <ClCompile Include="..\..\VM\vm.cpp">
       <Filter>Source Files\ANL\VM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParser.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClCompile Include="..\..\lang\NoiseParserAST.cpp">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParserAST.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClCompile Include="..\..\lang\NoiseParserEmitter.cpp">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParserEmitter.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClCompile Include="..\..\lang\NoiseParser.cpp">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Expression\NoiseParserToken.cpp">
-      <Filter>Source Files\ANL\Expression</Filter>
+    <ClCompile Include="..\..\lang\SimpleExpressionTests.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

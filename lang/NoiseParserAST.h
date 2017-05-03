@@ -24,7 +24,7 @@ component ::= 'x' | 'y' | 'z' | 'w' | 'u' | 'v'
 letter ::= [a-zA-Z]
 digit ::= [0-9]
 
-keyword ::= letter+
+keyword ::= [letter | '_']+
 number ::= digit+ ('.' digit+)?
 domainModifierLeft ::= '<' domainOp component? ':'
 domainModifierRight ::= '>'
@@ -97,7 +97,7 @@ namespace anl
 
 			public:
 				// recurse on tree calling ShapeUp on all elements
-				void ShapeUpAll()
+				inline void ShapeUpAll()
 				{
 					ShapeUp();// first ourself.
 					// then our children
