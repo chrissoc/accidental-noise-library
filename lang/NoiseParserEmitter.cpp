@@ -536,7 +536,7 @@ namespace anl
 						CInstructionIndex boolRot = kernel.one(); // default to true;
 						if (argsFound == 6)
 							boolRot = args[5];
-						instruction = kernel.simplefBm(args[0], args[1], args[2], args[3], args[4], args[5], nonConstArgIndex);
+						instruction = kernel.simplefBm(args[0], args[1], args[2], args[3], args[4], boolRot, nonConstArgIndex);
 						if (nonConstArgIndex >= 0)
 						{
 							std::string msg = "simplefBm requires argument index ";
