@@ -252,7 +252,7 @@ namespace anl
 				default:
 					while (true)
 					{
-						if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')
+						if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || (token.keyword.length() != 0 && c >= '0' && c <= '9'))
 						{
 							if (IntegralDigitCount || FractionalDigitCount)
 							{
