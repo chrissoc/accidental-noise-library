@@ -129,10 +129,10 @@
     'body': 'smoothTiers(${1:a}, ${2:b})'
   'blend':
     'prefix': 'blend'
-    'body': 'blend(${1:low}, ${2:heigh}, ${3:control})'
+    'body': 'blend(${1:low}, ${2:high}, ${3:control})'
   'select':
     'prefix': 'select'
-    'body': 'select(${1:low}, ${2:heigh}, ${3:control}, ${4:threshold}, ${5:falloff})'
+    'body': 'select(${1:low}, ${2:high}, ${3:control}, ${4:threshold}, ${5:falloff})'
   'sigmoid':
     'prefix': 'sigmoid'
     'body': 'sigmoid(${1:source}, ${2:opt_center}, ${3:opt_ramp})'
@@ -144,7 +144,7 @@
     'body': 'radial()'
   'clamp':
     'prefix': 'clamp'
-    'body': 'clamp(${1:source}, ${2:low}, ${3:heigh})'
+    'body': 'clamp(${1:source}, ${2:low}, ${3:high})'
   'color':
     'prefix': 'color'
     'body': 'color(${1:red}, ${2:green}, ${3:blue}, ${4:alpha})'
