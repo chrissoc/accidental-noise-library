@@ -985,7 +985,6 @@ namespace anl
 
 			if (success)
 			{
-				//Kernel.optimize(TotalFolds, TotalInstructions);
 				NodePtr ASTRoot = Stack.back();
 
 				// ShapeUp is required before emitting
@@ -1004,6 +1003,7 @@ namespace anl
 				else
 				{
 					ParseResult = emitter.GetProgramStart();
+					Kernel.optimize(TotalFolds, TotalInstructions);
 				}
 			}
 

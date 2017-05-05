@@ -766,10 +766,8 @@ namespace anl
             case OP_Select:
             {
                 evaluated[index]=true;
-                SVMOutput low,high;
+                
 				double control,threshold,falloff;
-                low=evaluateBoth(kernel,evaluated,coordcache,cache,i.sources_[0],coord);
-                high=evaluateBoth(kernel,evaluated,coordcache,cache,i.sources_[1],coord);
                 control=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[2],coord);
                 threshold=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[3],coord);
                 falloff=evaluateParameter(kernel,evaluated,coordcache,cache,i.sources_[4],coord);
@@ -778,14 +776,21 @@ namespace anl
                 {
                     if(control<(threshold-falloff))
                     {
+						SVMOutput low;
+						low = evaluateBoth(kernel, evaluated, coordcache, cache, i.sources_[0], coord);
                         cache[index].set(low);
                     }
                     else if(control>(threshold+falloff))
                     {
+						SVMOutput high;
+						high = evaluateBoth(kernel, evaluated, coordcache, cache, i.sources_[1], coord);
                         cache[index].set(high);
                     }
                     else
                     {
+						SVMOutput low, high;
+						low = evaluateBoth(kernel, evaluated, coordcache, cache, i.sources_[0], coord);
+						high = evaluateBoth(kernel, evaluated, coordcache, cache, i.sources_[1], coord);
                         double lower=threshold-falloff;
                         double upper=threshold+falloff;
                         double blend=quintic_blend((control-lower)/(upper-lower));
@@ -795,8 +800,16 @@ namespace anl
                 }
                 else
                 {
-                    if(control<threshold) cache[index].set(low);
-                    else cache[index].set(high);
+					if (control < threshold) {
+						SVMOutput low;
+						low = evaluateBoth(kernel, evaluated, coordcache, cache, i.sources_[0], coord);
+						cache[index].set(low);
+					}
+					else {
+						SVMOutput high;
+						high = evaluateBoth(kernel, evaluated, coordcache, cache, i.sources_[1], coord);
+						cache[index].set(high);
+					}
                 }
             } break;
 
