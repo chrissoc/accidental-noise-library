@@ -721,7 +721,7 @@ namespace anl
                 double ay=evaluateParameter(kernel, evaluated, coordcache, cache, i.sources_[3], coord);
                 double az=evaluateParameter(kernel, evaluated, coordcache, cache, i.sources_[4], coord);
 
-                double len=std::sqrt(ax*ax+ax*ay+az*az);
+                double len=std::sqrt(ax*ax+ay*ay+az*az);
                 ax/=len;
                 ay/=len;
                 az/=len;
