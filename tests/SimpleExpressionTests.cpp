@@ -9,7 +9,7 @@
 #include "../VM/kernel.h"
 #include "../VM/instruction.h"
 
-#include "NoiseParser.h"
+#include "../lang/NoiseParser.h"
 
 #include <iostream>
 #include <iomanip>

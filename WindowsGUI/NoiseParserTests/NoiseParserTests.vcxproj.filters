@@ -95,7 +95,7 @@
     <ClCompile Include="..\..\lang\NoiseParser.cpp">
       <Filter>Source Files\ANL\lang</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\lang\SimpleExpressionTests.cpp">
+    <ClCompile Include="..\..\tests\SimpleExpressionTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

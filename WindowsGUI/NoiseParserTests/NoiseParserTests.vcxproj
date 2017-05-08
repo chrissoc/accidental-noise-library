@@ -163,7 +163,7 @@
     <ClCompile Include="..\..\lang\NoiseParser.cpp" />
     <ClCompile Include="..\..\lang\NoiseParserAST.cpp" />
     <ClCompile Include="..\..\lang\NoiseParserEmitter.cpp" />
-    <ClCompile Include="..\..\lang\SimpleExpressionTests.cpp" />
+    <ClCompile Include="..\..\tests\SimpleExpressionTests.cpp" />
     <ClCompile Include="..\..\VM\coordinate.cpp" />
     <ClCompile Include="..\..\VM\hashing.cpp" />
     <ClCompile Include="..\..\VM\kernel.cpp" />
