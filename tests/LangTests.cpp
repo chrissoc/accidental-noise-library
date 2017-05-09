@@ -357,7 +357,6 @@ int main(int argc, const char* args[])
 	rlist[4] = 0.5;
 	TEM("<r:pi/2,0,0,1>x();", rlist);
 
-	TEPE("var2 = 5.0;");
 	TEPE("var = varB = VarC = 5.0;");
 	TSE("var = 5.0; var;", 5.0);
 	TSE("var = 5.0; varb = 3.0; var;", 5.0);
