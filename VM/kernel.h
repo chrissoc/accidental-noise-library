@@ -145,10 +145,13 @@ public:
         double angle, double ax, double ay, double az);
 
     CInstructionIndex simplefBm(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot=true);
+	// nonConstArg, if less than zero, indicates an error. Some CInstructionIndex arguments must be able to decompose into an actual number during this function call.
     CInstructionIndex simplefBm(CInstructionIndex basistype, CInstructionIndex interptype, CInstructionIndex numoctaves, CInstructionIndex frequency, CInstructionIndex seed, CInstructionIndex/*bool*/ rot, int& nonConstArg);
     CInstructionIndex simpleRidgedMultifractal(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot=true);
+	// nonConstArg, if less than zero, indicates an error. Some CInstructionIndex arguments must be able to decompose into an actual number during this function call.
     CInstructionIndex simpleRidgedMultifractal(CInstructionIndex basistype, CInstructionIndex interptype, CInstructionIndex numoctaves, CInstructionIndex frequency, CInstructionIndex seed, CInstructionIndex/*bool*/ rot, int& nonConstArg);
     CInstructionIndex simpleBillow(unsigned int basistype, unsigned int interptype, int numoctaves, double frequency, unsigned int seed, bool rot=true);
+	// nonConstArg, if less than zero, indicates an error. Some CInstructionIndex arguments must be able to decompose into an actual number during this function call.
     CInstructionIndex simpleBillow(CInstructionIndex basistype, CInstructionIndex interptype, CInstructionIndex numoctaves, CInstructionIndex frequency, CInstructionIndex seed, CInstructionIndex/*bool*/ rot, int& nonConstArg);
 
     InstructionListType *getKernel()
