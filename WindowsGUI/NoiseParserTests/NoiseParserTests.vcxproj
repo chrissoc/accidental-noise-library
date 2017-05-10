@@ -147,7 +147,6 @@
     <ClInclude Include="..\..\lang\NoiseParser.h" />
     <ClInclude Include="..\..\lang\NoiseParserAST.h" />
     <ClInclude Include="..\..\lang\NoiseParserToken.h" />
-    <ClInclude Include="..\..\VM\BooleanBits.h" />
     <ClInclude Include="..\..\VM\coordinate.h" />
     <ClInclude Include="..\..\VM\hashing.h" />
     <ClInclude Include="..\..\VM\instruction.h" />
@@ -155,7 +154,6 @@
     <ClInclude Include="..\..\VM\noise_gen.h" />
     <ClInclude Include="..\..\VM\noise_lut.h" />
     <ClInclude Include="..\..\VM\random_gen.h" />
-    <ClInclude Include="..\..\VM\types.h" />
     <ClInclude Include="..\..\VM\utility.h" />
     <ClInclude Include="..\..\VM\vm.h" />
   </ItemGroup>
@@ -164,12 +162,14 @@
     <ClCompile Include="..\..\lang\NoiseParserAST.cpp" />
     <ClCompile Include="..\..\lang\NoiseParserEmitter.cpp" />
     <ClCompile Include="..\..\tests\LangTests.cpp" />
-    <ClCompile Include="..\..\VM\coordinate.cpp" />
-    <ClCompile Include="..\..\VM\hashing.cpp" />
-    <ClCompile Include="..\..\VM\kernel.cpp" />
-    <ClCompile Include="..\..\VM\noise_gen.cpp" />
-    <ClCompile Include="..\..\VM\noise_lut.cpp" />
-    <ClCompile Include="..\..\VM\vm.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\VM\coordinate.inl" />
+    <None Include="..\..\VM\hashing.inl" />
+    <None Include="..\..\VM\kernel.inl" />
+    <None Include="..\..\VM\noise_gen.inl" />
+    <None Include="..\..\VM\noise_lut.inl" />
+    <None Include="..\..\VM\vm.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

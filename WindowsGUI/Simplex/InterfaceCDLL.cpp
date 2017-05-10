@@ -1,12 +1,12 @@
 
-#include "InterfaceCDLL.h"
 
-#include "..\..\VM\vm.h"
-#include "..\..\VM\kernel.h"
-#include "..\..\VM\instruction.h"
+#define ANL_IMPLEMENTATION
+#include "../../anl.h"
 
 #include "..\..\lang\NoiseBuilder.h"
 #include "..\..\lang\NoiseParser.h"
+
+#include "InterfaceCDLL.h"
 
 #include <iostream>
 

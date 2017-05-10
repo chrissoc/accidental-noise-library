@@ -24,8 +24,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\VM\BooleanBits.h">
-      <Filter>Source Files\ANL\VM</Filter>
+    <ClInclude Include="..\..\lang\NoiseParser.h">
+      <Filter>Source Files\ANL\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lang\NoiseParserAST.h">
+      <Filter>Source Files\ANL\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lang\NoiseParserToken.h">
+      <Filter>Source Files\ANL\lang</Filter>
     </ClInclude>
     <ClInclude Include="..\..\VM\coordinate.h">
       <Filter>Source Files\ANL\VM</Filter>
@@ -48,44 +54,14 @@
     <ClInclude Include="..\..\VM\random_gen.h">
       <Filter>Source Files\ANL\VM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\VM\types.h">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\VM\utility.h">
       <Filter>Source Files\ANL\VM</Filter>
     </ClInclude>
     <ClInclude Include="..\..\VM\vm.h">
       <Filter>Source Files\ANL\VM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\lang\NoiseParser.h">
-      <Filter>Source Files\ANL\lang</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\lang\NoiseParserAST.h">
-      <Filter>Source Files\ANL\lang</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\lang\NoiseParserToken.h">
-      <Filter>Source Files\ANL\lang</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\VM\coordinate.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\hashing.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\kernel.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\noise_gen.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\noise_lut.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\VM\vm.cpp">
-      <Filter>Source Files\ANL\VM</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\lang\NoiseParserAST.cpp">
       <Filter>Source Files\ANL\lang</Filter>
     </ClCompile>
@@ -98,5 +74,25 @@
     <ClCompile Include="..\..\tests\LangTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\VM\coordinate.inl">
+      <Filter>Source Files\ANL\VM</Filter>
+    </None>
+    <None Include="..\..\VM\hashing.inl">
+      <Filter>Source Files\ANL\VM</Filter>
+    </None>
+    <None Include="..\..\VM\kernel.inl">
+      <Filter>Source Files\ANL\VM</Filter>
+    </None>
+    <None Include="..\..\VM\noise_gen.inl">
+      <Filter>Source Files\ANL\VM</Filter>
+    </None>
+    <None Include="..\..\VM\noise_lut.inl">
+      <Filter>Source Files\ANL\VM</Filter>
+    </None>
+    <None Include="..\..\VM\vm.inl">
+      <Filter>Source Files\ANL\VM</Filter>
+    </None>
   </ItemGroup>
 </Project>

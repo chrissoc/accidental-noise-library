@@ -5,9 +5,8 @@
 #include <vector>
 #include <string>
 
-#include "../VM/vm.h"
-#include "../VM/kernel.h"
-#include "../VM/instruction.h"
+#define ANL_IMPLEMENTATION
+#include "../anl.h"
 
 #include "../lang/NoiseParser.h"
 
