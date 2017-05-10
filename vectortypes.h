@@ -1,19 +1,18 @@
 #ifndef COMMON_VECTOR_TYPES
 #define COMMON_VECTOR_TYPES
 
-#include "VM/types.h"
-
 namespace anl
 {
-	//typedef rhs4D<float> SRGBA;
-	
-	struct SRGBA
-	{
-		SRGBA() : r(0), g(0), b(0), a(0){}
-		SRGBA(int al) : r(a), g(a), b(a), a(al) {}
-		SRGBA(const  SRGBA &rhs) : r(rhs.r), g(rhs.g), b(rhs.b), a(rhs.a){}
-		SRGBA(const double t1, const double t2, const double t3, const double t4) : r(t1), g(t2), b(t3), a(t4){}
-		~SRGBA(){}
+//typedef rhs4D<float> SRGBA;
+
+struct SRGBA
+{
+    SRGBA() : r(0), g(0), b(0), a(0) {}
+    SRGBA(int al) : r(a), g(a), b(a), a((float)al) {}
+    SRGBA(const  SRGBA &rhs) : r(rhs.r), g(rhs.g), b(rhs.b), a(rhs.a) {}
+    //SRGBA(const float t1, const float t2, const float t3, const float t4) : r(t1), g(t2), b(t3), a(t4) {}
+	SRGBA(const double t1, const double t2, const double t3, const double t4) : r((float)t1), g((float)t2), b((float)t3), a((float)t4) {}
+    ~SRGBA() {}
 
     bool operator ==(const SRGBA &rhs) const
     {
@@ -42,20 +41,20 @@ namespace anl
         return SRGBA(r*rhs.r, g*rhs.g, b*rhs.b, a*rhs.a);
     };
 
-	SRGBA operator *(const double &rhs) const
-	{
-		return SRGBA(r*rhs, g*rhs, b*rhs, a*rhs);
-	}
+    SRGBA operator *(const double &rhs) const
+    {
+        return SRGBA(r*rhs, g*rhs, b*rhs, a*rhs);
+    }
 
     SRGBA operator /(const SRGBA &rhs) const
     {
         return SRGBA(r/rhs.r, g/rhs.g, b/rhs.b, a/rhs.a);
     };
 
-	SRGBA operator /(const double &rhs) const
-	{
-		return SRGBA(r/rhs, g/rhs, b/rhs, a/rhs);
-	}
+    SRGBA operator /(const double &rhs) const
+    {
+        return SRGBA(r/rhs, g/rhs, b/rhs, a/rhs);
+    }
 
     SRGBA operator -() const
     {
@@ -156,11 +155,11 @@ namespace anl
         return (*this);
     };
 
-		double r;
-		double g;
-		double b;
-		double a;
-	};
+    float r;
+    float g;
+    float b;
+    float a;
+};
 };
 
 

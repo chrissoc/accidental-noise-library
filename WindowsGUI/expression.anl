@@ -3,7 +3,7 @@
 Quick Reference:
 
 true, TRUE, True, are aliases for 1.0
-false, FALSE, False, are aliase for 0.0
+false, FALSE, False, are aliases for 0.0
 
 Multiplication and addition can be used to affect the output of a value,
 where as expressions inside angled brackets '< expression >' affect the
