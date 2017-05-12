@@ -13,6 +13,8 @@
 #include "NoiseParserAST.h"
 
 /*
+This is a fairly loose grammer, the implementation is a little more strict
+
 whiteSpace ::= ' ' | '\n' | '\r' | '\t'
 printableChar ::= whiteSpace | [!-~]
 commentLine ::= '/' '/' printableChar*  '\n'
@@ -21,6 +23,7 @@ commentBlock ::= '/' '*' printableChar* '*' '/'
 letter ::= [a-zA-Z]
 keyword ::= letter+
 digit ::= [0-9]
+string ::= \" (letter | digit | whiteSpace)* \"
 number ::= digit+ ('.' digit+)?
 domainOp ::= 's' | 't' | 'r'
 component ::= 'x' | 'y' | 'z' | 'w' | 'u' | 'v'
@@ -30,7 +33,7 @@ domainModifierRight ::= '>'
 domainOperator ::= domainModifierLeft argumentList domainModifierRight
 argumentList ::= expression (',' argumentList)*
 functionCall ::= keyword ( '(' argumentList* ')' )?
-object ::= functionCall | grouping | negative | number | keyword
+object ::= functionCall | grouping | negative | number | keyword | string
 domainPrecedence ::= (domainOperator domainPrecedence) | object
 mult ::= domainPrecedence (('*' | '/') mult)?
 add ::= mult (('+' | '-') add)?

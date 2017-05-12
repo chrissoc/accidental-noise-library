@@ -19,8 +19,7 @@ namespace anl
 
 			class number;
 			class keyword;
-			class domainModifierLeft;
-			class domainModifierRight;
+			class string;
 			class domainOperator;
 			class argumentList;
 			class functionCall;
@@ -47,6 +46,7 @@ namespace anl
 
 				virtual void Emit(number* node) = 0;
 				virtual void Emit(keyword* node) = 0;
+				virtual void Emit(string * node) = 0;
 				virtual void Emit(domainOperator* node) = 0;
 				virtual void Emit(argumentList* node) = 0;
 				virtual void Emit(functionCall* node) = 0;
@@ -63,7 +63,16 @@ namespace anl
 			};
 			class ANLEmitter : public Emitter {
 			protected:
+				// Stack may have one of the following out of bounds indices in it
+				// indicating a special case
+				enum {
+					// special case of CInstructionIndex indicating that the
+					// value is not yet in the kernal but the value is a string
+					// located on the StringStack
+					STACK_INDEX_STRING_STACK = 1000000001,
+				};
 				std::vector<CInstructionIndex> Stack;
+				std::vector<std::string> StringStack;
 				// provided to simply pass integer data between functions
 				std::vector<int> StackIntegers;
 				std::map<std::string, std::unique_ptr<CInstructionIndex>> Variables;
@@ -80,21 +89,22 @@ namespace anl
 
 				CInstructionIndex GetProgramStart() { return ProgramStart; }
 
-				virtual void Emit(number* node);
-				virtual void Emit(keyword* node);
-				virtual void Emit(domainOperator* node);
-				virtual void Emit(argumentList* node);
-				virtual void Emit(functionCall* node);
-				virtual void Emit(object* node);
-				virtual void Emit(domainPrecedence* node);
-				virtual void Emit(mult* node);
-				virtual void Emit(add* node);
-				virtual void Emit(grouping* node);
-				virtual void Emit(negative* node);
-				virtual void Emit(expression* node);
-				virtual void Emit(statement* node);
-				virtual void Emit(assignment* node);
-				virtual void Emit(program* node);
+				virtual void Emit(number* node) override;
+				virtual void Emit(keyword* node) override;
+				virtual void Emit(string * node) override;
+				virtual void Emit(domainOperator* node) override;
+				virtual void Emit(argumentList* node) override;
+				virtual void Emit(functionCall* node) override;
+				virtual void Emit(object* node) override;
+				virtual void Emit(domainPrecedence* node) override;
+				virtual void Emit(mult* node) override;
+				virtual void Emit(add* node) override;
+				virtual void Emit(grouping* node) override;
+				virtual void Emit(negative* node) override;
+				virtual void Emit(expression* node) override;
+				virtual void Emit(statement* node) override;
+				virtual void Emit(assignment* node) override;
+				virtual void Emit(program* node) override;
 			};
 			/*
 			class SomeOtherExecutionContext : public Emitter {

@@ -327,6 +327,15 @@ int main(int argc, const char* args[])
 
 	TSE("blend(-1, 1, 0.5);", 0);
 
+	TSE("<tx:namedInput(\"test\")>0;", 0);
+
+	rlist[0] = 5000 + 0;
+	rlist[1] = 5000 + 0.5;
+	rlist[2] = 5000 + -0.5;
+	rlist[3] = 5000 + -0.5;
+	rlist[4] = 5000 + 0.5;
+	TEM("<tx:namedInput(\"test\", 5000)>x();", rlist);
+
 	TEPE("<rx:1,1,1,1>5;");
 
 	TEPE("<r:>22.0;");

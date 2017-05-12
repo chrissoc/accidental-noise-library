@@ -57,6 +57,7 @@ namespace anl
 			token.token = Token::NONE;
 			token.tokenLocation = ColumnStartOffset - DataIndex;
 			token.number = 0.0;
+			token.keyword.clear();
 
 			bool makingFractional = false;
 			int IntegralDigitCount = 0;
@@ -249,6 +250,37 @@ namespace anl
 						return token;
 					}
 					break;
+				case '\"':
+				{
+					token.token = Token::STRING;
+					token.keyword.clear();
+					while (true)
+					{
+						if (IsEof())
+						{
+							SetError("Unexpected end of file while trying to match quote (\")");
+							token.token = Token::TOKEN_ERROR;
+							return token;
+						}
+						if (Data[DataIndex] == '\"')
+						{
+							DataIndex++;
+							return token;
+						}
+						else if (Data[DataIndex] == '\n')
+						{
+							SetError("Unexpected end of line while trying to match quote (\")");
+							token.token = Token::TOKEN_ERROR;
+							return token;
+						}
+						else
+						{
+							token.keyword += Data[DataIndex];
+							DataIndex++;
+						}
+					}
+					break;
+				}
 				default:
 					while (true)
 					{
@@ -415,7 +447,9 @@ namespace anl
 		EFunction::Function NoiseParser::KeywordToFunc(const std::string& keyword)
 		{
 			EFunction::Function f = EFunction::FUNC_INVALID;
-			if (keyword == "valueBasis")
+			if (keyword == "namedInput")
+				f = EFunction::FUNC_NAMED_INPUT;
+			else if (keyword == "valueBasis")
 				f = EFunction::FUNC_VALUE_BASIS;
 			else if (keyword == "gradientBasis")
 				f = EFunction::FUNC_GRADIENT_BASIS;
@@ -690,6 +724,12 @@ namespace anl
 			{
 				NodePtr key = std::make_shared<NoiseParserAST::keyword>(t);
 				Stack.push_back(std::make_shared<NoiseParserAST::object>(key));
+				return true;
+			}
+			else if (t.token == Token::STRING)
+			{
+				NodePtr string = std::make_shared<NoiseParserAST::string>(t);
+				Stack.push_back(std::make_shared<NoiseParserAST::object>(string));
 				return true;
 			}
 			else

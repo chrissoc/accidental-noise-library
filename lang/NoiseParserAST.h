@@ -57,6 +57,7 @@ namespace anl
 				enum Type {
 					NUMBER,
 					KEYWORD,
+					STRING,
 					DOMAIN_OPERATOR,
 					ARGUMENT_LIST,
 					FUNCTION_CALL,
@@ -120,6 +121,15 @@ namespace anl
 				static const Type MyType = KEYWORD;
 			public:
 				keyword(const Token& t) : Node(MyType)
+				{
+					token = t;
+				}
+				void Emit(Emitter* emitter) override { emitter->Emit(this); }
+			};
+			class string : public Node {
+				static const Type MyType = KEYWORD;
+			public:
+				string(const Token& t) : Node(MyType)
 				{
 					token = t;
 				}

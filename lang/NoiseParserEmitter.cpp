@@ -99,6 +99,13 @@ namespace anl
 					}
 				}
 			}
+			void ANLEmitter::Emit(string * node)
+			{
+				StringStack.push_back(node->token.keyword);
+				anl::CInstructionIndex i = kernel.zero();// goofy way of constructing a CInstructionIndex
+				i = STACK_INDEX_STRING_STACK;			 // only to work around its protections on the next line
+				Stack.push_back(i);
+			}
 			void ANLEmitter::Emit(domainOperator * node)
 			{
 				// the object to do the domain operation on is already waiting for us
@@ -343,6 +350,70 @@ namespace anl
 				// we now have the name of the function and all the arguments
 				switch (func)
 				{
+				case EFunction::FUNC_NAMED_INPUT:
+				{
+					if (argsFound != 1 && argsFound != 2)
+					{
+						SetError("namedInput accepts 1-2 arguemnts", funcToken);
+						return;
+					}
+
+					std::string s;
+					CInstructionIndex i = kernel.zero();
+					i = STACK_INDEX_STRING_STACK;
+					// check if the string is on the string stack
+					if (args[0] == i)
+					{
+						s = StringStack.back();
+						StringStack.pop_back();
+					}
+					else
+					{
+						SetError("namedInput first argument must be a string, the name of the input", funcToken);
+						return;
+					}
+
+					if (s == "")
+					{
+						SetError("namedInput first argument must be a non empty string", funcToken);
+						return;
+					}
+
+					{
+						// this is also the first spot where the function name and argument types meet,
+						// for namedInput we only accept strings that contain a single identifier with no white space
+						if (s[0] >= '0' && s[0] <= '9')
+						{
+							SetError("namedInput first argument must be a string in the form of an identifier, that is - starting with a letter and may contain numbers, letters and underscores", funcToken);
+							return;
+						}
+						for (char c : s)
+						{
+							const bool IsLetter = (c >= 'a' && c <= 'z');
+							const bool IsUpperCaseLetter = (c >= 'A' && c <= 'Z');
+							const bool IsNumber = (c >= '0' && c <= '9');
+							if (!IsLetter && !IsUpperCaseLetter && !IsNumber && c != '_')
+							{
+								SetError("namedInput first argument must be a string in the form of an identifier, that is - starting with a letter and may contain numbers, letters and underscores", funcToken);
+								return;
+							}
+						}
+					}
+
+					i = kernel.zero();
+					if (argsFound == 2)
+						i = args[1];
+					instruction = kernel.namedInput(s, i, nonConstArgIndex);
+					if (nonConstArgIndex >= 0)
+					{
+						std::string msg = "namedInput requires argument index ";
+						msg += std::to_string(nonConstArgIndex);
+						msg += " to be constant";
+						SetError(msg, funcToken);
+						return;
+					}
+					break;
+				}
 				case EFunction::FUNC_VALUE_BASIS:
 					if (argsFound != 2)
 					{

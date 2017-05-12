@@ -18,6 +18,7 @@ namespace anl
 				TOKEN_EOF,
 				TOKEN_ERROR,
 				KEYWORD,
+				STRING,
 				NUMBER,
 				L_PAREN,
 				R_PAREN,
@@ -69,6 +70,7 @@ namespace anl
 		namespace EFunction {
 			enum Function {
 				FUNC_INVALID,
+				FUNC_NAMED_INPUT,
 				FUNC_VALUE_BASIS,
 				FUNC_GRADIENT_BASIS,
 				FUNC_SIMPLEX_BASIS,
