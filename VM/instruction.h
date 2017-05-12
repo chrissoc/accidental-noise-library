@@ -14,6 +14,7 @@ enum EOpcodes
     OP_NOP,
     OP_Seed,
     OP_Constant,
+	OP_NamedInput,
     OP_ValueBasis,
     OP_GradientBasis,
     OP_SimplexBasis,
@@ -98,6 +99,9 @@ struct SInstruction
     // Instruction opcode
     unsigned int opcode_;
     //unsigned int seed_;
+
+	// used with OP_NamedInput, name of the input variable to look up at runtime
+	std::string namedInput;
 
     SInstruction()
     {

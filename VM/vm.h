@@ -6,6 +6,7 @@
 #include "noise_gen.h"
 
 #include <vector>
+#include <unordered_map>
 #include "../templates/tarray1.h"
 #include "../vectortypes.h"
 
@@ -95,12 +96,19 @@ typedef std::vector<SInstruction> InstructionListType;
 typedef std::vector<bool> EvaluatedType;
 typedef std::vector<CCoordinate> CoordCacheType;
 typedef std::vector<SVMOutput> CacheType;
+typedef std::unordered_map<std::string, SVMOutput> NamedInputMap;
 
 class CNoiseExecutor
 {
 public:
     CNoiseExecutor(CKernel &kernel);
     ~CNoiseExecutor();
+
+	// NamedInput are constants that are not included until execution time.
+	// If the Kernel uses NamedInput but NamedInput is not populated, then
+	// default values will be used instead. Provide name value of the
+	// named input variable here before calling evaluateScalar/Color
+	NamedInputMap NamedInput;
 
     SVMOutput evaluate(CCoordinate &coord);
     SVMOutput evaluateAt(CCoordinate &coord, CInstructionIndex index);

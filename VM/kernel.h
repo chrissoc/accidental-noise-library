@@ -46,6 +46,8 @@ public:
 
     CInstructionIndex constant(double val);
     CInstructionIndex seed(unsigned int val);
+	CInstructionIndex namedInput(std::string name, double defaultValue);
+	CInstructionIndex namedInput(std::string name, CInstructionIndex defaultValue, int& nonConstArg);
     CInstructionIndex valueBasis(CInstructionIndex interpindex, CInstructionIndex seed);
     CInstructionIndex gradientBasis(CInstructionIndex interpindex, CInstructionIndex seed);
     CInstructionIndex simplexBasis(CInstructionIndex seed);
@@ -174,6 +176,10 @@ public:
     int constFold(CInstructionIndex startingIndex);
     int constFoldAll();
     void optimize(int& totalFolds, int& totalInstructions);
+	// returns a list of named input entries, values associated with the returned
+	// names may be passed to the CExpressionBuilder VM during execution.
+	// the double in the tuple is the default value associated with the namedInput
+	std::vector<std::tuple<std::string, double>> ListNamedInput();
 
 private:
     // success indicates if the index was a constant and that the returned value is valid.

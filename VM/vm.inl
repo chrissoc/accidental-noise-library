@@ -200,6 +200,18 @@ void CNoiseExecutor::evaluateInstruction(InstructionListType &kernel, EvaluatedT
         return;
         break;
 
+	case OP_NamedInput:
+	{
+		evaluated[index] = true;
+		auto& itr=NamedInput.find(i.namedInput);
+		if(itr==NamedInput.end())
+			cache[index].set(i.outfloat_);
+		else
+			cache[index].set(itr->second);
+		return;
+		break;
+	}
+
     case OP_ValueBasis:
     {
         // Parameters

@@ -1,3 +1,4 @@
+#include "kernel.h"
 namespace anl
 {
 
@@ -58,6 +59,36 @@ CInstructionIndex CKernel::seed(unsigned int val)
     i.opcode_=anl::OP_Seed;
     kernel_.push_back(i);
     return lastIndex();
+}
+
+CInstructionIndex CKernel::namedInput(std::string name, double defaultValue)
+{
+	anl::SInstruction i;
+	i.namedInput=name;
+	i.outfloat_=defaultValue;
+	i.opcode_=anl::OP_NamedInput;
+	kernel_.push_back(i);
+	return lastIndex();
+}
+
+CInstructionIndex CKernel::namedInput(std::string name, CInstructionIndex defaultValue, int& nonConstArg)
+{
+	nonConstArg=-1;
+	bool success;
+	constFold(defaultValue);
+	double value=extractConst(defaultValue,success);
+	if (success==false)
+	{
+		nonConstArg = 1;
+		return zero();
+	}
+
+	anl::SInstruction i;
+	i.namedInput=name;
+	i.outfloat_=value;
+	i.opcode_=anl::OP_NamedInput;
+	kernel_.push_back(i);
+	return lastIndex();
 }
 
 CInstructionIndex CKernel::valueBasis(CInstructionIndex interpindex, CInstructionIndex seed)
@@ -1411,6 +1442,17 @@ void CKernel::optimize(int& totalFolds, int& totalInstructions)
     totalFolds = 0;
     totalFolds = constFoldAll();
     totalInstructions = (int)kernel_.size();
+}
+
+std::vector<std::tuple<std::string, double>> CKernel::ListNamedInput()
+{
+	std::vector<std::tuple<std::string, double>> NamedInputList;
+	for (auto i : kernel_)
+	{
+		if (i.opcode_ == OP_NamedInput)
+			NamedInputList.emplace_back(i.namedInput, i.outfloat_);
+	}
+	return NamedInputList;
 }
 
 double CKernel::extractConst(CInstructionIndex index, bool& success)
