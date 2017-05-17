@@ -19,6 +19,12 @@
     'contentName': 'comment'
   }
   {
+    'begin': '"'
+    'end': '"'
+    'name': 'string'
+    'contentName': 'string'
+  }
+  {
     'match': '(\\d+\\.\\d+)|(\\d+)'
     'name': 'constant.numeric'
   }
