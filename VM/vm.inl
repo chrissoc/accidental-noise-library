@@ -203,7 +203,7 @@ void CNoiseExecutor::evaluateInstruction(InstructionListType &kernel, EvaluatedT
 	case OP_NamedInput:
 	{
 		evaluated[index] = true;
-		auto& itr=NamedInput.find(i.namedInput);
+		auto&& itr=NamedInput.find(i.namedInput);
 		if(itr==NamedInput.end())
 			cache[index].set(i.outfloat_);
 		else
