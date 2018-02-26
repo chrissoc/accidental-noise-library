@@ -125,7 +125,7 @@ namespace anl
 			{
 				StackIntegers.push_back((int)node->Child.size());
 				// iterate in order thus pushing things onto the Stack left to right
-				for (int i = 0; i < node->Child.size(); ++i)
+				for (size_t i = 0; i < node->Child.size(); ++i)
 					node->Child[i]->Emit(this);
 			}
 			void ANLEmitter::Emit(functionCall * node)
