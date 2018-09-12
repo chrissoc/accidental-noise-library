@@ -313,7 +313,7 @@ namespace anl
 					Child[1] = Child[1]->RemoveIntermidiates();
 					// if there is nothing to assign to then we dont need
 					// to keep this assignment node, just pass our one child instead.
-					if (Child[0] == false)
+					if (Child[0] == nullptr)
 					{
 						return Child[1];
 					}
