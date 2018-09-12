@@ -2,6 +2,7 @@
 #define INSTRUCTION_H
 
 #include "../vectortypes.h"
+#include <string>
 #include <vector>
 
 const int MaxSourceCount=20;
@@ -201,7 +202,7 @@ public:
         return c.index_ == index_;
     }
 
-    unsigned int GetIndex() { return index_; }
+    unsigned int GetIndex() const { return index_; }
 
     private:
     CInstructionIndex()

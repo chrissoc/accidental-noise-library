@@ -129,7 +129,7 @@ namespace anl
 
 		public:
 			NoiseParser(ParseString expression)
-				: tokens(expression), VM(Kernel), Error(false), NOP(Kernel.constant(0)), ParseResult(NOP), TotalFolds(0), TotalInstructions(0) {}
+				: tokens(expression), VM(Kernel), NOP(Kernel.constant(0)), ParseResult(NOP), TotalFolds(0), TotalInstructions(0), Error(false) {}
 			virtual ~NoiseParser();
 
 			// returns true for success
