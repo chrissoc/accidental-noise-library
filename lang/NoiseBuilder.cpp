@@ -5,7 +5,7 @@ namespace anl {
 
 		INoiseSource::INoiseSource(anl::CKernel& kernel, anl::CInstructionIndex index)
 			: Kernel(kernel), Index(index),
-			Error(false), ScalingFinilized(false), ComponentScalingCount(0)
+			ComponentScalingCount(0), ScalingFinilized(false), Error(false)
 		{
 		}
 
