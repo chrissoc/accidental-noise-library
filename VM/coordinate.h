@@ -21,7 +21,7 @@ struct CCoordinate
     CCoordinate operator *(CCoordinate &rhs);
     CCoordinate operator +(CCoordinate &rhs);
     CCoordinate &operator =(const CCoordinate &rhs);
-    bool operator ==(const CCoordinate &rhs);
+    bool operator ==(const CCoordinate &rhs) const;
 
     double x_, y_, z_, w_, u_, v_;
     unsigned int dimension_;

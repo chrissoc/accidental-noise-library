@@ -132,7 +132,7 @@ CCoordinate &CCoordinate::operator =(const CCoordinate &c)
     return *this;
 }
 
-bool CCoordinate::operator ==(const CCoordinate &c)
+bool CCoordinate::operator ==(const CCoordinate &c) const
 {
     switch(dimension_)
     {
