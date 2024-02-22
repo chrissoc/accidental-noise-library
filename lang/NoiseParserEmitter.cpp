@@ -347,6 +347,8 @@ namespace anl
 
 				int nonConstArgIndex = -1;
 
+				instruction = kernel.zero();
+
 				// we now have the name of the function and all the arguments
 				switch (func)
 				{
@@ -410,176 +412,133 @@ namespace anl
 						msg += std::to_string(nonConstArgIndex);
 						msg += " to be constant";
 						SetError(msg, funcToken);
-						return;
+						break;
 					}
 					break;
 				}
 				case EFunction::FUNC_VALUE_BASIS:
 					if (argsFound != 2)
-					{
 						SetError("valueBasis accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.valueBasis(args[0], args[1]);
+					else
+						instruction = kernel.valueBasis(args[0], args[1]);
 					break;
 				case EFunction::FUNC_GRADIENT_BASIS:
 					if (argsFound != 2)
-					{
 						SetError("GradientBasis accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.gradientBasis(args[0], args[1]);
+					else
+						instruction = kernel.gradientBasis(args[0], args[1]);
 					break;
 				case EFunction::FUNC_SIMPLEX_BASIS:
 					if (argsFound != 1)
-					{
 						SetError("SimplexBasis accepts 1 arguemnt", funcToken);
-						return;
-					}
-					instruction = kernel.simplexBasis(args[0]);
+					else
+						instruction = kernel.simplexBasis(args[0]);
 					break;
 				case EFunction::FUNC_CELLULAR_BASIS:
 					if (argsFound != 10)
-					{
 						SetError("cellularBasis accepts 10 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.cellularBasis(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
+					else
+						instruction = kernel.cellularBasis(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
 					break;
 				case EFunction::FUNC_MAX:
 					if (argsFound != 2)
-					{
 						SetError("max accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.maximum(args[0], args[1]);
+					else
+						instruction = kernel.maximum(args[0], args[1]);
 					break;
 				case EFunction::FUNC_MIN:
 					if (argsFound != 2)
-					{
 						SetError("min accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.minimum(args[0], args[1]);
+					else
+						instruction = kernel.minimum(args[0], args[1]);
 					break;
 				case EFunction::FUNC_ABS:
 					if (argsFound != 1)
-					{
 						SetError("abs accepts 1 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.abs(args[0]);
+					else
+						instruction = kernel.abs(args[0]);
 					break;
 				case EFunction::FUNC_POW:
 					if (argsFound != 2)
-					{
 						SetError("pow accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.pow(args[0], args[1]);
+					else
+						instruction = kernel.pow(args[0], args[1]);
 					break;
 				case EFunction::FUNC_BIAS:
 					if (argsFound != 2)
-					{
 						SetError("bias accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.bias(args[0], args[1]);
+					else
+						instruction = kernel.bias(args[0], args[1]);
 					break;
 				case EFunction::FUNC_GAIN:
 					if (argsFound != 2)
-					{
 						SetError("gain accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.gain(args[0], args[1]);
+					else
+						instruction = kernel.gain(args[0], args[1]);
 					break;
 				case EFunction::FUNC_COS:
 					if (argsFound != 1)
-					{
 						SetError("cos accepts 1 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.cos(args[0]);
+					else
+						instruction = kernel.cos(args[0]);
 					break;
 				case EFunction::FUNC_SIN:
 					if (argsFound != 1)
-					{
 						SetError("sin accepts 1 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.sin(args[0]);
+					else
+						instruction = kernel.sin(args[0]);
 					break;
 				case EFunction::FUNC_TAN:
 					if (argsFound != 1)
-					{
 						SetError("tan accepts 1 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.tan(args[0]);
+					else
+						instruction = kernel.tan(args[0]);
 					break;
 				case EFunction::FUNC_ACOS:
 					if (argsFound != 1)
-					{
 						SetError("acos accepts 1 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.acos(args[0]);
+					else
+						instruction = kernel.acos(args[0]);
 					break;
 				case EFunction::FUNC_ASIN:
 					if (argsFound != 1)
-					{
 						SetError("asin accepts 1 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.asin(args[0]);
+					else
+						instruction = kernel.asin(args[0]);
 					break;
 				case EFunction::FUNC_ATAN:
 					if (argsFound != 1)
-					{
 						SetError("atan accepts 1 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.atan(args[0]);
+					else
+						instruction = kernel.atan(args[0]);
 					break;
 				case EFunction::FUNC_TIERS:
 					if (argsFound != 2)
-					{
 						SetError("tiers accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.tiers(args[0], args[1]);
+					else
+						instruction = kernel.tiers(args[0], args[1]);
 					break;
 				case EFunction::FUNC_SMOOTH_TIERS:
 					if (argsFound != 2)
-					{
 						SetError("smoothTiers accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.smoothTiers(args[0], args[1]);
+					else
+						instruction = kernel.smoothTiers(args[0], args[1]);
 					break;
 				case EFunction::FUNC_BLEND:
 					if (argsFound != 3)
-					{
 						SetError("blend accepts 3 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.blend(args[0], args[1], args[2]);
+					else
+						instruction = kernel.blend(args[0], args[1], args[2]);
 					break;
 				case EFunction::FUNC_SELECT:
 					if (argsFound != 5)
-					{
 						SetError("select accepts 5 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.select(args[0], args[1], args[2], args[3], args[4]);
+					else
+						instruction = kernel.select(args[0], args[1], args[2], args[3], args[4]);
 					break;
 				case EFunction::FUNC_SIMPLE_RIDGED_MULTIFRACTAL:
 					if (argsFound != 6 && argsFound != 5)
-					{
 						SetError("simpleRidgedMultifractal accepts 5 or 6 arguemnts", funcToken);
-						return;
-					}
 					else
 					{
 						CInstructionIndex boolRot = kernel.one(); // default to true;
@@ -592,16 +551,13 @@ namespace anl
 							msg += std::to_string(nonConstArgIndex);
 							msg += " to be constant";
 							SetError(msg, funcToken);
-							return;
+							break;
 						}
 					}
 					break;
 				case EFunction::FUNC_SIMPLE_FBM:
 					if (argsFound != 6 && argsFound != 5)
-					{
 						SetError("simplefBm accepts 5 or 6 arguemnts", funcToken);
-						return;
-					}
 					else
 					{
 						CInstructionIndex boolRot = kernel.one(); // default to true;
@@ -614,16 +570,13 @@ namespace anl
 							msg += std::to_string(nonConstArgIndex);
 							msg += " to be constant";
 							SetError(msg, funcToken);
-							return;
+							break;
 						}
 					}
 					break;
 				case EFunction::FUNC_SIMPLE_BILLOW:
 					if (argsFound != 6 && argsFound != 5)
-					{
 						SetError("simpleBillow accepts 5 or 6 arguemnts", funcToken);
-						return;
-					}
 					else
 					{
 						CInstructionIndex boolRot = kernel.one(); // default to true;
@@ -636,111 +589,86 @@ namespace anl
 							msg += std::to_string(nonConstArgIndex);
 							msg += " to be constant";
 							SetError(msg, funcToken);
-							return;
+							break;
 						}
 					}
 					break;
 				case EFunction::FUNC_X:
 					if (argsFound != 0)
-					{
 						SetError("x accepts 0 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.x();
+					else
+						instruction = kernel.x();
 					break;
 				case EFunction::FUNC_Y:
 					if (argsFound != 0)
-					{
 						SetError("y accepts 0 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.y();
+					else
+						instruction = kernel.y();
 					break;
 				case EFunction::FUNC_Z:
 					if (argsFound != 0)
-					{
 						SetError("z accepts 0 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.z();
+					else
+						instruction = kernel.z();
 					break;
 				case EFunction::FUNC_W:
 					if (argsFound != 0)
-					{
 						SetError("w accepts 0 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.w();
+					else
+						instruction = kernel.w();
 					break;
 				case EFunction::FUNC_U:
 					if (argsFound != 0)
-					{
 						SetError("u accepts 0 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.u();
+					else
+						instruction = kernel.u();
 					break;
 				case EFunction::FUNC_V:
 					if (argsFound != 0)
-					{
 						SetError("v accepts 0 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.v();
+					else
+						instruction = kernel.v();
 					break;
 				case EFunction::FUNC_DX:
 					if (argsFound != 2)
-					{
 						SetError("dx accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.dx(args[0], args[1]);
+					else
+						instruction = kernel.dx(args[0], args[1]);
 					break;
 				case EFunction::FUNC_DY:
 					if (argsFound != 2)
-					{
 						SetError("dy accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.dy(args[0], args[1]);
+					else
+						instruction = kernel.dy(args[0], args[1]);
 					break;
 				case EFunction::FUNC_DZ:
 					if (argsFound != 2)
-					{
 						SetError("dz accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.dz(args[0], args[1]);
+					else
+						instruction = kernel.dz(args[0], args[1]);
 					break;
 				case EFunction::FUNC_DW:
 					if (argsFound != 2)
-					{
 						SetError("dw accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.dw(args[0], args[1]);
+					else
+						instruction = kernel.dw(args[0], args[1]);
 					break;
 				case EFunction::FUNC_DU:
 					if (argsFound != 2)
-					{
 						SetError("du accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.du(args[0], args[1]);
+					else
+						instruction = kernel.du(args[0], args[1]);
 					break;
 				case EFunction::FUNC_DV:
 					if (argsFound != 2)
-					{
 						SetError("dv accepts 2 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.dv(args[0], args[1]);
+					else
+						instruction = kernel.dv(args[0], args[1]);
 					break;
 				case EFunction::FUNC_SIGMOID:
-					if (argsFound != 1 && argsFound != 3)
-					{
+					if (argsFound != 1 && argsFound != 3) {
 						SetError("sigmoid accepts 1 or 3 arguemnts", funcToken);
-						return;
+						break;
 					}
 					if (argsFound == 1)
 						instruction = kernel.sigmoid(args[0]);
@@ -749,52 +677,40 @@ namespace anl
 					break;
 				case EFunction::FUNC_SCALE_OFFSET:
 					if (argsFound != 3)
-					{
 						SetError("scaleOffset accepts 3 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.scaleOffset(args[0], args[1], args[2]);
+					else
+						instruction = kernel.scaleOffset(args[0], args[1], args[2]);
 					break;
 				case EFunction::FUNC_RADIAL:
 					if (argsFound != 0)
-					{
 						SetError("radial accepts 0 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.radial();
+					else
+						instruction = kernel.radial();
 					break;
 				case EFunction::FUNC_CLAMP:
 					if (argsFound != 3)
-					{
 						SetError("clamp accepts 3 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.clamp(args[0], args[1], args[2]);
+					else
+						instruction = kernel.clamp(args[0], args[1], args[2]);
 					break;
 				case EFunction::FUNC_RGBA:
 				case EFunction::FUNC_COLOR:
 					if (argsFound != 4)
-					{
 						SetError("rgba/color accepts 4 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.combineRGBA(args[0], args[1], args[2], args[3]);
+					else
+						instruction = kernel.combineRGBA(args[0], args[1], args[2], args[3]);
 					break;
 				case EFunction::FUNC_HEX_TILE:
 					if (argsFound != 1)
-					{
 						SetError("hexTile accepts 1 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.hexTile(args[0]);
+					else
+						instruction = kernel.hexTile(args[0]);
 					break;
 				case EFunction::FUNC_HEX_BUMP:
 					if (argsFound != 0)
-					{
 						SetError("hexBump accepts 0 arguemnts", funcToken);
-						return;
-					}
-					instruction = kernel.hexBump();
+					else
+						instruction = kernel.hexBump();
 					break;
 				default:
 					SetError("Unkown function type", funcToken);
