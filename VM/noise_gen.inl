@@ -724,11 +724,11 @@ void cellular_function3D(double x, double y, double z, unsigned int seed, double
         disp[c]=0.0;
     }
 
-    for (int zcur=zint-2; zcur<=zint+2; ++zcur)
+    for (int zcur=zint-2; zcur<=zint+3; ++zcur)
     {
-        for(int ycur=yint-2; ycur<=yint+2; ++ycur)
+        for(int ycur=yint-2; ycur<=yint+3; ++ycur)
         {
-            for(int xcur=xint-2; xcur<=xint+2; ++xcur)
+            for(int xcur=xint-2; xcur<=xint+3; ++xcur)
             {
                 double xpos = (double)xcur + value_noise_3(x,y,z,xcur,ycur,zcur,seed);
                 double ypos = (double)ycur + value_noise_3(x,y,z,xcur,ycur,zcur,seed+1);
@@ -761,13 +761,13 @@ void cellular_function4D(double x, double y, double z, double w, unsigned int se
         disp[c]=0.0;
     }
 
-    for (int wcur=wint-2; wcur<=wint+2; ++wcur)
+    for (int wcur=wint-2; wcur<=wint+3; ++wcur)
     {
-        for (int zcur=zint-2; zcur<=zint+2; ++zcur)
+        for (int zcur=zint-2; zcur<=zint+3; ++zcur)
         {
-            for(int ycur=yint-2; ycur<=yint+2; ++ycur)
+            for(int ycur=yint-2; ycur<=yint+3; ++ycur)
             {
-                for(int xcur=xint-2; xcur<=xint+2; ++xcur)
+                for(int xcur=xint-2; xcur<=xint+3; ++xcur)
                 {
                     double xpos = (double)xcur + value_noise_4(x,y,z,w,xcur,ycur,zcur,wcur,seed);
                     double ypos = (double)ycur + value_noise_4(x,y,z,w,xcur,ycur,zcur,wcur,seed+1);
@@ -806,18 +806,18 @@ void cellular_function6D(double x, double y, double z, double w, double u, doubl
         disp[c]=0.0;
     }
 
-    for (int vcur=vint-1; vcur<=vint+1; ++vcur)
+    for (int vcur=vint-2; vcur<=vint+3; ++vcur)
     {
-        for(int ucur=uint-1; ucur<=uint+1; ++ucur)
+        for(int ucur=uint-2; ucur<=uint+3; ++ucur)
         {
 
-            for (int wcur=wint-2; wcur<=wint+2; ++wcur)
+            for (int wcur=wint-2; wcur<=wint+3; ++wcur)
             {
-                for (int zcur=zint-2; zcur<=zint+2; ++zcur)
+                for (int zcur=zint-2; zcur<=zint+3; ++zcur)
                 {
-                    for(int ycur=yint-2; ycur<=yint+2; ++ycur)
+                    for(int ycur=yint-2; ycur<=yint+3; ++ycur)
                     {
-                        for(int xcur=xint-2; xcur<=xint+2; ++xcur)
+                        for(int xcur=xint-2; xcur<=xint+3; ++xcur)
                         {
                             double xpos = (double)xcur + value_noise_6(x,y,z,w,u,v,xcur,ycur,zcur,wcur,ucur,vcur,seed);
                             double ypos = (double)ycur + value_noise_6(x,y,z,w,u,v,xcur,ycur,zcur,wcur,ucur,vcur,seed+1);
